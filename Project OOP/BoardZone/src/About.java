@@ -32,7 +32,7 @@ public class About implements MouseListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu("UserName");
+        username = new JMenu(Account.getName());
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         
         homemenu.addMouseListener(this);
