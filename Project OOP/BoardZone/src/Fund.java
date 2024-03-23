@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Fund implements MouseListener{
+public class Fund implements MouseListener, ActionListener{
     private JFrame fundframe;
     private JPanel fundpanel;
     private JPanel left;
@@ -18,6 +18,9 @@ public class Fund implements MouseListener{
     private JMenu aboutmenu;
     private JMenu username;
     private JLabel picprofile;
+    
+    private JButton donateButton;
+    private JPanel jp;
 
     public Fund(){
         fundframe = new JFrame("BoardZone");
@@ -34,12 +37,15 @@ public class Fund implements MouseListener{
         aboutmenu = new JMenu("About us");
         username = new JMenu("UserName");
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        donateButton = new JButton("Creat post");
+        jp = new JPanel();
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
         fundmenu.addMouseListener(this);
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
+        donateButton.addActionListener((ActionListener) this);
        
         fundframe.setJMenuBar(fundbar);
         fundbar.setLayout(new BorderLayout());
@@ -53,6 +59,7 @@ public class Fund implements MouseListener{
         fundbar.add(menupanel, BorderLayout.WEST);
         fundbar.add(space, BorderLayout.CENTER);
         fundbar.add(profilemenu, BorderLayout.EAST);
+        jp.add(donateButton);
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
@@ -60,8 +67,9 @@ public class Fund implements MouseListener{
         fundframe.setLayout(new BorderLayout());
         fundframe.add(fundpanel, BorderLayout.CENTER);
         fundframe.add(left, BorderLayout.WEST);
-        fundframe.add(right, BorderLayout.EAST);   
-                
+        fundframe.add(right, BorderLayout.EAST);
+        fundframe.add(jp, BorderLayout.SOUTH);
+        
         fundbar.setBackground(new Color(43, 43, 43));
         menupanel.setBackground(new Color(43, 43, 43));
         space.setBackground(new Color(43, 43, 43));
@@ -70,6 +78,8 @@ public class Fund implements MouseListener{
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
         fundpanel.setBackground(new Color(75,75,75));
+        jp.setBackground(new Color(101,101,101));
+        donateButton.setBackground(Color.WHITE);
         
         homemenu.setForeground(new Color(170, 170, 170));
         lobbymenu.setForeground(new Color(170, 170,170));
@@ -126,6 +136,15 @@ public class Fund implements MouseListener{
 
     public void setLocation(Point location) {
         fundframe.setLocation(location);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource().equals(donateButton)){
+            Donate donate = new Donate();
+            Thread thread = new Thread(donate);
+            thread.start();
+        }
     }
 
 }
