@@ -200,4 +200,8 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
             
         }
     }
+
+    private void setLayout(GroupLayout layout) {
+        
+    }
 }
