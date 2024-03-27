@@ -3,7 +3,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Donate implements Runnable, MouseListener, ActionListener{
+public class Donate extends javax.swing.JPanel implements Runnable, MouseListener, ActionListener{
+    private JPanel jPanel1;
+    private JButton jButton1;
+    private JTextField jTextField1;
+    
     private JFrame donateframe;
     private JPanel gridpanel, leftPanel, rightPanel, rightPanell;
     private JPanel donatebar, subPanel, leftSubright, rightSubright, headright, leftSubleft, underleft, top;
@@ -15,6 +19,52 @@ public class Donate implements Runnable, MouseListener, ActionListener{
     private JButton picturebutton, exitbutton, postbutton;
     
     public Donate(){
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+
+        jPanel1.setBackground(new java.awt.Color(43, 43, 43));
+
+        jPanel1.setBackground(new java.awt.Color(43, 43, 43));
+
+        jButton1.setText("Post");
+        jButton1.setBackground(Color.WHITE);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        
+        jButton1.addActionListener(this);
+        jTextField1.addActionListener(this);
+        
         donateframe = new JFrame();
         leftPanel = new JPanel();
         rightPanel = new JPanel();
@@ -32,7 +82,7 @@ public class Donate implements Runnable, MouseListener, ActionListener{
         pic1 = new ImageIcon("poring.png");
         jl1 = new JLabel(pic1, JLabel.CENTER);
         jl2 = new JLabel();
-        sp1 = new JLabel("Name : ");
+        sp1 = new JLabel("     Name : ");
         fontHead = new Font("Inter", Font.BOLD, 20);
         picturebutton = new JButton(pic1);
         exitbutton = new JButton("X");
@@ -59,7 +109,7 @@ public class Donate implements Runnable, MouseListener, ActionListener{
         head.setForeground(Color.WHITE);
         head.setOpaque(false);
         exitbutton.setForeground(Color.WHITE);
-        sp1.setFont(fontHead);
+        sp1.setFont(fontHead.deriveFont(36));
         sp1.setForeground(Color.WHITE);
         postbutton.setForeground(Color.WHITE);
         
@@ -77,7 +127,7 @@ public class Donate implements Runnable, MouseListener, ActionListener{
         rightPanel.add(discription, BorderLayout.CENTER);
         rightPanel.add(leftSubright, BorderLayout.WEST);
         rightPanel.add(rightSubright, BorderLayout.EAST);
-        rightPanel.add(donatebar, BorderLayout.SOUTH);
+        rightPanel.add(jPanel1, BorderLayout.SOUTH);
         
         top.setBackground(new Color(43, 43, 43));
         exitbutton.setBackground(new Color(43, 43, 43));
@@ -141,14 +191,13 @@ public class Donate implements Runnable, MouseListener, ActionListener{
         new Donate();
     }
 
-    void setLocation(Point location) {
-        
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(exitbutton)){
             System.exit(JFrame.DISPOSE_ON_CLOSE);
+        }
+        else if(e.getSource().equals(jButton1)){
+            
         }
     }
 }
