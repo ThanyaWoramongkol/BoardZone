@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class Donate extends javax.swing.JPanel implements Runnable, MouseListener, ActionListener{
     private JPanel jPanel1;
-    private JButton jButton1;
+    private JButton post;
     private JTextField jTextField1;
     
     private JFrame donateframe;
@@ -18,51 +18,54 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
     private Font fontHead;
     private JButton picturebutton, exitbutton, postbutton;
     
+    private String name, detail;
+    private double price;
+    
     public Donate(){
-        jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        jPanel1 = new JPanel();
+        post = new JButton();
+        jTextField1 = new JTextField();
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
 
-        jButton1.setText("Post");
-        jButton1.setBackground(Color.WHITE);
+        post.setText("Post");
+        post.setBackground(Color.WHITE);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(post)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addComponent(post)
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         
-        jButton1.addActionListener(this);
+        post.addActionListener(this);
         jTextField1.addActionListener(this);
         
         donateframe = new JFrame();
@@ -157,6 +160,24 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
         donateframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         donateframe.setVisible(true);
     }
+    public String getName(){
+        return name;
+    }
+    public String getDetail(){
+        return detail;
+    }
+    public double getPrice(){
+        return price;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setDetail(String detail){
+        this.detail = detail;
+    }
+    public void setPrice(double price){
+        this.price = price;
+    }
 
     @Override
     public void run() {
@@ -196,8 +217,11 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
         if(e.getSource().equals(exitbutton)){
             System.exit(JFrame.DISPOSE_ON_CLOSE);
         }
-        else if(e.getSource().equals(jButton1)){
-            
+        else if(e.getSource().equals(post)){
+            name = head.getText();
+            detail = discription.getText();
+            price = Integer.parseInt( jTextField1.getText());
+            System.exit(JFrame.DISPOSE_ON_CLOSE);
         }
     }
 
