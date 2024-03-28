@@ -199,7 +199,7 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(exitbutton)){
-            System.exit(JFrame.DISPOSE_ON_CLOSE);
+            donateframe.dispose();
         }
         else if(e.getSource().equals(picturebutton)){
             try {
@@ -214,7 +214,7 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         else if(e.getSource().equals(post)){
             DonateData post1 = new DonateData();
             post1.setDefault(head.getText(), discription.getText(), Integer.parseInt( jTextField1.getText()));
-            System.exit(JFrame.DISPOSE_ON_CLOSE);
+            donateframe.dispose();
         }
     }
 
