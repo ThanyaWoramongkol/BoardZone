@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Home implements MouseListener{
+public class Home implements MouseListener, ActionListener{
     private JFrame homeframe;
     private JPanel homepanel;
     private JPanel left;
@@ -18,6 +18,8 @@ public class Home implements MouseListener{
     private JMenu aboutmenu;
     private JMenu username;
     private JLabel picprofile;
+    
+    private JButton createBtn;
 
     public Home(){
         homeframe = new JFrame("BoardZone");
@@ -34,12 +36,14 @@ public class Home implements MouseListener{
         aboutmenu = new JMenu("About us");
         username = new JMenu(Account.getName());
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        createBtn = new JButton("Create Post");
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
         fundmenu.addMouseListener(this);
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
+        createBtn.addActionListener(this);
 
         
         homeframe.setJMenuBar(homebar);
@@ -57,6 +61,8 @@ public class Home implements MouseListener{
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
+        
+        homepanel.add(createBtn);
         
         homeframe.setLayout(new BorderLayout());
         homeframe.add(homepanel, BorderLayout.CENTER);
@@ -82,7 +88,9 @@ public class Home implements MouseListener{
         homeframe.setSize(1080,720);
         homeframe.setVisible(true);
     }
-
+    public JFrame getFrame(){
+        return this.homeframe;
+    }
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(homemenu)){
             homeframe.setVisible(true);    
@@ -127,5 +135,12 @@ public class Home implements MouseListener{
 
     public void setLocation(Point location) {
         homeframe.setLocation(location);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(createBtn)){
+            new CreatePost(this);
+        }
     }
 }
