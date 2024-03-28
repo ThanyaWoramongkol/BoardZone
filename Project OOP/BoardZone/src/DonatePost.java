@@ -7,13 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 
-public class Donate extends DonateData implements Runnable, MouseListener, ActionListener{
+public class DonatePost extends javax.swing.JPanel implements Runnable, MouseListener, ActionListener{
     private JPanel jPanel1;
     private JButton post;
     private JTextField jTextField1;
     
     private JFrame donateframe;
-    private JPanel gridpanel, leftPanel, rightPanel, rightPanell, donate;
+    private JPanel gridpanel, leftPanel, rightPanel, rightPanell;
     private JPanel donatebar, subPanel, leftSubright, rightSubright, headright, leftSubleft, underleft, top;
     private JTextArea head, discription;
     private JLabel jl1, jl2, jl3, sp1;
@@ -24,7 +24,11 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
 //    private JButton postbutton;
 //    private JTextField cost;
     
-    public Donate(){
+    private String name, detail;
+    private double price;
+    private DonateData data;
+    
+    public DonatePost(){
         jPanel1 = new JPanel();
         post = new JButton();
         jTextField1 = new JTextField();
@@ -33,7 +37,7 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
 
-        post.setText("Post");
+        post.setText("Donate");
         post.setBackground(Color.WHITE);
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
@@ -163,6 +167,25 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         donateframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         donateframe.setVisible(true);
     }
+    public String getName(){
+        return name;
+    }
+    public String getDetail(){
+        return detail;
+    }
+    public double getPrice(){
+        return price;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setDetail(String detail){
+        this.detail = detail;
+    }
+    public void setPrice(double price){
+        this.price = price;
+    }
+
     @Override
     public void run() {
         donateframe.setLocation(90, 150);
@@ -212,8 +235,9 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
             }
         }
         else if(e.getSource().equals(post)){
-            DonateData post1 = new DonateData();
-            post1.setDefault(head.getText(), discription.getText(), Integer.parseInt( jTextField1.getText()));
+            name = head.getText();
+            detail = discription.getText();
+            price = Integer.parseInt( jTextField1.getText());
             System.exit(JFrame.DISPOSE_ON_CLOSE);
         }
     }
@@ -222,3 +246,4 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         
     }
 }
+

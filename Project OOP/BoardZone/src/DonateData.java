@@ -8,7 +8,7 @@
  * @author pc
  */
 
-public class DonateData {
+public class DonateData extends javax.swing.JPanel{
     private String name, detail;
     private double price;
     
@@ -21,6 +21,11 @@ public class DonateData {
     public double getPrice(){
         return price;
     }
+    public void setDefault(String name, String detail, double price){
+        this.name = name;
+        this.detail = detail;
+        this.price = price;
+    } 
     public void setName(String name){
         this.name = name;
     }
