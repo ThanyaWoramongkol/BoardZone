@@ -2,6 +2,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.awt.image.BufferedImage;
 
 public class Fund implements MouseListener, ActionListener{
     private JFrame fundframe;
@@ -21,6 +25,13 @@ public class Fund implements MouseListener, ActionListener{
     
     private JButton donateButton;
     private JPanel jp;
+    private JPanel post;
+    private JButton btPost;
+    private JPanel detail;
+    private JLabel name, sub, price;
+    private JLabel empty_line1, empty_line2;
+    private ImageIcon pic1;
+    private JLabel jp1;
 
     public Fund(){
         fundframe = new JFrame("BoardZone");
@@ -39,14 +50,31 @@ public class Fund implements MouseListener, ActionListener{
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         donateButton = new JButton("Creat post");
         jp = new JPanel();
+        btPost = new JButton();
+        detail = new JPanel();
+        post = new JPanel();
+        name = new JLabel("Name");
+        sub = new JLabel("Detail");
+        price = new JLabel("0/100");
+        empty_line1 = new JLabel();
+        empty_line2 = new JLabel();
+        pic1 = new ImageIcon("poring.png");
+        jp1 = new JLabel(pic1, JLabel.CENTER);
+        
+        post.setLayout(new BorderLayout());
+        empty_line1.setPreferredSize(new Dimension(3000,0));
+        empty_line2.setPreferredSize(new Dimension(3000,0));
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
         fundmenu.addMouseListener(this);
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
+        
+        btPost.addActionListener(this);
         donateButton.addActionListener((ActionListener) this);
        
+        fundpanel.setLayout(new FlowLayout());
         fundframe.setJMenuBar(fundbar);
         fundbar.setLayout(new BorderLayout());
         menupanel.add(homemenu);
@@ -60,6 +88,22 @@ public class Fund implements MouseListener, ActionListener{
         fundbar.add(space, BorderLayout.CENTER);
         fundbar.add(profilemenu, BorderLayout.EAST);
         jp.add(donateButton);
+        detail.setLayout(new FlowLayout(FlowLayout.LEFT));
+        btPost.setPreferredSize(new Dimension(850, 85));
+        
+        
+        detail.add(name);
+        detail.add(empty_line1);
+        detail.add(sub);
+        detail.add(empty_line2);
+        detail.add(price);
+        
+        post.add(jp1, BorderLayout.WEST);
+        post.add(detail, BorderLayout.CENTER);
+        
+        btPost.add(post);
+        
+        fundpanel.add(btPost);
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
@@ -70,6 +114,9 @@ public class Fund implements MouseListener, ActionListener{
         fundframe.add(right, BorderLayout.EAST);
         fundframe.add(jp, BorderLayout.SOUTH);
         
+        post.setBackground(Color.WHITE);
+        detail.setBackground(Color.WHITE);
+        btPost.setBackground(Color.WHITE);
         fundbar.setBackground(new Color(43, 43, 43));
         menupanel.setBackground(new Color(43, 43, 43));
         space.setBackground(new Color(43, 43, 43));
@@ -145,6 +192,14 @@ public class Fund implements MouseListener, ActionListener{
             Thread thread = new Thread(donate);
             thread.start();
         }
+        else if(e.getSource().equals(btPost)){
+            DonatePost donate = new DonatePost();
+            Thread thread = new Thread(donate);
+            thread.start();
+        }
+    }
+    public static void main(String[] args) {
+        new Fund();
     }
 
 }

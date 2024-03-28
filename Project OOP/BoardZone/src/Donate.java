@@ -31,8 +31,6 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
 
-        jPanel1.setBackground(new java.awt.Color(43, 43, 43));
-
         post.setText("Post");
         post.setBackground(Color.WHITE);
 

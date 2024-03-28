@@ -222,7 +222,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(exitbutton)){
-            System.exit(JFrame.DISPOSE_ON_CLOSE);
+            donateframe.dispose();
         }
         else if(e.getSource().equals(picturebutton)){
             try {
@@ -235,10 +235,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
             }
         }
         else if(e.getSource().equals(post)){
-            name = head.getText();
-            detail = discription.getText();
-            price = Integer.parseInt( jTextField1.getText());
-            System.exit(JFrame.DISPOSE_ON_CLOSE);
+            new Pay();
         }
     }
 
