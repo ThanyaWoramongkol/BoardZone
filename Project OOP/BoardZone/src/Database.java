@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 public class Database {
     private Connection connect = null;
     private Statement statement = null;
@@ -33,6 +35,17 @@ public class Database {
         catch (SQLException ex){
             ex.printStackTrace();
         }
+    }
+    
+    public Connection getConnection(){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connect = DriverManager.getConnection(host,user,password);
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+        return connect;
     }
     
     public void close(){

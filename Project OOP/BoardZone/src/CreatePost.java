@@ -1,23 +1,29 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-public class CreatePost implements MouseListener, Runnable{
+import java.io.*;
+import javax.swing.filechooser.*;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+public class CreatePost implements MouseListener, ActionListener, Runnable{
     private JFrame frame;
-    private JPanel headerPanel, bodyPanel, imagePanel, showImagePanel, addImagePanel, inputPanel, namePanel, dnbPanel, detailPanel, footerPanel, postPanel;
+    private JPanel headerPanel, bodyPanel, mainImagePanel, showImagePanel, inputPanel, namePanel, dnbPanel, detailPanel, footerPanel, postPanel, bottomImagePanel;
     private Home mainWindow;
     private JLabel xBtnLabel, nameLabel, plusLabel;
+    private JLabel imgLabel[] = new JLabel[4];;
     private JTextField nameTF;
     private JTextArea detailTA;
     private JButton postBtn;
+    private File imgFiles[];
     public CreatePost(Home mainWindow){
         
         this.mainWindow = mainWindow;
         frame = new JFrame();
         headerPanel = new JPanel();
         bodyPanel = new JPanel();
-        imagePanel = new JPanel();
+        mainImagePanel = new JPanel();
         showImagePanel = new JPanel();
-        addImagePanel = new JPanel();
         inputPanel = new JPanel();
         footerPanel = new JPanel();
         nameTF = new JTextField();
@@ -28,7 +34,15 @@ public class CreatePost implements MouseListener, Runnable{
         postBtn = new JButton("Post");
         postPanel = new JPanel();
         detailPanel = new JPanel();
+        imgLabel[0] = new JLabel();
+        imgLabel[1] = new JLabel();
+        imgLabel[2] = new JLabel();
+        imgLabel[3] = new JLabel();
+        plusLabel = new JLabel();
+        bottomImagePanel = new JPanel();
         
+        postBtn.addActionListener(this);
+        showImagePanel.addMouseListener(this);
         
         //Header
         Image image = new ImageIcon("./resource/icons/times.png").getImage();
@@ -47,19 +61,27 @@ public class CreatePost implements MouseListener, Runnable{
         //Header
         
         
-        //ImagePanel
+        //mainImagePanel
         Image plusImage = new ImageIcon("./resource/icons/plus.png").getImage();
         ImageIcon plusIcon = new ImageIcon(plusImage.getScaledInstance(48, 48,  java.awt.Image.SCALE_SMOOTH));
-        plusLabel = new JLabel(plusIcon);
-        imagePanel.setBackground(new Color(61,61,61));
-        addImagePanel.setLayout(new BorderLayout());
-        addImagePanel.setBackground(new Color(126,126,126));
-        addImagePanel.add(plusLabel);
+        imgLabel[0].setIcon(plusIcon);
+        imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
+        showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
-        imagePanel.setLayout(new BorderLayout());
-        imagePanel.add(new BlankPanel(20, 50, new Color(61, 61, 61)), BorderLayout.EAST);
-        imagePanel.add(addImagePanel);
-        //ImagePanel
+        
+        showImagePanel.setBackground(new Color(126,126,126));
+        showImagePanel.setLayout(new BorderLayout());
+        bottomImagePanel.setLayout(new GridLayout(1, 3));
+        bottomImagePanel.add(imgLabel[1]);
+        bottomImagePanel.add(imgLabel[2]);
+        bottomImagePanel.add(imgLabel[3]);
+        showImagePanel.add(imgLabel[0]);
+        showImagePanel.add(bottomImagePanel, BorderLayout.SOUTH);
+        
+        mainImagePanel.setLayout(new BorderLayout());
+        mainImagePanel.add(new BlankPanel(20, 50, new Color(61, 61, 61)), BorderLayout.EAST);
+        mainImagePanel.add(showImagePanel);
+        //mainImagePanel
         
         
         //inputPanel
@@ -89,6 +111,7 @@ public class CreatePost implements MouseListener, Runnable{
         postBtn.setBackground(new Color(61, 61, 61));
         postBtn.setForeground(new Color(255, 255, 255));
         postBtn.setFont(postBtn.getFont().deriveFont(16f));
+        postBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         postPanel.setLayout(new BorderLayout());
         postPanel.add(new BlankPanel(new Color(61, 61, 61)), BorderLayout.CENTER);
@@ -108,7 +131,7 @@ public class CreatePost implements MouseListener, Runnable{
         
         //bodyPanel
         bodyPanel.setLayout(new GridLayout(1, 2));
-        bodyPanel.add(imagePanel);
+        bodyPanel.add(mainImagePanel);
         bodyPanel.add(inputPanel);
         //bodyPanel
         
@@ -153,6 +176,34 @@ public class CreatePost implements MouseListener, Runnable{
         if (e.getSource().equals(xBtnLabel)){
             frame.dispose();
         }
+        else if (e.getSource().equals(showImagePanel)){
+            
+            JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
+            fc.setFileFilter(filter);
+            fc.setMultiSelectionEnabled(true);
+            fc.showOpenDialog(frame);
+            File files[] = fc.getSelectedFiles();
+            if (files.length > 4){
+                System.out.println("maximum 4 images :C");
+            }
+            else{
+                int i = 0;
+                imgFiles = files.clone();
+                for (File imgFile : files){
+                    Image image = new ImageIcon(imgFile.getAbsolutePath()).getImage();
+                    ImageIcon icon = null;
+                    if (i == 0){
+                        icon = new ImageIcon(image.getScaledInstance(586, 330,  java.awt.Image.SCALE_SMOOTH));
+                    }
+                    else{
+                        icon = new ImageIcon(image.getScaledInstance(160, 90,  java.awt.Image.SCALE_SMOOTH));
+                    }
+                    imgLabel[i].setIcon(icon);
+                    i++;
+                }
+            }
+        }
     }
 
     @Override
@@ -166,12 +217,52 @@ public class CreatePost implements MouseListener, Runnable{
         if (e.getSource().equals(xBtnLabel)){
             xBtnLabel.setBackground(Color.red);
         }
+        else if (e.getSource().equals(showImagePanel)){
+            showImagePanel.setBackground(new Color(150,150,150));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if (e.getSource().equals(xBtnLabel)){
             xBtnLabel.setBackground(new Color(61,61,61));
+        }
+        else if (e.getSource().equals(showImagePanel)){
+            showImagePanel.setBackground(new Color(126,126,126));
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(postBtn)){
+            
+            Database db = new Database();
+            db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.getName()));
+            db.close();
+            
+            Connection cn = db.getConnection();
+            int i = 0;
+            try {
+                for (File imgFile : imgFiles){
+                    
+                    try(FileInputStream fis = new FileInputStream(imgFile)){
+                        PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.board_games SET img%s = ? WHERE (name = ?)", ""+i));
+                        ps.setBlob(1, fis);
+                        ps.setString(2, nameTF.getText());
+                        ps.executeUpdate();
+                        System.out.println("img"+ i + " added");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    i++;
+                }
+                
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            db.close();
+            frame.dispose();
+            JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
         }
     }
     
