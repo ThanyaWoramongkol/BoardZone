@@ -1,13 +1,20 @@
 
 public class CheckINTTwoDigit<T> extends CheckINT {
-    private final int limit = 2;
+//    private final int limit = 2;
     private T content;
     private int checkedT;
     
-    public int getLimit(){
-        return limit;
+//    public int getLimit(){
+//        return limit;
+//    }
+    public CheckINTTwoDigit(){}
+    
+    public CheckINTTwoDigit(T content){
+        super(2);
+        this.content = content;
     }
     
+
     public void setContent(T content){
         this.content = content;
     }
@@ -18,8 +25,8 @@ public class CheckINTTwoDigit<T> extends CheckINT {
     public int getCheckText() {
         try{
             checkedT = Integer.parseInt((String) content);
-            if (String.valueOf(checkedT).length() > limit){
-                return Integer.parseInt(String.valueOf(checkedT).substring(0, limit));
+            if (String.valueOf(checkedT).length() > this.getLimit()){
+                return Integer.parseInt(String.valueOf(checkedT).substring(0, this.getLimit()));
             } else {
                 return checkedT;
             }

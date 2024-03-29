@@ -67,9 +67,10 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         tmaxp = new JTextField(2);
         tloca = new JTextField();
         
-        checkhour = new CheckINTTwoDigit<>();
-        checkmin = new CheckINTTwoDigit<>();
-        checkmaxp = new CheckINTTwoDigit<>();
+        checkhour = new CheckINTTwoDigit<>(thour.getText());
+        checkmin = new CheckINTTwoDigit<>(tmin.getText());
+        checkmaxp = new CheckINTTwoDigit<>(tmaxp.getText());
+
         
         
         top.setLayout(new BorderLayout());
@@ -287,6 +288,23 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
             bpublic.setBackground(null);
             bpublic.setFont(new Font("Arial", Font.BOLD, 20));
             bprivate.setFont(new Font("Arial", Font.BOLD, 28));
+        } else if(e.getSource().equals(bconfirm)) {
+            if (!bprivate.getBackground().equals(Color.CYAN) && !bpublic.getBackground().equals(Color.CYAN)){
+                JOptionPane.showMessageDialog(null, "Please choose Public or Private", "WARNING", JOptionPane.ERROR_MESSAGE);
+            }
+            else if (thour.getText().equals("Hour") && tmin.getText().equals("Minute")){
+                JOptionPane.showMessageDialog(null, "Please input how long will you play", "WARNING", JOptionPane.ERROR_MESSAGE);
+            }
+            else if (tmaxp.getText().equals("")){
+                JOptionPane.showMessageDialog(null, "Please input max player", "WARNING", JOptionPane.ERROR_MESSAGE);
+            }
+            else if (tloca.getText().equals("") && ispublic){
+                JOptionPane.showMessageDialog(null, "Please input where you play", "WARNING", JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Successfully Borrowed A Game");
+                System.exit(JFrame.DISPOSE_ON_CLOSE);
+            }
         } else {
             System.exit(JFrame.DISPOSE_ON_CLOSE);
         }

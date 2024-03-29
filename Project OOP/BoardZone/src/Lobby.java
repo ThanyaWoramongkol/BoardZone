@@ -1,13 +1,16 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
+import javax.swing.border.*;
 
-public class Lobby implements MouseListener{
+public class Lobby implements MouseListener, ActionListener{
     private JFrame lobbyframe;
     private JPanel lobbypanel;
     private JPanel left;
     private JPanel right;
+    private JPanel bottompanel;
     private JMenuBar lobbybar;
     private JMenuBar menupanel;
     private JMenuBar space;
@@ -18,12 +21,15 @@ public class Lobby implements MouseListener{
     private JMenu aboutmenu;
     private JMenu username;
     private JLabel picprofile;
+    private JButton funbutton;
+    private JInternalFrame oxgame;
 
     public Lobby(){
         lobbyframe = new JFrame("BoardZone");
         lobbypanel = new JPanel();
         left = new JPanel();
         right = new JPanel();
+        bottompanel = new JPanel();
         lobbybar = new JMenuBar();
         menupanel = new JMenuBar();
         space = new JMenuBar();
@@ -32,16 +38,19 @@ public class Lobby implements MouseListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.username);
+        username = new JMenu(Account.getName());
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        funbutton = new JButton("Play MiniGame");
+        
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
         fundmenu.addMouseListener(this);
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
+        funbutton.addActionListener(this);
 
-        
+        lobbypanel.setLayout(new FlowLayout());
         lobbyframe.setJMenuBar(lobbybar);
         lobbybar.setLayout(new BorderLayout());
         menupanel.add(homemenu);
@@ -54,6 +63,7 @@ public class Lobby implements MouseListener{
         lobbybar.add(menupanel, BorderLayout.WEST);
         lobbybar.add(space, BorderLayout.CENTER);
         lobbybar.add(profilemenu, BorderLayout.EAST);
+        bottompanel.add(funbutton);
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
@@ -61,7 +71,8 @@ public class Lobby implements MouseListener{
         lobbyframe.setLayout(new BorderLayout());
         lobbyframe.add(lobbypanel, BorderLayout.CENTER);
         lobbyframe.add(left, BorderLayout.WEST);
-        lobbyframe.add(right, BorderLayout.EAST);   
+        lobbyframe.add(right, BorderLayout.EAST);
+        lobbyframe.add(bottompanel, BorderLayout.SOUTH);
                 
         lobbybar.setBackground(new Color(43, 43, 43));
         menupanel.setBackground(new Color(43, 43, 43));
@@ -70,6 +81,7 @@ public class Lobby implements MouseListener{
         lobbyframe.setBackground(new Color(101,101,101));
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
+        bottompanel.setBackground(new Color(101,101,101));
         lobbypanel.setBackground(new Color(75,75,75));
         
         homemenu.setForeground(new Color(170, 170, 170));
@@ -78,10 +90,25 @@ public class Lobby implements MouseListener{
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(170, 170, 170));
         
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+        funbutton.setForeground(new Color(red, green, blue));
+        funbutton.setBorder(new LineBorder(new Color(red, green, blue)));
+        funbutton.setBackground(null);
+        funbutton.setFont(new Font("Arial", Font.BOLD, 20));
+        
         lobbyframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lobbyframe.setSize(1080,720);
         lobbyframe.setVisible(true);
     }
+    
+    public static void main(String[] args) {
+        new Lobby();
+    }
+    
+
     
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(homemenu)){
@@ -127,5 +154,12 @@ public class Lobby implements MouseListener{
 
     public void setLocation(Point location) {
         lobbyframe.setLocation(location);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(funbutton)){
+            new GameClient();
+        }
     }
 }
