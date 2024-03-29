@@ -199,7 +199,7 @@ public class Login implements ActionListener, MouseListener{
         
         under_logo.setBackground(new Color(37, 37, 37));
         main.setBackground(new Color(37, 37, 37));
-       main.setBackground(Color.CYAN);
+       // main.setBackground(Color.CYAN);
         
         txt_user.setForeground(Color.WHITE);
         txt_pass.setForeground(Color.WHITE);
