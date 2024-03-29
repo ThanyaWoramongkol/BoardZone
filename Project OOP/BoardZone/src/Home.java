@@ -2,9 +2,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-
-public class Home implements MouseListener, ActionListener{
+import java.sql.*;
+import java.util.*;
+public class Home implements MouseListener, ActionListener, WindowListener{
     private JFrame homeframe;
     private JPanel homepanel;
     private JPanel left;
@@ -21,8 +21,9 @@ public class Home implements MouseListener, ActionListener{
     private JLabel picprofile;
     private JPanel footerPanel;
     private JScrollPane homeScrollPane;
-    
+    private JLabel loading;
     private JButton createBtn;
+    private ArrayList<BoardGamePanel> bgPanels = new ArrayList<BoardGamePanel>();
 
     public Home(){
         homeframe = new JFrame("BoardZone");
@@ -42,6 +43,7 @@ public class Home implements MouseListener, ActionListener{
         createBtn = new JButton("Create Post");
         footerPanel = new JPanel();
         homeScrollPane = new JScrollPane(homepanel);
+        loading = new JLabel("Loading...");
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
@@ -49,6 +51,7 @@ public class Home implements MouseListener, ActionListener{
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
         createBtn.addActionListener(this);
+        homeframe.addWindowListener(this);
 
         
         homeframe.setJMenuBar(homebar);
@@ -67,14 +70,13 @@ public class Home implements MouseListener, ActionListener{
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
         
-        homepanel.add(new BlankPanel(300,300,Color.BLACK));
-        homepanel.add(new BlankPanel(300,300,Color.RED));
-        homepanel.add(new BlankPanel(300,300,Color.GREEN));
-        homepanel.add(new BlankPanel(300,300,Color.RED));
-        homepanel.add(new BlankPanel(300,300,Color.GREEN));
-        homepanel.add(new BlankPanel(300,300,Color.BLACK));
-        homepanel.add(new BlankPanel(300,300,Color.BLACK));
+        ((FlowLayout)homepanel.getLayout()).setHgap(24);
+        ((FlowLayout)homepanel.getLayout()).setVgap(24);
+        
+        
         homepanel.setPreferredSize(new Dimension(880, 2000));
+        loading.setForeground(Color.WHITE);
+        homepanel.add(loading);
 
         homeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         homeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -171,4 +173,51 @@ public class Home implements MouseListener, ActionListener{
             new CreatePost(this);
         }
     }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        Database db = new Database();
+        try{
+            System.out.println("Loading....");
+            ResultSet rs = db.getSelect("SELECT * FROM board_games");
+            System.out.println("Loading....");
+            while((rs!=null) && (rs.next())){
+                int boardGameID = rs.getInt("board_game_id");
+                String name = rs.getString("name");
+                boolean isAvailable = rs.getBoolean("is_available");
+                String rating = rs.getString("rating");
+                byte[] imgBytes = rs.getBytes("img0");
+                ImageIcon img = new ImageIcon(imgBytes);
+                bgPanels.add(new BoardGamePanel(name, rating, isAvailable, img));
+                System.out.println("Loading....");
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        db.close();
+        for( BoardGamePanel bgPanel : bgPanels){
+            homepanel.add(bgPanel);
+        }
+        loading.setVisible(false);
+        
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {}
+
+    @Override
+    public void windowClosed(WindowEvent e) {}
+
+    @Override
+    public void windowIconified(WindowEvent e) {}
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {}
+
+    @Override
+    public void windowActivated(WindowEvent e) {}
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
 }
