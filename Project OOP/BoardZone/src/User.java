@@ -17,7 +17,55 @@ public class User implements MouseListener{
     private JMenu fundmenu;
     private JMenu aboutmenu;
     private JMenu username;
-    private JLabel picprofile;
+    private JLabel picprofile;   
+    private JPanel userprofile;
+    private JPanel userprofileleft;
+    private JPanel userprofileright;
+    private JPanel backgroudpicture;
+    private JPanel stupidpanel1;
+    private JPanel stupidpanel2;
+    private JPanel stupidpanel3;
+    private JPanel stupidpanel4;
+    private JButton changepicture;
+    private JPanel changepicturepanel;
+    private JLabel pictureframe;
+    private JPanel rightpanel1;
+    private JPanel rightpanel2;
+    private JPanel rightpanel3;
+    private JPanel rightpanel4;
+    private JPanel rightpanel5;
+    private JPanel rightpanel6;
+    private JPanel rightpanel7;
+    private JPanel rightpanel8;
+    private JPanel rightpanel9;
+    private JPanel rightpanel10;
+    private JPanel rightpanel11;
+    private JPanel rightpanel12;
+    private JPanel stupidback1;
+    private JPanel stupidback2;
+    private JPanel stupidback3;
+    private JPanel stupidback4;
+    private JPanel stupidback5;
+    private JPanel stupidback6;
+    private JPanel finalbutton1;
+    private JPanel finalbutton2;
+    private JLabel name;
+    private JLabel surname; 
+    private JLabel usernameprofile; 
+    private JLabel email; 
+    private JLabel phone;
+    private JLabel academic;
+    private JLabel faculty;
+    private JTextField textname;
+    private JTextField textsurname;
+    private JTextField textusername;
+    private JTextField textphone;
+    private JTextField textemail;
+    private JTextField textacademic;
+    private JTextField textfaculty;
+    private JButton logout;
+    private JButton save;
+    
 
     public User(){
         userframe = new JFrame("BoardZone");
@@ -32,8 +80,56 @@ public class User implements MouseListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.getName());
-        picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        username = new JMenu("UserName");
+        picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);     
+        
+        userprofile = new JPanel();
+        userprofileleft = new JPanel();
+        userprofileright = new JPanel();
+        backgroudpicture = new JPanel();
+        pictureframe = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        changepicturepanel = new JPanel();
+        changepicture = new JButton("Change Picture Here");
+        stupidpanel1 = new JPanel();
+        stupidpanel2 = new JPanel();
+        stupidpanel3 = new JPanel();
+        stupidpanel4 = new JPanel();
+        rightpanel1 = new JPanel();
+        rightpanel2 = new JPanel();
+        rightpanel3 = new JPanel();
+        rightpanel4 = new JPanel();
+        rightpanel5 = new JPanel();
+        rightpanel6 = new JPanel();
+        rightpanel7 = new JPanel();
+        rightpanel8 = new JPanel();
+        rightpanel9 = new JPanel();
+        rightpanel10 = new JPanel();
+        rightpanel11= new JPanel();
+        rightpanel12= new JPanel();
+        stupidback1 = new JPanel();
+        stupidback2 = new JPanel();
+        stupidback3 = new JPanel();
+        stupidback4 = new JPanel();
+        stupidback5 = new JPanel();
+        stupidback6 = new JPanel();
+        finalbutton1 = new JPanel();
+        finalbutton2 = new JPanel();
+        name = new JLabel("Name :");
+        surname = new JLabel("Surname :");
+        usernameprofile = new JLabel("Username :");
+        phone = new JLabel("Phone Number :");
+        email = new JLabel("Email :");
+        academic = new JLabel("Academic Year :");
+        faculty = new JLabel("Faculty :");
+        textname = new JTextField(16);
+        textsurname = new JTextField(16);
+        textusername = new JTextField(48);
+        textphone = new JTextField(48);
+        textemail = new JTextField(48);
+        textacademic = new JTextField(16);
+        textfaculty = new JTextField(16);
+        logout = new JButton("Logout");
+        save = new JButton("Save");
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
@@ -75,11 +171,145 @@ public class User implements MouseListener{
         lobbymenu.setForeground(new Color(170, 170, 170));
         fundmenu.setForeground(new Color(170, 170, 170));
         aboutmenu.setForeground(new Color(170, 170, 170));
-        username.setForeground(new Color(255, 255, 255));
+        username.setForeground(new Color(255, 255, 255)); 
         
         userframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userframe.setSize(1080,720);
-        userframe.setVisible(true);
+        userframe.setVisible(true);  
+                
+        userpanel.setLayout(new GridLayout(1,2));
+        userpanel.add(userprofile);
+        userprofile.setLayout(new GridLayout(1,2));
+        userprofile.add(userprofileleft);
+        userprofile.add(userprofileright);
+        userprofileleft.setBackground(new Color(75,75,75));
+        userprofileright.setBackground(new Color(75,75,75));
+        
+        userprofileleft.setLayout(new BorderLayout());
+        userprofileleft.add(pictureframe,BorderLayout.CENTER);
+        backgroudpicture.setPreferredSize(new Dimension(userprofileleft.getWidth()-30, userprofileleft.getHeight()-30));
+        
+        userprofileleft.add(changepicturepanel,BorderLayout.SOUTH);
+        changepicturepanel.setSize(userprofileleft.getWidth()-50, userprofileleft.getHeight()-50);
+        
+        changepicturepanel.setLayout(new BorderLayout());
+        changepicturepanel.add(changepicture, BorderLayout.CENTER);
+        changepicturepanel.add(stupidpanel1, BorderLayout.SOUTH);
+        changepicturepanel.add(stupidpanel2, BorderLayout.WEST);
+        changepicturepanel.add(stupidpanel3, BorderLayout.EAST);
+        changepicturepanel.add(stupidpanel4, BorderLayout.NORTH);
+        stupidpanel1.setPreferredSize(new Dimension(userprofileleft.getWidth(), 50));
+        stupidpanel2.setPreferredSize(new Dimension(100, userprofileleft.getHeight()));
+        stupidpanel3.setPreferredSize(new Dimension(100, userprofileleft.getHeight()));
+        stupidpanel4.setPreferredSize(new Dimension(userprofileleft.getWidth(), 50));
+          
+        changepicturepanel.setBackground(new Color(75,75,75));
+        stupidpanel1.setBackground(new Color(75,75,75));
+        stupidpanel2.setBackground(new Color(75,75,75));
+        stupidpanel3.setBackground(new Color(75,75,75));
+        stupidpanel4.setBackground(new Color(75,75,75));
+        
+        userprofileright.setLayout(new GridLayout(8,1));
+        userprofileright.add(rightpanel6);
+        userprofileright.add(rightpanel1);
+        userprofileright.add(rightpanel2);
+        userprofileright.add(rightpanel3);
+        userprofileright.add(rightpanel4);
+        userprofileright.add(rightpanel5);
+        userprofileright.add(rightpanel7);
+        userprofileright.add(rightpanel12);
+        
+        
+        rightpanel1.setLayout(new GridLayout());
+        rightpanel1.add(rightpanel8);
+        rightpanel8.setLayout(new GridLayout(2,1));
+        rightpanel8.add(name);
+        rightpanel8.add(textname);
+        name.setFont(new Font("Arial", Font.BOLD, 18));
+        textname.setFont(new Font("Arial", Font.PLAIN, 18));
+        rightpanel1.add(rightpanel9);
+        rightpanel9.setLayout(new GridLayout(2,1));
+        rightpanel9.add(surname);
+        rightpanel9.add(textsurname);
+        surname.setFont(new Font("Arial", Font.BOLD, 18));
+        textsurname.setFont(new Font("Arial", Font.PLAIN, 18));
+        
+        rightpanel2.setLayout(new GridLayout(2,1));
+        rightpanel2.add(usernameprofile);
+        rightpanel2.add(textusername);
+        usernameprofile.setFont(new Font("Arial", Font.BOLD, 18));
+        textusername.setFont(new Font("Arial", Font.PLAIN, 18));
+        
+        rightpanel3.setLayout(new GridLayout(2,1));
+        rightpanel3.add(phone);
+        rightpanel3.add(textphone);
+        phone.setFont(new Font("Arial", Font.BOLD, 18));
+        textphone.setFont(new Font("Arial", Font.PLAIN, 18));
+        
+        rightpanel4.setLayout(new GridLayout(2,1));
+        rightpanel4.add(email);
+        rightpanel4.add(textemail);
+        email.setFont(new Font("Arial", Font.BOLD, 18));
+        textemail.setFont(new Font("Arial", Font.PLAIN, 18));
+        
+        rightpanel5.setLayout(new GridLayout());
+        rightpanel5.add(rightpanel10);
+        rightpanel10.setLayout(new GridLayout(2,1));
+        rightpanel10.add(academic);
+        rightpanel10.add(textacademic);
+        academic.setFont(new Font("Arial", Font.BOLD, 18));
+        textacademic.setFont(new Font("Arial", Font.PLAIN,18));
+        rightpanel5.add(rightpanel11);
+        rightpanel11.setLayout(new GridLayout(2,1));
+        rightpanel11.add(faculty);
+        rightpanel11.add(textfaculty);
+        faculty.setFont(new Font("Arial", Font.BOLD, 18));
+        textfaculty.setFont(new Font("Arial", Font.PLAIN, 18));
+        
+        rightpanel12.setLayout(new GridLayout(1,4));
+        rightpanel12.add(stupidback1);
+        rightpanel12.add(stupidback2);
+        rightpanel12.add(finalbutton1);
+        rightpanel12.add(finalbutton2);
+        
+        finalbutton1.setLayout(new GridLayout(3,1));
+        finalbutton1.add(stupidback3);
+        finalbutton1.add(logout);
+        finalbutton1.add(stupidback4);
+        
+        finalbutton2.setLayout(new GridLayout(3,1));
+        finalbutton2.add(stupidback5);
+        finalbutton2.add(save);
+        finalbutton2.add(stupidback6);
+        
+        name.setForeground(new Color(255, 255, 255));
+        surname.setForeground(new Color(255, 255, 255));
+        usernameprofile.setForeground(new Color(255, 255, 255));
+        phone.setForeground(new Color(255, 255, 255));
+        email.setForeground(new Color(255, 255, 255));
+        academic.setForeground(new Color(255, 255, 255));
+        faculty.setForeground(new Color(255, 255, 255));
+        
+        rightpanel1.setBackground(new Color(75,75,75));
+        rightpanel2.setBackground(new Color(75,75,75));
+        rightpanel3.setBackground(new Color(75,75,75));
+        rightpanel4.setBackground(new Color(75,75,75));       
+        rightpanel5.setBackground(new Color(75,75,75));
+        rightpanel6.setBackground(new Color(75,75,75));
+        rightpanel7.setBackground(new Color(75,75,75));
+        rightpanel8.setBackground(new Color(75,75,75));
+        rightpanel9.setBackground(new Color(75,75,75));
+        rightpanel10.setBackground(new Color(75,75,75));       
+        rightpanel11.setBackground(new Color(75,75,75));
+        rightpanel12.setBackground(new Color(75,75,75));
+        stupidback1.setBackground(new Color(75,75,75));
+        stupidback2.setBackground(new Color(75,75,75));
+        stupidback3.setBackground(new Color(75,75,75));
+        stupidback4.setBackground(new Color(75,75,75));
+        stupidback5.setBackground(new Color(75,75,75));
+        stupidback6.setBackground(new Color(75,75,75));
+        finalbutton1.setBackground(new Color(75,75,75));
+        finalbutton2.setBackground(new Color(75,75,75));
     }
     
     public void mouseClicked(MouseEvent e) {
