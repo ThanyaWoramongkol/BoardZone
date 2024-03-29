@@ -1,6 +1,9 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
+
 public class Login implements ActionListener, MouseListener{
     private JFrame frame;
     private JPanel panel_l, panel_r, panel_t, panel_b, main;
@@ -199,7 +202,7 @@ public class Login implements ActionListener, MouseListener{
         
         under_logo.setBackground(new Color(37, 37, 37));
         main.setBackground(new Color(37, 37, 37));
-       // main.setBackground(Color.CYAN);
+//       main.setBackground(Color.CYAN);
         
         txt_user.setForeground(Color.WHITE);
         txt_pass.setForeground(Color.WHITE);
@@ -250,33 +253,68 @@ public class Login implements ActionListener, MouseListener{
         
     }
     
+    public boolean login(){
+        String uusername = username.getText();
+        String upassword = String.valueOf(password.getPassword());
+        try {
+            Database db = new Database();
+            ResultSet rs = null;
+            String sql = String.format("SELECT * FROM boardzone.Account WHERE username = '%s' and password = '%s'", uusername, upassword);
+
+            rs = db.getSelect(sql);
+            return rs.next();
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
     @Override
     public void actionPerformed(ActionEvent ae) {
+        
         if (ae.getSource().equals(login)){
-            if (username.getText().equals("") || password.getText().equals("")){
+            if (username.getText().equals("") || String.valueOf(password.getPassword()).equals("")){
                 err.setText("Please input username or password.");
-            } else {
+            } else if (login()) {
+                System.out.println(username.getText() + " | " + String.valueOf(password.getPassword()));
                 Account.username = username.getText();
                 Home home = new Home();
                 home.setSize(frame.getSize());
                 home.setLocation(frame.getLocation());
                 frame.dispose();
+            } else {
+                System.out.println(username.getText() + " | " + String.valueOf(password.getPassword()));
+                err.setText("Invalid username or password");
             }
         }
+        //MDI Create account action
         if (ae.getSource().equals(createButton)){
-            if (firstname.getText().isEmpty() || lastname.getText().isEmpty()){
+            String uusername = iusername.getText();
+            String upassword = String.valueOf(pPassword.getPassword());
+            String ufirstname = firstname.getText();
+            String ulastname = lastname.getText();
+            String uemail = email.getText();
+            
+            if (ufirstname.equals("") || ulastname.equals("")){
                 terror.setText("Please input firstname and lastname");
-            } else if (email.getText().isEmpty()){
+            } else if (uemail.equals("")){
                 terror.setText("Please input your Email");
-            } else if (iusername.getText().isEmpty() || pPassword.getText().isEmpty()){
+            } else if (uusername.equals("") || upassword.equals("")){
                 terror.setText("Please input username and password");
             } else {
-                firstname.setText("");
-                lastname.setText("");
-                email.setText("");
-                iusername.setText("");
-                pPassword.setText("");
-                terror.setText("");
+                try {
+                    Database db = new Database();
+                    
+                    String sql = String.format("INSERT INTO boardzone.Account (username, password, email, firstname, lastname) VALUES ('%s','%s','%s','%s','%s');", uusername, upassword, uemail, ufirstname, ulastname);
+                    db.update(sql);
+                    db.close();
+                    
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+                //remove text on this page
+                firstname.setText(""); lastname.setText(""); email.setText("");
+                iusername.setText(""); pPassword.setText("");terror.setText("");                
                 
                 JOptionPane.showMessageDialog(create, "Created Account Success");
                 
