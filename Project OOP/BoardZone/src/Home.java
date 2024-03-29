@@ -153,7 +153,7 @@ public class Home implements MouseListener, ActionListener, WindowListener{
             bgPanel.addMouseListener(this);
         }
         loading.setVisible(false);
-        homepanel.setPreferredSize(new Dimension(880, 350*(int)(bgPanels.size()/3)));
+        homepanel.setPreferredSize(new Dimension(880, 310*((int)(bgPanels.size()/3)+1)));
     }
     public static void main(String[] args) {
         new Home();
@@ -216,6 +216,7 @@ public class Home implements MouseListener, ActionListener, WindowListener{
             new CreatePost(this);
         }
         else if (e.getSource().equals(refreshBtn)){
+            homepanel.removeAll();
             this.refresh();
         }
     }
