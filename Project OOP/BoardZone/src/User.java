@@ -2,8 +2,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
 
-public class User implements MouseListener{
+public class User implements MouseListener, ActionListener{
     private JFrame userframe;
     private JPanel userpanel;
     private JPanel left;
@@ -17,7 +18,7 @@ public class User implements MouseListener{
     private JMenu fundmenu;
     private JMenu aboutmenu;
     private JMenu username;
-    private JLabel picprofile;   
+    private JLabel picprofile;
     private JPanel userprofile;
     private JPanel userprofileleft;
     private JPanel userprofileright;
@@ -80,7 +81,7 @@ public class User implements MouseListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu("UserName");
+        username = new JMenu(Account.username);
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);     
         
         userprofile = new JPanel();
@@ -121,13 +122,13 @@ public class User implements MouseListener{
         email = new JLabel("Email :");
         academic = new JLabel("Academic Year :");
         faculty = new JLabel("Faculty :");
-        textname = new JTextField(16);
-        textsurname = new JTextField(16);
-        textusername = new JTextField(48);
-        textphone = new JTextField(48);
-        textemail = new JTextField(48);
-        textacademic = new JTextField(16);
-        textfaculty = new JTextField(16);
+        textname = new JTextField(Account.firstname,16);
+        textsurname = new JTextField(Account.lastname, 16);
+        textusername = new JTextField(Account.username, 48);
+        textphone = new JTextField(Account.phone, 48);
+        textemail = new JTextField(Account.email, 48);
+        textacademic = new JTextField(Account.year, 16);
+        textfaculty = new JTextField(Account.faculty, 16);
         logout = new JButton("Logout");
         save = new JButton("Save");
         
@@ -136,6 +137,10 @@ public class User implements MouseListener{
         fundmenu.addMouseListener(this);
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
+        
+        changepicture.addActionListener(this);
+        logout.addActionListener(this);
+        save.addActionListener(this);
         
         userframe.setJMenuBar(userbar);
         userbar.setLayout(new BorderLayout());
@@ -213,8 +218,8 @@ public class User implements MouseListener{
         userprofileright.add(rightpanel6);
         userprofileright.add(rightpanel1);
         userprofileright.add(rightpanel2);
-        userprofileright.add(rightpanel3);
         userprofileright.add(rightpanel4);
+        userprofileright.add(rightpanel3);
         userprofileright.add(rightpanel5);
         userprofileright.add(rightpanel7);
         userprofileright.add(rightpanel12);
@@ -225,31 +230,31 @@ public class User implements MouseListener{
         rightpanel8.setLayout(new GridLayout(2,1));
         rightpanel8.add(name);
         rightpanel8.add(textname);
-        name.setFont(new Font("Arial", Font.BOLD, 18));
+        name.setFont(new Font("Arial", Font.PLAIN, 18));
         textname.setFont(new Font("Arial", Font.PLAIN, 18));
         rightpanel1.add(rightpanel9);
         rightpanel9.setLayout(new GridLayout(2,1));
         rightpanel9.add(surname);
         rightpanel9.add(textsurname);
-        surname.setFont(new Font("Arial", Font.BOLD, 18));
+        surname.setFont(new Font("Arial", Font.PLAIN, 18));
         textsurname.setFont(new Font("Arial", Font.PLAIN, 18));
         
         rightpanel2.setLayout(new GridLayout(2,1));
         rightpanel2.add(usernameprofile);
         rightpanel2.add(textusername);
-        usernameprofile.setFont(new Font("Arial", Font.BOLD, 18));
+        usernameprofile.setFont(new Font("Arial", Font.PLAIN, 18));
         textusername.setFont(new Font("Arial", Font.PLAIN, 18));
         
         rightpanel3.setLayout(new GridLayout(2,1));
         rightpanel3.add(phone);
         rightpanel3.add(textphone);
-        phone.setFont(new Font("Arial", Font.BOLD, 18));
+        phone.setFont(new Font("Arial", Font.PLAIN, 18));
         textphone.setFont(new Font("Arial", Font.PLAIN, 18));
         
         rightpanel4.setLayout(new GridLayout(2,1));
         rightpanel4.add(email);
         rightpanel4.add(textemail);
-        email.setFont(new Font("Arial", Font.BOLD, 18));
+        email.setFont(new Font("Arial", Font.PLAIN, 18));
         textemail.setFont(new Font("Arial", Font.PLAIN, 18));
         
         rightpanel5.setLayout(new GridLayout());
@@ -257,13 +262,13 @@ public class User implements MouseListener{
         rightpanel10.setLayout(new GridLayout(2,1));
         rightpanel10.add(academic);
         rightpanel10.add(textacademic);
-        academic.setFont(new Font("Arial", Font.BOLD, 18));
+        academic.setFont(new Font("Arial", Font.PLAIN, 18));
         textacademic.setFont(new Font("Arial", Font.PLAIN,18));
         rightpanel5.add(rightpanel11);
         rightpanel11.setLayout(new GridLayout(2,1));
         rightpanel11.add(faculty);
         rightpanel11.add(textfaculty);
-        faculty.setFont(new Font("Arial", Font.BOLD, 18));
+        faculty.setFont(new Font("Arial", Font.PLAIN, 18));
         textfaculty.setFont(new Font("Arial", Font.PLAIN, 18));
         
         rightpanel12.setLayout(new GridLayout(1,4));
@@ -312,6 +317,21 @@ public class User implements MouseListener{
         finalbutton2.setBackground(new Color(75,75,75));
     }
     
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(logout)){
+            Login login = new Login();
+            login.setSize(userframe.getSize());
+            login.setLocation(userframe.getLocation());
+            userframe.dispose();
+        } else if (e.getSource().equals(save)){
+            Account.setDataPlus(textname.getText(), textsurname.getText(), textusername.getText(), 
+                    textemail.getText(), textphone.getText(), textacademic.getText(), textfaculty.getText());
+            JOptionPane.showMessageDialog(userframe, "Account successfully updated.");
+        }
+    }
+    
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(homemenu)){
             Home home = new Home();
@@ -357,4 +377,9 @@ public class User implements MouseListener{
     public void setLocation(Point location) {
         userframe.setLocation(location);
     }
+    
+    public static void main(String[] args) {
+        new User();
+    }
+
 }

@@ -51,7 +51,7 @@ public class Login implements ActionListener, MouseListener{
         mainpanel = new JDesktopPane();
         
         // create account frame
-        create = new JInternalFrame("Create an account", true, true, true, true);
+        create = new JInternalFrame("Create an account", false, true, false, false);
         cframe = new JPanel();
         cmain = new JPanel();
         cFirstname = new JPanel();
@@ -278,6 +278,8 @@ public class Login implements ActionListener, MouseListener{
             } else if (login()) {
                 System.out.println(username.getText() + " | " + String.valueOf(password.getPassword()));
                 Account.username = username.getText();
+                Account.setData();
+                
                 Home home = new Home();
                 home.setSize(frame.getSize());
                 home.setLocation(frame.getLocation());
@@ -304,10 +306,16 @@ public class Login implements ActionListener, MouseListener{
             } else {
                 try {
                     Database db = new Database();
-                    
                     String sql = String.format("INSERT INTO boardzone.Account (username, password, email, firstname, lastname) VALUES ('%s','%s','%s','%s','%s');", uusername, upassword, uemail, ufirstname, ulastname);
+//                    String sqlS = String.format("SELECT * FROM boardzone.Account WHERE username = '%s';", uusername);
+//                    ResultSet rs = db.getSelect(sqlS);
+//                    if (rs.getString("username").equals(uusername) && rs.next()){
+//                        terror.setText("Username already exists.");
+//                    }
+                    
                     db.update(sql);
                     db.close();
+                    
                     
                 } catch (Exception ex){
                     ex.printStackTrace();
@@ -354,9 +362,16 @@ public class Login implements ActionListener, MouseListener{
     public void mouseExited(MouseEvent e) {
 
     }
+    
+    public void setSize(Dimension size) {
+        frame.setSize(size);
+    }
 
+    public void setLocation(Point location) {
+        frame.setLocation(location);
+    }
     public static void main(String[] args) {
         new Login();
     }
-        
+  
 }
