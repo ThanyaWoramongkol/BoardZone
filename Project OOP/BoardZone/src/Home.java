@@ -22,8 +22,8 @@ public class Home implements MouseListener, ActionListener, WindowListener{
     private JPanel footerPanel;
     private JScrollPane homeScrollPane;
     private JLabel loading;
-    private JButton createBtn;
-    private ArrayList<BoardGamePanel> bgPanels = new ArrayList<BoardGamePanel>();
+    private JButton createBtn, refreshBtn;
+    private ArrayList<BoardGamePanel> bgPanels;
 
     public Home(){
         homeframe = new JFrame("BoardZone");
@@ -41,6 +41,7 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         username = new JMenu(Account.getName());
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         createBtn = new JButton("Create Post");
+        refreshBtn = new JButton("Refresh");
         footerPanel = new JPanel();
         homeScrollPane = new JScrollPane(homepanel);
         loading = new JLabel("Loading...");
@@ -51,6 +52,7 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
         createBtn.addActionListener(this);
+        refreshBtn.addActionListener(this);
         homeframe.addWindowListener(this);
 
         
@@ -74,7 +76,7 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         ((FlowLayout)homepanel.getLayout()).setVgap(24);
         
         
-        homepanel.setPreferredSize(new Dimension(880, 2000));
+//        homepanel.setPreferredSize(new Dimension(880, 2000));
         loading.setForeground(Color.WHITE);
         homepanel.add(loading);
 
@@ -84,8 +86,12 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         homeScrollPane.getVerticalScrollBar().setBackground(new Color(75,75,75));
         homeScrollPane.getVerticalScrollBar().setUI(new ScrollBarUI());
         homeScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
+        homeScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        
+        refreshBtn.setFocusPainted(false);
         createBtn.setFocusPainted(false);
         footerPanel.add(createBtn);
+        footerPanel.add(refreshBtn);
         
         homeframe.setLayout(new BorderLayout());
         homeframe.add(homeScrollPane, BorderLayout.CENTER);
@@ -102,9 +108,11 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         right.setBackground(new Color(101,101,101));
         footerPanel.setBackground(new Color(101,101,101));
         createBtn.setBackground(new Color(101,101,101));
+        refreshBtn.setBackground(new Color(101,101,101));
         homepanel.setBackground(new Color(75,75,75));
         
         createBtn.setForeground(new Color(255, 255, 255));
+        refreshBtn.setForeground(new Color(255, 255, 255));
         homemenu.setForeground(new Color(255, 255, 255));
         lobbymenu.setForeground(new Color(170, 170, 170));
         fundmenu.setForeground(new Color(170, 170, 170));
@@ -117,6 +125,35 @@ public class Home implements MouseListener, ActionListener, WindowListener{
     }
     public JFrame getFrame(){
         return this.homeframe;
+    }
+    public void refresh(){
+        bgPanels = new ArrayList<BoardGamePanel>();
+        Database db = new Database();
+        try{
+            System.out.println("Loading....");
+            ResultSet rs = db.getSelect("SELECT * FROM board_games");
+            System.out.println("Loading....");
+            while((rs!=null) && (rs.next())){
+                int boardGameID = rs.getInt("board_game_id");
+                String name = rs.getString("name");
+                boolean isAvailable = rs.getBoolean("is_available");
+                String rating = rs.getString("rating");
+                byte[] imgBytes = rs.getBytes("img0");
+                ImageIcon img = new ImageIcon(imgBytes);
+                bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
+                System.out.println("Loading....");
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        db.close();
+        for( BoardGamePanel bgPanel : bgPanels){
+            homepanel.add(bgPanel);
+            bgPanel.addMouseListener(this);
+        }
+        loading.setVisible(false);
+        homepanel.setPreferredSize(new Dimension(880, 350*(int)(bgPanels.size()/3)));
     }
     public static void main(String[] args) {
         new Home();
@@ -149,6 +186,12 @@ public class Home implements MouseListener, ActionListener, WindowListener{
             user.setLocation(homeframe.getLocation());
             homeframe.dispose();
         }
+        for( BoardGamePanel bgPanel : bgPanels){
+            if (e.getSource().equals(bgPanel)){
+                System.out.println("boardGameID:"+bgPanel.getID());
+                new BoardGameShowDetail(this, bgPanel.getID());
+            }
+        }
     }
     public void mousePressed(MouseEvent e) {
     }
@@ -172,35 +215,14 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         if (e.getSource().equals(createBtn)){
             new CreatePost(this);
         }
+        else if (e.getSource().equals(refreshBtn)){
+            this.refresh();
+        }
     }
 
     @Override
     public void windowOpened(WindowEvent e) {
-        Database db = new Database();
-        try{
-            System.out.println("Loading....");
-            ResultSet rs = db.getSelect("SELECT * FROM board_games");
-            System.out.println("Loading....");
-            while((rs!=null) && (rs.next())){
-                int boardGameID = rs.getInt("board_game_id");
-                String name = rs.getString("name");
-                boolean isAvailable = rs.getBoolean("is_available");
-                String rating = rs.getString("rating");
-                byte[] imgBytes = rs.getBytes("img0");
-                ImageIcon img = new ImageIcon(imgBytes);
-                bgPanels.add(new BoardGamePanel(name, rating, isAvailable, img));
-                System.out.println("Loading....");
-            }
-        }
-        catch(Exception ex){
-            ex.printStackTrace();
-        }
-        db.close();
-        for( BoardGamePanel bgPanel : bgPanels){
-            homepanel.add(bgPanel);
-        }
-        loading.setVisible(false);
-        
+        this.refresh();
     }
 
     @Override

@@ -17,6 +17,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
     private JButton postBtn;
     private File imgFiles[];
     private ImageIcon plusIcon;
+    private JScrollPane taScrollPane;
     public CreatePost(Home mainWindow){
         
         this.mainWindow = mainWindow;
@@ -41,6 +42,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         imgLabel[3] = new JLabel();
         plusLabel = new JLabel();
         bottomImagePanel = new JPanel();
+        taScrollPane = new JScrollPane(detailTA);
         
         postBtn.addActionListener(this);
         showImagePanel.addMouseListener(this);
@@ -99,11 +101,18 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         namePanel.add(nameLabel, BorderLayout.WEST);
         namePanel.add(nameTF);
         
+        taScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        taScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        taScrollPane.getVerticalScrollBar().setUnitIncrement(15);
+        taScrollPane.getVerticalScrollBar().setBackground(new Color(75,75,75));
+        taScrollPane.getVerticalScrollBar().setUI(new ScrollBarUI());
+        taScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
+        taScrollPane.setBorder(BorderFactory.createEmptyBorder());
         
-        
+        detailTA.setLineWrap(true);
         detailTA.setBackground(new Color(86, 86, 86));
         detailTA.setForeground(new Color(255, 255, 255));
-        detailPanel.add(detailTA);
+        detailPanel.add(taScrollPane);
         dnbPanel.setLayout(new BorderLayout());
         dnbPanel.add(new BlankPanel(38, 32, new Color(61, 61, 61)), BorderLayout.NORTH);
         dnbPanel.add(detailPanel);
@@ -168,6 +177,10 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         while (true) {
             if(mainWindow.getFrame().isFocused()){
                 frame.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-frame.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-frame.getHeight())/2));
+                frame.setAlwaysOnTop(true);
+            }
+            else {
+                frame.setAlwaysOnTop(false);
             }
         }
     }
