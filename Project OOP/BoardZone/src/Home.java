@@ -2,6 +2,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class Home implements MouseListener, ActionListener{
     private JFrame homeframe;
@@ -18,6 +19,8 @@ public class Home implements MouseListener, ActionListener{
     private JMenu aboutmenu;
     private JMenu username;
     private JLabel picprofile;
+    private JPanel footerPanel;
+    private JScrollPane homeScrollPane;
     
     private JButton createBtn;
 
@@ -37,6 +40,8 @@ public class Home implements MouseListener, ActionListener{
         username = new JMenu(Account.getName());
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         createBtn = new JButton("Create Post");
+        footerPanel = new JPanel();
+        homeScrollPane = new JScrollPane(homepanel);
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
@@ -62,12 +67,29 @@ public class Home implements MouseListener, ActionListener{
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
         
-        homepanel.add(createBtn);
+        homepanel.add(new BlankPanel(300,300,Color.BLACK));
+        homepanel.add(new BlankPanel(300,300,Color.RED));
+        homepanel.add(new BlankPanel(300,300,Color.GREEN));
+        homepanel.add(new BlankPanel(300,300,Color.RED));
+        homepanel.add(new BlankPanel(300,300,Color.GREEN));
+        homepanel.add(new BlankPanel(300,300,Color.BLACK));
+        homepanel.add(new BlankPanel(300,300,Color.BLACK));
+        homepanel.setPreferredSize(new Dimension(1080, 2000));
+
+        homeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        homeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        homeScrollPane.getVerticalScrollBar().setUnitIncrement(15);
+        homeScrollPane.getVerticalScrollBar().setBackground(new Color(75,75,75));
+        homeScrollPane.getVerticalScrollBar().setUI(new ScrollBarUI());
+        homeScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
+        createBtn.setFocusPainted(false);
+        footerPanel.add(createBtn);
         
         homeframe.setLayout(new BorderLayout());
-        homeframe.add(homepanel, BorderLayout.CENTER);
+        homeframe.add(homeScrollPane, BorderLayout.CENTER);
         homeframe.add(left, BorderLayout.WEST);
-        homeframe.add(right, BorderLayout.EAST);   
+        homeframe.add(right, BorderLayout.EAST); 
+        homeframe.add(footerPanel, BorderLayout.SOUTH);
                 
         homebar.setBackground(new Color(43, 43, 43));
         menupanel.setBackground(new Color(43, 43, 43));
@@ -76,20 +98,27 @@ public class Home implements MouseListener, ActionListener{
         homeframe.setBackground(new Color(101,101,101));
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
+        footerPanel.setBackground(new Color(101,101,101));
+        createBtn.setBackground(new Color(101,101,101));
         homepanel.setBackground(new Color(75,75,75));
         
+        createBtn.setForeground(new Color(255, 255, 255));
         homemenu.setForeground(new Color(255, 255, 255));
         lobbymenu.setForeground(new Color(170, 170, 170));
         fundmenu.setForeground(new Color(170, 170, 170));
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(170, 170, 170));
         
+        homeframe.setResizable(false);
         homeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        homeframe.setSize(1080,720);
+        homeframe.setSize(1280,720);
         homeframe.setVisible(true);
     }
     public JFrame getFrame(){
         return this.homeframe;
+    }
+    public static void main(String[] args) {
+        new Home();
     }
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(homemenu)){

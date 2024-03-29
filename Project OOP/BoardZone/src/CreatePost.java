@@ -16,6 +16,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
     private JTextArea detailTA;
     private JButton postBtn;
     private File imgFiles[];
+    private ImageIcon plusIcon;
     public CreatePost(Home mainWindow){
         
         this.mainWindow = mainWindow;
@@ -63,7 +64,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         
         //mainImagePanel
         Image plusImage = new ImageIcon("./resource/icons/plus.png").getImage();
-        ImageIcon plusIcon = new ImageIcon(plusImage.getScaledInstance(48, 48,  java.awt.Image.SCALE_SMOOTH));
+        plusIcon = new ImageIcon(plusImage.getScaledInstance(48, 48,  java.awt.Image.SCALE_SMOOTH));
         imgLabel[0].setIcon(plusIcon);
         imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
         showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -177,6 +178,11 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
             frame.dispose();
         }
         else if (e.getSource().equals(showImagePanel)){
+            imgLabel[0].setIcon(plusIcon);
+            imgLabel[1].setIcon(null);
+            imgLabel[2].setIcon(null);
+            imgLabel[3].setIcon(null);
+            
             
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
@@ -185,7 +191,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
             fc.showOpenDialog(frame);
             File files[] = fc.getSelectedFiles();
             if (files.length > 4){
-                System.out.println("maximum 4 images :C");
+                JOptionPane.showMessageDialog(null, "maximum 4 images :C");
             }
             else{
                 int i = 0;
@@ -235,34 +241,40 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(postBtn)){
-            
-            Database db = new Database();
-            db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.getName()));
-            db.close();
-            
-            Connection cn = db.getConnection();
-            int i = 0;
-            try {
-                for (File imgFile : imgFiles){
-                    
-                    try(FileInputStream fis = new FileInputStream(imgFile)){
-                        PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.board_games SET img%s = ? WHERE (name = ?)", ""+i));
-                        ps.setBlob(1, fis);
-                        ps.setString(2, nameTF.getText());
-                        ps.executeUpdate();
-                        System.out.println("img"+ i + " added");
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+            if (!nameTF.getText().equals("") && !detailTA.getText().equals("")){
+                Database db = new Database();
+                db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.getName()));
+                db.close();
+
+                Connection cn = db.getConnection();
+                int i = 0;
+                try {
+                    for (File imgFile : imgFiles){
+
+                        try(FileInputStream fis = new FileInputStream(imgFile)){
+                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.board_games SET img%s = ? WHERE (name = ?)", ""+i));
+                            ps.setBlob(1, fis);
+                            ps.setString(2, nameTF.getText());
+                            ps.executeUpdate();
+                            System.out.println("img"+ i + " added");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        i++;
                     }
-                    i++;
+
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
-                
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+                db.close();
+                frame.dispose();
+                JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
             }
-            db.close();
-            frame.dispose();
-            JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
+            else {
+                frame.dispose();
+                JOptionPane.showMessageDialog(null, "pls input name and detail");
+            }
+            
         }
     }
     
