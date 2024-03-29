@@ -38,7 +38,7 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.getName());
+        username = new JMenu(Account.username);
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         createBtn = new JButton("Create Post");
         refreshBtn = new JButton("Refresh");

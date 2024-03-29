@@ -257,7 +257,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         if (e.getSource().equals(postBtn)){
             if (!nameTF.getText().equals("") && !detailTA.getText().equals("")){
                 Database db = new Database();
-                db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.getName()));
+                db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.username));
                 db.close();
                 
                 Connection cn = db.getConnection();
