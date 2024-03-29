@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class GameClient extends JFrame implements ActionListener, MouseListener, Runnable {
+public class GameClient implements ActionListener, MouseListener, Runnable {
+    private JFrame frame;
     private JPanel gamePanel, gameState, newGamePanel;
     private JLabel[][] marks;
     private JLabel playerText, newGameText;
@@ -17,6 +18,7 @@ public class GameClient extends JFrame implements ActionListener, MouseListener,
     public static final String fontName = "Source Code Pro";
     
     public GameClient() {
+        frame = new JFrame();
         gamePanel = new JPanel();
         gameState = new JPanel();
         newGamePanel = new JPanel();
@@ -27,7 +29,7 @@ public class GameClient extends JFrame implements ActionListener, MouseListener,
         newGameWithoutAIBtn = new JButton("2 Players");
         game = new GameBoard();
         
-        this.add(gamePanel);
+        frame.add(gamePanel);
         gamePanel.setBackground(BG_COLOR);
         gamePanel.setPreferredSize(new Dimension(600, 600));
         gamePanel.setLayout(new GridLayout(3, 3));
@@ -45,13 +47,13 @@ public class GameClient extends JFrame implements ActionListener, MouseListener,
         
         gamePanel.addMouseListener(this);
         
-        this.add(gameState, BorderLayout.NORTH);
+        frame.add(gameState, BorderLayout.NORTH);
         gameState.add(playerText);
         playerText.setFont(new Font(fontName, Font.PLAIN, 32));
         playerText.setForeground(FONT_COLOR);
         gameState.setBackground(MENU_COLOR);
         
-        this.add(newGamePanel, BorderLayout.SOUTH);
+        frame.add(newGamePanel, BorderLayout.SOUTH);
         newGamePanel.add(newGameText);
         newGameText.setFont(new Font(fontName, Font.PLAIN, 32));
         newGameText.setForeground(FONT_COLOR);
@@ -72,6 +74,10 @@ public class GameClient extends JFrame implements ActionListener, MouseListener,
         
         Thread t = new Thread(this);
         t.start();
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     public void updatePosition(int row, int col) {
