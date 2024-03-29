@@ -13,11 +13,13 @@ public class Login implements ActionListener, MouseListener{
     private JInternalFrame create;
     
     // create account frame attribute
-    private JPanel cframe, cmain;
+    private JPanel cframe, cmain, cmain2;
     private JPanel cFirstname, cLastname, cEmail, cPassword, cBlank;
+//    private JTextArea blank1, blank2, blank3, blank4;
+    private JPanel caction, cerror, cbutton;
     private JTextField firstname, lastname, email;
     private JPasswordField pPassword, pConfirm;
-    private JLabel tFirst, tLast, tEmail, tPassword, tConfirm;
+    private JLabel tFirst, tLast, tEmail, tPassword, tConfirm, terror;
     private JButton createButton;
 
     public Login(){
@@ -34,13 +36,13 @@ public class Login implements ActionListener, MouseListener{
         input_password = new JPanel();
         under_logo = new JPanel();
         main = new JPanel();
-        txt_user = new JLabel("       Username    : ");
-        txt_pass = new JLabel("       Password    : ");
+        txt_user = new JLabel("Username    : ");
+        txt_pass = new JLabel("Password    : ");
         username = new JTextField(21);
         password = new JPasswordField(21);
         err = new JLabel();
         blank = new JLabel();
-        createAcct = new JLabel("                                           create account");
+        createAcct = new JLabel("create account", JLabel.HORIZONTAL);
         logo = new JLabel("", new ImageIcon("Logo.png"), JLabel.CENTER);
         login = new JButton("Login");
         mainpanel = new JDesktopPane();
@@ -49,33 +51,49 @@ public class Login implements ActionListener, MouseListener{
         create = new JInternalFrame("Create an account", true, true, false, false);
         cframe = new JPanel();
         cmain = new JPanel();
+        cmain2 = new JPanel();
         cFirstname = new JPanel();
         cLastname = new JPanel();
         cEmail = new JPanel();
         cPassword = new JPanel();
         cBlank = new JPanel();
-        firstname = new JTextField(16);
-        lastname = new JTextField(16);
-        email = new JTextField(16);
-        pPassword = new JPasswordField(16);
-        pConfirm = new JPasswordField(16);
+        cerror = new JPanel();
+        cbutton = new JPanel();
+        caction = new JPanel();
+//        blank1 = new JTextArea();
+//        blank2 = new JTextArea();
+//        blank3 = new JTextArea();
+//        blank4 = new JTextArea();
+        firstname = new JTextField(25);
+        lastname = new JTextField(25);
+        email = new JTextField(25);
+        pPassword = new JPasswordField(25);
+        pConfirm = new JPasswordField(25);
         tFirst = new JLabel("Firstname :");
         tLast = new JLabel("Lastname :");
-        tEmail = new JLabel("Email :");
+        tEmail = new JLabel("Email         :");
         tPassword = new JLabel("Password :");
+        terror = new JLabel("hula hula hula hula pai ta lea hule hule yea yeah tok wea la");
 //        tConfirm = new JLabel("Confirm password :");
         createButton = new JButton("Create account");
         
+        cBlank.setSize(440, 200);
+        
         createButton.addActionListener(this);
         
-//        cframe.setLayout(new BorderLayout());
+        cframe.setLayout(new BorderLayout());
+        cmain2.setLayout(new GridLayout(2,1));
         
         tFirst.setForeground(Color.WHITE);
         tLast.setForeground(Color.WHITE);
         tEmail.setForeground(Color.WHITE);
         tPassword.setForeground(Color.WHITE);
         
-//        tFirst.setFont(new Font("Arial", 20));
+        tFirst.setFont(new Font("", Font.BOLD, 18));
+        tLast.setFont(new Font("", Font.BOLD, 18));
+        tEmail.setFont(new Font("", Font.BOLD, 18));
+        tPassword.setFont(new Font("", Font.BOLD, 18));
+//        tConfirm.setFont(new Font("", Font.BOLD, 18));
         
         cFirstname.add(tFirst);
         cFirstname.add(firstname);
@@ -85,19 +103,43 @@ public class Login implements ActionListener, MouseListener{
         cEmail.add(email);
         cPassword.add(tPassword);
         cPassword.add(pPassword);
+        cbutton.add(createButton);
+        caction.add(terror);
+        caction.add(cbutton);
+        
+        caction.setLayout(new BorderLayout());
+        
+        terror.setForeground(Color.RED);
         
         cframe.setBackground(new Color(37,37,37));
+        cmain.setBackground(new Color(37,37,37));
         cFirstname.setBackground(new Color(37,37,37));
         cLastname.setBackground(new Color(37,37,37));
         cEmail.setBackground(new Color(37,37,37));
         cPassword.setBackground(new Color(37,37,37));
+        caction.setBackground(new Color(37,37,37));
+        cerror.setBackground(new Color(37,37,37));
+        cbutton.setBackground(new Color(37,37,37));
         
-        cframe.add(cFirstname);
-        cframe.add(cLastname);
-        cframe.add(cEmail);
-        cframe.add(cPassword);
+        caction.add(terror);
+        caction.add(cbutton, BorderLayout.EAST);
         
+        cmain.add(cFirstname);
+//        main.add(blank1);
+        cmain.add(cLastname);
+//        main.add(blank2);
+        cmain.add(cEmail);
+//        main.add(blank3);
+        cmain.add(cPassword);
+//        main.add(blank4);
+        cmain.add(caction);
+        
+        cframe.add(cmain);
+        create.add(caction, BorderLayout.SOUTH);
         create.add(cframe);
+        
+        cBlank.setBackground(Color.red);
+        cframe.setBackground(Color.CYAN);
         
 //        create.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //            mainpanel.add(create);
@@ -171,7 +213,7 @@ public class Login implements ActionListener, MouseListener{
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource().equals(login)){
             if (username.getText().equals("") || password.getText().equals("")){
-                err.setText("                        Please input username or password.");
+                err.setText("Please input username or password.");
             } else {
                 Account.username = username.getText();
                 Home home = new Home();
@@ -189,6 +231,7 @@ public class Login implements ActionListener, MouseListener{
             create.setVisible(true);
             mainpanel.add(create);
             create.toFront();
+            System.out.println(create.getWidth() + "" + create.getHeight());
         }
     }
 
