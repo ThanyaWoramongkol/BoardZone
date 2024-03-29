@@ -75,6 +75,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         showImagePanel.setBackground(new Color(126,126,126));
         showImagePanel.setLayout(new BorderLayout());
         bottomImagePanel.setLayout(new GridLayout(1, 3));
+        bottomImagePanel.setBackground(new Color(126,126,126));
         bottomImagePanel.add(imgLabel[1]);
         bottomImagePanel.add(imgLabel[2]);
         bottomImagePanel.add(imgLabel[3]);
@@ -258,7 +259,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
                 Database db = new Database();
                 db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.getName()));
                 db.close();
-
+                
                 Connection cn = db.getConnection();
                 int i = 0;
                 try {

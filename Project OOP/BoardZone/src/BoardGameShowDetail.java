@@ -73,6 +73,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         showImagePanel.setBackground(new Color(126,126,126));
         showImagePanel.setLayout(new BorderLayout());
         bottomImagePanel.setLayout(new GridLayout(1, 3));
+        bottomImagePanel.setBackground(new Color(126,126,126));
         bottomImagePanel.add(imgLabel[1]);
         bottomImagePanel.add(imgLabel[2]);
         bottomImagePanel.add(imgLabel[3]);
@@ -89,7 +90,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         nameLabel.setBackground(new Color(61, 61, 61));
         nameLabel.setForeground(new Color(255, 255, 255));
         nameLabel.setOpaque(true);
-        nameLabel.setFont(xBtnLabel.getFont().deriveFont(24f));
+        nameLabel.setFont(nameLabel.getFont().deriveFont(24f));
         
         namePanel.setLayout(new BorderLayout());
         namePanel.add(new BlankPanel(38, 10, new Color(61, 61, 61)), BorderLayout.NORTH);
@@ -100,7 +101,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         isAvailableBtn.setFont(isAvailableBtn.getFont().deriveFont(12f));
         isAvailableBtn.setRolloverEnabled(false);
         isAvailableBtn.setFocusPainted(false);
-        ratingLabel.setForeground(new Color(255, 255, 255));
+        ratingLabel.setForeground(new Color(180, 180, 180));
          
         statusPanel.setLayout(new GridLayout(1, 3));
         statusPanel.setBackground(new Color(61, 61, 61));
@@ -233,10 +234,10 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         if (e.getSource().equals(frame)){
             Database db = new Database();
             try{
-                System.out.println("Loading.");
+                System.out.println("Connecting to database...");
                 ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
-                System.out.println("Loading..");
                 while((rs!=null) && (rs.next())){
+                    System.out.println("Loading data...");
                     name = rs.getString("name");
                     nameLabel.setText(name);
 
@@ -272,7 +273,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                         imgLabel[i].setIcon(icon);
                     }
 
-                    System.out.println("Loading...");
+                    System.out.println("Loading complete!");
                 }
             }
             catch(Exception ex){

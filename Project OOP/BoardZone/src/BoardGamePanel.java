@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class BoardGamePanel extends JPanel implements MouseListener{
     private JLabel imgLabel, nameLabel, ratingLabel;
-    private JPanel imgPanel, detailPanel, namePanel, ratingNStatusPanel, statusPanel, nPanel, wPanel, ePanel, sPanel;
+    private JPanel imgPanel, detailPanel, namePanel, ratingNStatusPanel, statusPanel, nPanel, wPanel, ePanel, sPanel, w2Panel;
     private JButton statusBtn;
     private int boardGameID;
     public BoardGamePanel(int boardGameID, String name, String rating, boolean isAvailable, ImageIcon img){
@@ -20,12 +20,13 @@ public class BoardGamePanel extends JPanel implements MouseListener{
         nPanel = new BlankPanel(16, 16, new Color(58, 56, 57));
         wPanel = new BlankPanel(16, 16, new Color(58, 56, 57));
         ePanel = new BlankPanel(16, 16, new Color(58, 56, 57));
-        sPanel = new BlankPanel(16, 16, new Color(58, 56, 57));
+        sPanel = new BlankPanel(16, 7, new Color(58, 56, 57));
+        w2Panel = new BlankPanel(18, 18, new Color(58, 56, 57));
         
         this.addMouseListener(this);
         
         Image image = img.getImage();
-        ImageIcon icon = new ImageIcon(image.getScaledInstance(192, 108,  java.awt.Image.SCALE_SMOOTH));
+        ImageIcon icon = new ImageIcon(image.getScaledInstance(224, 126,  java.awt.Image.SCALE_SMOOTH));
         imgLabel = new JLabel(icon);
         
         imgPanel.setLayout(new BorderLayout());
@@ -35,7 +36,11 @@ public class BoardGamePanel extends JPanel implements MouseListener{
         imgPanel.add(ePanel, BorderLayout.EAST);
         imgPanel.add(sPanel, BorderLayout.SOUTH);
         
-        namePanel.add(nameLabel);      
+        namePanel.setLayout(new BorderLayout());
+        nameLabel.setFont(nameLabel.getFont().deriveFont(16f));
+        namePanel.add(w2Panel, BorderLayout.WEST);
+        namePanel.add(nameLabel); 
+        
         
         if (isAvailable){
             statusBtn.setText("Available");
@@ -53,6 +58,7 @@ public class BoardGamePanel extends JPanel implements MouseListener{
         ratingNStatusPanel.setLayout(new GridLayout(1, 2));
         ratingNStatusPanel.add(ratingLabel);
         ratingNStatusPanel.add(statusPanel);
+        ratingNStatusPanel.setPreferredSize(new Dimension(224, 40));
         
         detailPanel.add(namePanel);
         detailPanel.add(ratingNStatusPanel);
@@ -64,7 +70,7 @@ public class BoardGamePanel extends JPanel implements MouseListener{
         statusPanel.setBackground(new Color(58, 56, 57));
         
         nameLabel.setForeground(Color.white);
-        ratingLabel.setForeground(Color.white);
+        ratingLabel.setForeground(new Color(180, 180, 180));
         
         
         this.setPreferredSize(new Dimension(224, 256));
@@ -98,6 +104,7 @@ public class BoardGamePanel extends JPanel implements MouseListener{
             ePanel.setBackground(new Color(64, 63, 62));
             wPanel.setBackground(new Color(64, 63, 62));
             sPanel.setBackground(new Color(64, 63, 62));
+            w2Panel.setBackground(new Color(64, 63, 62));
         }
     }
 
@@ -112,6 +119,7 @@ public class BoardGamePanel extends JPanel implements MouseListener{
             ePanel.setBackground(new Color(58, 56, 57));
             sPanel.setBackground(new Color(58, 56, 57));
             wPanel.setBackground(new Color(58, 56, 57));
+            w2Panel.setBackground(new Color(58, 56, 57));
         }
     }
 }

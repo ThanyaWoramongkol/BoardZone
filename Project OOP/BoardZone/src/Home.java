@@ -90,6 +90,8 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         
         refreshBtn.setFocusPainted(false);
         createBtn.setFocusPainted(false);
+        createBtn.setFont(createBtn.getFont().deriveFont(13f));
+        refreshBtn.setFont(createBtn.getFont().deriveFont(13f));
         footerPanel.add(createBtn);
         footerPanel.add(refreshBtn);
         
@@ -107,8 +109,8 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
         footerPanel.setBackground(new Color(101,101,101));
-        createBtn.setBackground(new Color(101,101,101));
-        refreshBtn.setBackground(new Color(101,101,101));
+        createBtn.setBackground(new Color(88,88,88));
+        refreshBtn.setBackground(new Color(88,88, 88));
         homepanel.setBackground(new Color(75,75,75));
         
         createBtn.setForeground(new Color(255, 255, 255));
@@ -130,10 +132,10 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         bgPanels = new ArrayList<BoardGamePanel>();
         Database db = new Database();
         try{
-            System.out.println("Loading....");
+            System.out.println("Connecting to database...");
             ResultSet rs = db.getSelect("SELECT * FROM board_games");
-            System.out.println("Loading....");
             while((rs!=null) && (rs.next())){
+                    System.out.println("Loading Data....");
                 int boardGameID = rs.getInt("board_game_id");
                 String name = rs.getString("name");
                 boolean isAvailable = rs.getBoolean("is_available");
@@ -141,8 +143,9 @@ public class Home implements MouseListener, ActionListener, WindowListener{
                 byte[] imgBytes = rs.getBytes("img0");
                 ImageIcon img = new ImageIcon(imgBytes);
                 bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
-                System.out.println("Loading....");
+                
             }
+            System.out.println("Loading complete!");
         }
         catch(Exception ex){
             ex.printStackTrace();
