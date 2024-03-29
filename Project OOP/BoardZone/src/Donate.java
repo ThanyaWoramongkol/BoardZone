@@ -6,25 +6,41 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import javax.swing.border.*;
+import javax.swing.filechooser.*;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.*;
 
 public class Donate extends DonateData implements Runnable, MouseListener, ActionListener{
     private JPanel jPanel1;
     private JButton post;
     private JTextField jTextField1;
     
+    private JLabel imgLabel[] = new JLabel[1];;
+    private File imgFiles[];
+    
     private JFrame donateframe;
     private JPanel gridpanel, leftPanel, rightPanel, rightPanell, donate;
-    private JPanel donatebar, subPanel, leftSubright, rightSubright, headright, leftSubleft, underleft, top;
+    private JPanel donatebar, subPanel, leftSubright, rightSubright, headright, leftSubleft, underleft, top,bottomImagePanel, showImagePanel,mainImagePanel;
     private JTextArea head, discription;
     private JLabel jl1, jl2, jl3, sp1;
     private ImageIcon pic1;
     private Font fontHead;
-    private JButton picturebutton, exitbutton ;
+    private JButton exitbutton ;
     
+    public String name = "", detail = "", stfullPrice = "";
+    public double fullPrice = 0, price = 0;
 //    private JButton postbutton;
 //    private JTextField cost;
     
     public Donate(){
+        imgLabel[0] = new JLabel();
+        bottomImagePanel = new JPanel();
+        showImagePanel =new JPanel();
+        mainImagePanel = new JPanel();
+        
         jPanel1 = new JPanel();
         post = new JButton();
         jTextField1 = new JTextField();
@@ -82,18 +98,15 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         top = new JPanel();
         gridpanel = new JPanel();
         head = new JTextArea("");
-        discription = new JTextArea("Detail");
+        discription = new JTextArea("");
         pic1 = new ImageIcon("poring.png");
         jl1 = new JLabel(pic1, JLabel.CENTER);
         jl2 = new JLabel();
         sp1 = new JLabel("     Name : ");
         fontHead = new Font("Inter", Font.BOLD, 20);
-        picturebutton = new JButton(pic1);
         exitbutton = new JButton("X");
 //        postbutton = new JButton("Post");
 //        cost = new JTextField();
-        
-        exitbutton.addActionListener(this);
         
         donateframe.setLayout(new BorderLayout());
         gridpanel.setLayout(new GridLayout(1, 2));
@@ -102,6 +115,17 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         headright.setLayout(new BorderLayout());
         donatebar.setLayout(new BorderLayout());
         
+        showImagePanel.addMouseListener(this);
+        showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        showImagePanel.setBackground(new Color(101,101,101));
+        showImagePanel.setLayout(new BorderLayout());
+        showImagePanel.add(imgLabel[0]);
+//        showImagePanel.add(bottomImagePanel, BorderLayout.SOUTH);
+        
+        exitbutton.addMouseListener(this);
+        exitbutton.setOpaque(true);
+        exitbutton.setForeground(new Color(255, 255, 255));
+        exitbutton.setBackground(new Color(61,61,61));
         top.setPreferredSize(new Dimension(360 ,20));
         donatebar.setPreferredSize(new Dimension(360 ,150));
         leftSubright.setPreferredSize(new Dimension(40, 620));
@@ -123,7 +147,7 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         headright.add(sp1, BorderLayout.WEST); headright.add(head, BorderLayout.CENTER); headright.add(exitbutton, BorderLayout.EAST);
         
         subPanel.add(jl2);
-        leftPanel.add(picturebutton, BorderLayout.CENTER);
+        leftPanel.add(showImagePanel, BorderLayout.CENTER);
         leftPanel.add(underleft, BorderLayout.SOUTH);
         leftPanel.add(leftSubleft, BorderLayout.WEST);
         
@@ -132,6 +156,10 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         rightPanel.add(leftSubright, BorderLayout.WEST);
         rightPanel.add(rightSubright, BorderLayout.EAST);
         rightPanel.add(jPanel1, BorderLayout.SOUTH);
+        
+//        mainImagePanel.setLayout(new BorderLayout());
+//        mainImagePanel.add(new BlankPanel(20, 50, new Color(61, 61, 61)), BorderLayout.EAST);
+//        mainImagePanel.add(showImagePanel);
         
         top.setBackground(new Color(43, 43, 43));
         exitbutton.setBackground(new Color(43, 43, 43));
@@ -147,7 +175,6 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         underleft.setBackground(new Color(43, 43, 43));
         leftSubleft.setBackground(new Color(43, 43, 43));
         discription.setBackground(new Color(101,101,101));
-        picturebutton.setBackground(new Color(101,101,101));
 //        postbutton.setBackground(Color.cyan);
         
         gridpanel.add(leftPanel);
@@ -168,7 +195,37 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        
+        if(e.getSource().equals(exitbutton)){
+            donateframe.dispose();
+        }
+        else if (e.getSource().equals(showImagePanel)){
+            
+            JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
+            fc.setFileFilter(filter);
+            fc.setMultiSelectionEnabled(true);
+            fc.showOpenDialog(donateframe);
+            File files[] = fc.getSelectedFiles();
+            if (files.length > 4){
+                System.out.println("maximum 4 images :C");
+            }
+            else{
+                int i = 0;
+                imgFiles = files.clone();
+                for (File imgFile : files){
+                    Image image = new ImageIcon(imgFile.getAbsolutePath()).getImage();
+                    ImageIcon icon = null;
+                    if (i == 0){
+                        icon = new ImageIcon(image.getScaledInstance(590, 330,  java.awt.Image.SCALE_SMOOTH));
+                    }
+                    else{
+                        icon = new ImageIcon(image.getScaledInstance(160, 100,  java.awt.Image.SCALE_SMOOTH));
+                    }
+                    imgLabel[i].setIcon(icon);
+                    i++;
+                }
+            }
+        }
     }
 
     @Override
@@ -183,12 +240,22 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        
+        if (e.getSource().equals(exitbutton)){
+            exitbutton.setBackground(Color.red);
+        }
+        else if (e.getSource().equals(showImagePanel)){
+            showImagePanel.setBackground(new Color(150,150,150));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        
+        if (e.getSource().equals(exitbutton)){
+            exitbutton.setBackground(new Color(61,61,61));
+        }
+        else if (e.getSource().equals(showImagePanel)){
+            showImagePanel.setBackground(new Color(101,101,101));
+        }
     }
     public static void main(String[] args) {
         new Donate();
@@ -199,20 +266,45 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         if(e.getSource().equals(exitbutton)){
             donateframe.dispose();
         }
-        else if(e.getSource().equals(picturebutton)){
-            try {
-                // retrieve image
-                BufferedImage bi = null;
-                File outputfile = new File("saved.png");
-                ImageIO.write(bi, "png", outputfile);
-            } catch (IOException f) {
-                
-            }
-        }
         else if(e.getSource().equals(post)){
             DonateData post1 = new DonateData();
+            name = head.getText();
+            detail = discription.getText();
+            stfullPrice = jTextField1.getText();
+            fullPrice = Integer.parseInt( jTextField1.getText());
             post1.setDefault(head.getText(), discription.getText(), Integer.parseInt( jTextField1.getText()));
+            
             donateframe.dispose();
+        }
+        else if (e.getSource().equals(post)){
+            
+            Database db = new Database();
+            db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", head.getText(), discription.getText(), jTextField1.getText()));
+            db.close();
+            
+            Connection cn = db.getConnection();
+            int i = 0;
+            try {
+                for (File imgFile : imgFiles){
+                    
+                    try(FileInputStream fis = new FileInputStream(imgFile)){
+                        PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.board_games SET img%s = ? WHERE (name = ?)", ""+i));
+                        ps.setBlob(1, fis);
+                        ps.setString(2, head.getText());
+                        ps.executeUpdate();
+                        System.out.println("img"+ i + " added");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    i++;
+                }
+                
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            db.close();
+            donateframe.dispose();
+            JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
         }
     }
 
