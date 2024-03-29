@@ -370,8 +370,8 @@ public class Login implements ActionListener, MouseListener{
     public void setLocation(Point location) {
         frame.setLocation(location);
     }
-    public static void main(String[] args) {
-        new Login();
-    }
+//    public static void main(String[] args) {
+//        new Login();
+//    }
   
 }

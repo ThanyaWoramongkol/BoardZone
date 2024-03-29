@@ -326,7 +326,7 @@ public class User implements MouseListener, ActionListener{
             login.setLocation(userframe.getLocation());
             userframe.dispose();
         } else if (e.getSource().equals(save)){
-            Account.setDataPlus(textname.getText(), textsurname.getText(), textusername.getText(), 
+            Account.setDataPlus(textusername.getText(), textname.getText(), textsurname.getText(), 
                     textemail.getText(), textphone.getText(), textacademic.getText(), textfaculty.getText());
             JOptionPane.showMessageDialog(userframe, "Account successfully updated.");
         }
@@ -378,8 +378,8 @@ public class User implements MouseListener, ActionListener{
         userframe.setLocation(location);
     }
     
-    public static void main(String[] args) {
-        new User();
-    }
+//    public static void main(String[] args) {
+//        new User();
+//    }
 
 }
