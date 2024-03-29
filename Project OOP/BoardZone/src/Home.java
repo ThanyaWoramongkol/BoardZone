@@ -74,7 +74,7 @@ public class Home implements MouseListener, ActionListener{
         homepanel.add(new BlankPanel(300,300,Color.GREEN));
         homepanel.add(new BlankPanel(300,300,Color.BLACK));
         homepanel.add(new BlankPanel(300,300,Color.BLACK));
-        homepanel.setPreferredSize(new Dimension(1080, 2000));
+        homepanel.setPreferredSize(new Dimension(880, 2000));
 
         homeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         homeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -109,9 +109,8 @@ public class Home implements MouseListener, ActionListener{
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(170, 170, 170));
         
-        homeframe.setResizable(false);
         homeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        homeframe.setSize(1280,720);
+        homeframe.setSize(1080,720);
         homeframe.setVisible(true);
     }
     public JFrame getFrame(){
