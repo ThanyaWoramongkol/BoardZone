@@ -287,7 +287,7 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
                     for (File imgFile : imgFiles){
 
                         try(FileInputStream fis = new FileInputStream(imgFile)){
-                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.donate_data SET image%s = ? WHERE (name = ?)", ""+i));
+                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.donate_data SET img%s = ? WHERE (name = ?)", ""+i));
                             ps.setBlob(1, fis);
                             ps.setString(2, head.getText());
                             ps.executeUpdate();
@@ -306,7 +306,7 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
                 JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
             }else if(e.getSource().equals(exitbutton)){
             donateframe.dispose();
-        }
+            }
             else {
                 donateframe.dispose();
                 JOptionPane.showMessageDialog(null, "pls input name and detail");
