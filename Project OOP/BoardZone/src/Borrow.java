@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -17,8 +18,11 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private CheckINTTwoDigit<String> checkhour, checkmin, checkmaxp;
     
     public boolean ispublic;
+    private int boardGameID;
     
-    public Borrow(){
+    public Borrow(int id){
+        this.boardGameID = id;
+        
         fr = new JFrame();
         top = new JPanel();
         topleft = new JPanel();
@@ -98,8 +102,8 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         tloca.setFont(new Font("Arial", Font.PLAIN, 20));
         bpublic.setFont(new Font("Arial", Font.BOLD, 20));
         bprivate.setFont(new Font("Arial", Font.BOLD, 20));
-        bcancel.setFont(new Font("Arial", Font.PLAIN, 20));
-        bconfirm.setFont(new Font("Arial", Font.PLAIN, 20));
+        bcancel.setFont(new Font("Arial", Font.BOLD, 20));
+        bconfirm.setFont(new Font("Arial", Font.BOLD, 20));
         bexit.setFont(new Font("Arial", Font.PLAIN, 32));
         
         thour.setColumns(2);
@@ -232,18 +236,18 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         lsp4.setForeground(Color.white);
         bexit.setForeground(Color.white);
         bcancel.setForeground(Color.red);
-        bcancel.setBorder(new LineBorder(Color.red));
+        bcancel.setBorder(new LineBorder(Color.red, 3));
         bcancel.setBackground(null);
         bconfirm.setForeground(Color.green);
-        bconfirm.setBorder(new LineBorder(Color.green));
+        bconfirm.setBorder(new LineBorder(Color.green, 3));
         bconfirm.setBackground(null);
         bexit.setBorderPainted(false);
-        bpublic.setForeground(Color.CYAN);
+        bpublic.setForeground(new Color( 173, 207, 240));
         bpublic.setBackground(null);
-        bpublic.setBorder(new LineBorder(Color.CYAN));
-        bprivate.setForeground(Color.CYAN);
+        bpublic.setBorder(new LineBorder(new Color( 173, 207, 240), 3));
+        bprivate.setForeground(new Color( 173, 207, 240));
         bprivate.setBackground(null);
-        bprivate.setBorder(new LineBorder(Color.CYAN));
+        bprivate.setBorder(new LineBorder(new Color( 173, 207, 240), 3));
         thour.setForeground(Color.LIGHT_GRAY);
         tmin.setForeground(Color.LIGHT_GRAY);
         
@@ -267,29 +271,29 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         fr.setVisible(true);
     }
     public static void main(String[] args) {
-        new Borrow();
+        new Borrow(23); //only for TESTING
     }
 
     @Override
     public synchronized void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(bpublic)) {
             ispublic = true;
-            bpublic.setBackground(Color.CYAN);
+            bpublic.setBackground(new Color( 173, 207, 240));
             bpublic.setForeground(Color.WHITE);
-            bprivate.setForeground(Color.CYAN);
+            bprivate.setForeground(new Color( 173, 207, 240));
             bprivate.setBackground(null);
             bpublic.setFont(new Font("Arial", Font.BOLD, 28));
             bprivate.setFont(new Font("Arial", Font.BOLD, 20));
         } else if(e.getSource().equals(bprivate)) {
             ispublic = false;
-            bprivate.setBackground(Color.CYAN);
+            bprivate.setBackground(new Color( 173, 207, 240));
             bprivate.setForeground(Color.WHITE);
-            bpublic.setForeground(Color.CYAN);
+            bpublic.setForeground(new Color( 173, 207, 240));
             bpublic.setBackground(null);
             bpublic.setFont(new Font("Arial", Font.BOLD, 20));
             bprivate.setFont(new Font("Arial", Font.BOLD, 28));
         } else if(e.getSource().equals(bconfirm)) {
-            if (!bprivate.getBackground().equals(Color.CYAN) && !bpublic.getBackground().equals(Color.CYAN)){
+            if (!bprivate.getBackground().equals(new Color( 173, 207, 240)) && !bpublic.getBackground().equals(new Color( 173, 207, 240))){
                 JOptionPane.showMessageDialog(null, "Please choose Public or Private", "WARNING", JOptionPane.ERROR_MESSAGE);
             }
             else if (thour.getText().equals("Hour") && tmin.getText().equals("Minute")){
@@ -302,11 +306,26 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                 JOptionPane.showMessageDialog(null, "Please input where you play", "WARNING", JOptionPane.ERROR_MESSAGE);
             }
             else {
+//                START DATA BASE
+                Database db = new Database();
+                try{
+                    System.out.println("Connecting to database...");
+                    db.update(String.format("UPDATE boardzone.board_games\n" +
+"SET is_available = !is_available\n" +
+"WHERE board_game_id = '%s';", ""+boardGameID));
+                    System.out.println("Success Update to database...");
+                }
+                catch(Exception ex){
+                    System.out.println(ex);
+                }
+                db.close();
+//                THIS IS IMPORTENT
                 JOptionPane.showMessageDialog(null, "Successfully Borrowed A Game");
-                System.exit(JFrame.DISPOSE_ON_CLOSE);
+//                new Lobby();
+                fr.dispose();
             }
         } else {
-            System.exit(JFrame.DISPOSE_ON_CLOSE);
+            fr.dispose();
         }
     }
 
@@ -359,7 +378,5 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     }
 
     @Override
-    public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public void run() {}
 }

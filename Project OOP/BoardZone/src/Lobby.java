@@ -1,11 +1,12 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class Lobby implements MouseListener, ActionListener{
+public class Lobby implements MouseListener, ActionListener, WindowListener{
     private JFrame lobbyframe;
     private JPanel lobbypanel;
     private JPanel left;
@@ -21,8 +22,10 @@ public class Lobby implements MouseListener, ActionListener{
     private JMenu aboutmenu;
     private JMenu username;
     private JLabel picprofile;
+    private JLabel loading;
     private JButton funbutton;
     private JInternalFrame oxgame;
+    private ArrayList<BoardGamePanel> bgPanels;
 
     public Lobby(){
         lobbyframe = new JFrame("BoardZone");
@@ -38,9 +41,10 @@ public class Lobby implements MouseListener, ActionListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.getName());
+        username = new JMenu(Account.username);
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         funbutton = new JButton("Play MiniGame");
+        loading = new JLabel("Loading...");
         
         
         homemenu.addMouseListener(this);
@@ -104,6 +108,37 @@ public class Lobby implements MouseListener, ActionListener{
         lobbyframe.setVisible(true);
     }
     
+    public void refresh(){
+        bgPanels = new ArrayList<BoardGamePanel>();
+        Database db = new Database();
+        try{
+            System.out.println("Connecting to database...");
+            ResultSet rs = db.getSelect("SELECT * FROM board_games");
+            while((rs!=null) && (rs.next())){
+                    System.out.println("Loading Data....");
+                int boardGameID = rs.getInt("board_game_id");
+                String name = rs.getString("name");
+                boolean isAvailable = rs.getBoolean("is_available");
+                String rating = rs.getString("rating");
+                byte[] imgBytes = rs.getBytes("img0");
+                ImageIcon img = new ImageIcon(imgBytes);
+                bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
+                
+            }
+            System.out.println("Loading complete!");
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        db.close();
+        for( BoardGamePanel bgPanel : bgPanels){
+            lobbypanel.add(bgPanel);
+            bgPanel.addMouseListener(this);
+        }
+        loading.setVisible(false);
+        lobbypanel.setPreferredSize(new Dimension(880, 310*((int)(bgPanels.size()/3)+1)));
+    }
+    
     public static void main(String[] args) {
         new Lobby();
     }
@@ -162,4 +197,27 @@ public class Lobby implements MouseListener, ActionListener{
             new GameClient();
         }
     }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        this.refresh();
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {}
+
+    @Override
+    public void windowClosed(WindowEvent e) {}
+
+    @Override
+    public void windowIconified(WindowEvent e) {}
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {}
+
+    @Override
+    public void windowActivated(WindowEvent e) {}
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
 }

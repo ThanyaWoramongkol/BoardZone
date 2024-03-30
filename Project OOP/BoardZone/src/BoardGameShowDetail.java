@@ -233,7 +233,12 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             xBtnLabel.setBackground(Color.red);
         }
         else if (e.getSource().equals(borrowBtn)){
-            borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 3));
+//            ADD by Title to change if NOT AAvailable
+            if (isAvailable) {
+                borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 3));
+            } else {
+                borrowBtn.setBorder(new LineBorder(new Color( 237, 135, 136), 3));
+            }
         }
     }
 
@@ -243,12 +248,61 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             xBtnLabel.setBackground(new Color(61,61,61));
         }
         else if (e.getSource().equals(borrowBtn)){
-            borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
+//            ADD by Title to change if NOT AAvailable
+            if (isAvailable){
+                borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
+            } else {
+                borrowBtn.setBorder(new LineBorder(new Color( 237, 135, 136), 1));
+            }
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+//        ADD by Title to make button cant use if NOT Available and dispose if in use
+        if (e.getSource().equals(borrowBtn) && isAvailable){
+            Database db = new Database();
+            try{
+                System.out.println("Connecting to database...");
+                ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
+                while((rs!=null) && (rs.next())){
+                    isAvailable = rs.getBoolean("is_available");
+                    if (isAvailable){
+//                        ADD by Title change the BorrowBtn
+                        borrowBtn.setText("Borrow");
+                        borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
+                        borrowBtn.setForeground(new Color( 173, 207, 240));
+                        isAvailableBtn.setText("Available");
+                        isAvailableBtn.setForeground(new Color( 173, 207, 240));
+                        isAvailableBtn.setBorder(new LineBorder(new Color( 173, 207, 240)));
+                        isAvailableBtn.setPreferredSize(new Dimension(85, 26));
+                    }
+                    else {
+//                        ADD by Title change the BorrowBtn
+                        borrowBtn.setText("Wait");
+                        borrowBtn.setBorder(new LineBorder(new Color( 237, 135, 136), 1));
+                        borrowBtn.setForeground(new Color( 237, 135, 136));
+                        isAvailableBtn.setText("In use");
+                        isAvailableBtn.setForeground(new Color( 237, 135, 136));
+                        isAvailableBtn.setBorder(new LineBorder(new Color( 237, 135, 136)));
+                        isAvailableBtn.setPreferredSize(new Dimension(85, 26));
+                    }
+
+                    System.out.println("Loading isAvailable complete!");
+                    System.out.println(isAvailable);
+                }
+            }
+            catch(Exception ex){
+                System.out.println(ex);
+            }
+            db.close();
+            
+            if (isAvailable){
+                new Borrow(this.boardGameID);
+                frame.dispose();
+            }
+        }
+//        
     }
 
     @Override
@@ -268,12 +322,20 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
 
                     isAvailable = rs.getBoolean("is_available");
                     if (isAvailable){
+//                        ADD by Title change the BorrowBtn
+                        borrowBtn.setText("Borrow");
+                        borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
+                        borrowBtn.setForeground(new Color( 173, 207, 240));
                         isAvailableBtn.setText("Available");
                         isAvailableBtn.setForeground(new Color( 173, 207, 240));
                         isAvailableBtn.setBorder(new LineBorder(new Color( 173, 207, 240)));
                         isAvailableBtn.setPreferredSize(new Dimension(85, 26));
                     }
                     else {
+//                        ADD by Title change the BorrowBtn
+                        borrowBtn.setText("Wait");
+                        borrowBtn.setBorder(new LineBorder(new Color( 237, 135, 136), 1));
+                        borrowBtn.setForeground(new Color( 237, 135, 136));
                         isAvailableBtn.setText("In use");
                         isAvailableBtn.setForeground(new Color( 237, 135, 136));
                         isAvailableBtn.setBorder(new LineBorder(new Color( 237, 135, 136)));
