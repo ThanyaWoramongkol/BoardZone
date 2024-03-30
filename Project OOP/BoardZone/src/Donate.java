@@ -13,12 +13,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.*;
 
-public class Donate extends DonateData implements Runnable, MouseListener, ActionListener{
+public class Donate extends javax.swing.JPanel implements Runnable, MouseListener, ActionListener{
     private JPanel jPanel1;
     private JButton post;
-    private JTextField jTextField1;
+    private JTextArea priceta;
     
-    private JLabel imgLabel[] = new JLabel[1];;
+    private JLabel imgLabel[] = new JLabel[4];;
     private File imgFiles[];
     
     private JFrame donateframe;
@@ -29,6 +29,7 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
     private ImageIcon pic1;
     private Font fontHead;
     private JButton exitbutton ;
+    private ImageIcon plusIcon;
     
     public String name = "", detail = "", stfullPrice = "";
     public double fullPrice = 0, price = 0;
@@ -37,13 +38,16 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
     
     public Donate(){
         imgLabel[0] = new JLabel();
+        imgLabel[1] = new JLabel();
+        imgLabel[2] = new JLabel();
+        imgLabel[3] = new JLabel();
         bottomImagePanel = new JPanel();
         showImagePanel =new JPanel();
         mainImagePanel = new JPanel();
         
         jPanel1 = new JPanel();
         post = new JButton();
-        jTextField1 = new JTextField();
+        priceta = new JTextArea("");
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
 
@@ -60,14 +64,14 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
+                .addComponent(priceta, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(priceta, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addComponent(post)
                 .addContainerGap())
@@ -83,7 +87,6 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
             .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         
         post.addActionListener(this);
-        jTextField1.addActionListener(this);
         
         donateframe = new JFrame();
         leftPanel = new JPanel();
@@ -99,7 +102,6 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         gridpanel = new JPanel();
         head = new JTextArea("");
         discription = new JTextArea("");
-        pic1 = new ImageIcon("poring.png");
         jl1 = new JLabel(pic1, JLabel.CENTER);
         jl2 = new JLabel();
         sp1 = new JLabel("     Name : ");
@@ -119,6 +121,9 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         showImagePanel.setBackground(new Color(101,101,101));
         showImagePanel.setLayout(new BorderLayout());
+        bottomImagePanel.add(imgLabel[1]);
+        bottomImagePanel.add(imgLabel[2]);
+        bottomImagePanel.add(imgLabel[3]);
         showImagePanel.add(imgLabel[0]);
 //        showImagePanel.add(bottomImagePanel, BorderLayout.SOUTH);
         
@@ -157,6 +162,11 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
         rightPanel.add(rightSubright, BorderLayout.EAST);
         rightPanel.add(jPanel1, BorderLayout.SOUTH);
         
+        Image plusImage = new ImageIcon("./resource/icons/plus.png").getImage();
+        plusIcon = new ImageIcon(plusImage.getScaledInstance(48, 48,  java.awt.Image.SCALE_SMOOTH));
+        imgLabel[0].setIcon(plusIcon);
+        imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
+        showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 //        mainImagePanel.setLayout(new BorderLayout());
 //        mainImagePanel.add(new BlankPanel(20, 50, new Color(61, 61, 61)), BorderLayout.EAST);
 //        mainImagePanel.add(showImagePanel);
@@ -206,7 +216,7 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
             fc.setMultiSelectionEnabled(true);
             fc.showOpenDialog(donateframe);
             File files[] = fc.getSelectedFiles();
-            if (files.length > 4){
+            if (files.length > 1){
                 System.out.println("maximum 4 images :C");
             }
             else{
@@ -263,48 +273,45 @@ public class Donate extends DonateData implements Runnable, MouseListener, Actio
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(exitbutton)){
-            donateframe.dispose();
-        }
-        else if(e.getSource().equals(post)){
-            DonateData post1 = new DonateData();
-            name = head.getText();
-            detail = discription.getText();
-            stfullPrice = jTextField1.getText();
-            fullPrice = Integer.parseInt( jTextField1.getText());
-            post1.setDefault(head.getText(), discription.getText(), Integer.parseInt( jTextField1.getText()));
-            
-            donateframe.dispose();
-        }
-        else if (e.getSource().equals(post)){
-            
-            Database db = new Database();
-            db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", head.getText(), discription.getText(), jTextField1.getText()));
-            db.close();
-            
-            Connection cn = db.getConnection();
-            int i = 0;
-            try {
-                for (File imgFile : imgFiles){
-                    
-                    try(FileInputStream fis = new FileInputStream(imgFile)){
-                        PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.board_games SET img%s = ? WHERE (name = ?)", ""+i));
-                        ps.setBlob(1, fis);
-                        ps.setString(2, head.getText());
-                        ps.executeUpdate();
-                        System.out.println("img"+ i + " added");
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+        
+        if (e.getSource().equals(post)){
+            if (!head.getText().equals("") && !discription.getText().equals("")){
+                Database db = new Database();
+                db.update(String.format("INSERT INTO boardzone.donate_data (name, detail, price,fullprice) VALUES ('%s', '%s', '%f', '%f')", head.getText(), discription.getText(), Double.parseDouble(priceta.getText()), Double.parseDouble(priceta.getText())));
+                db.close();
+                Connection cn = db.getConnection();
+                int i = 0;
+                try {
+                    for (File imgFile : imgFiles){
+
+                        try(FileInputStream fis = new FileInputStream(imgFile)){
+                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.donate_data SET img%s = ? WHERE (name = ?)", ""+i));
+                            ps.setBlob(1, fis);
+                            ps.setString(2, head.getText());
+                            ps.executeUpdate();
+                            System.out.println("img"+ i + " added");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        i++;
                     }
-                    i++;
+
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
-                
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            db.close();
+                db.close();
+                donateframe.dispose();
+                JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
+            }else if(e.getSource().equals(exitbutton)){
             donateframe.dispose();
-            JOptionPane.showMessageDialog(null, "Your post has been successfully created!");
+        }
+            else {
+                donateframe.dispose();
+                JOptionPane.showMessageDialog(null, "pls input name and detail");
+            }
+        }
+        else if(e.getSource().equals(exitbutton)){
+            donateframe.dispose();
         }
     }
 
