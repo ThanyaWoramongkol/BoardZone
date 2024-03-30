@@ -1,6 +1,7 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 import java.sql.*;
 
@@ -306,14 +307,19 @@ public class Login implements ActionListener, MouseListener{
             } else {
                 try {
                     Database db = new Database();
-                    String sql = String.format("INSERT INTO boardzone.Account (username, password, email, firstname, lastname) VALUES ('%s','%s','%s','%s','%s');", uusername, upassword, uemail, ufirstname, ulastname);
-//                    String sqlS = String.format("SELECT * FROM boardzone.Account WHERE username = '%s';", uusername);
-//                    ResultSet rs = db.getSelect(sqlS);
-//                    if (rs.getString("username").equals(uusername) && rs.next()){
-//                        terror.setText("Username already exists.");
-//                    }
-                    
+                    Connection cn = db.getConnection();
+                    String sql = String.format("INSERT INTO boardzone.Account (username, password, email, firstname, lastname) VALUES ('%s','%s','%s','%s','%s');", 
+                            uusername, upassword, uemail, ufirstname, ulastname);
                     db.update(sql);
+                    
+                    try (FileInputStream fis = new FileInputStream("poring.png")){
+                        PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.Account SET img = ? WHERE username = '%s'", uusername));
+                        ps.setBlob(1, fis);
+                        ps.executeUpdate();
+                    }catch (IOException ex){
+                        ex.printStackTrace();
+                    }
+                    
                     db.close();
                     
                     

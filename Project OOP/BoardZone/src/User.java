@@ -2,8 +2,12 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import javax.swing.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class User implements MouseListener, ActionListener{
@@ -86,13 +90,17 @@ public class User implements MouseListener, ActionListener{
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
         username = new JMenu(Account.username);
-        picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);     
-        
+        picprofile = new JLabel("", Account.profile, JLabel.CENTER);     
+
         userprofile = new JPanel();
         userprofileleft = new JPanel();
         userprofileright = new JPanel();
         backgroudpicture = new JPanel();
-        pictureframe = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        
+        pictureframe = new JLabel(Account.profile);
+        ImageIcon icon = new ImageIcon(Account.images.getScaledInstance(412, 473, java.awt.Image.SCALE_SMOOTH));
+        pictureframe.setIcon(icon);
+
         changepicturepanel = new JPanel();
         changepicture = new JButton("Change Picture Here");
         blankp1 = new JPanel(); blankp2 = new JPanel(); blankp3 = new JPanel();
@@ -340,7 +348,8 @@ public class User implements MouseListener, ActionListener{
             login.setSize(userframe.getSize());
             login.setLocation(userframe.getLocation());
             userframe.dispose();
-        } else if (e.getSource().equals(save)){
+        } 
+        else if (e.getSource().equals(save)){
             String tusername = textusername.getText(); String tfirstname = textname.getText(); 
             String tsurname = textsurname.getText(); String temail = textemail.getText();
 //            String terror = "Please input ";
@@ -349,11 +358,37 @@ public class User implements MouseListener, ActionListener{
                 JOptionPane.showMessageDialog(userframe, "Please input firstname, lastname, username and email");
             }
             else {
+                Database db = new Database();
+                Connection cn = db.getConnection();
+                try{
+                    for (File img : imgFile){
+                        try (FileInputStream fis = new FileInputStream(img)){
+                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.Account SET img = ? WHERE (id = %s);", Account.id));
+                            ps.setBlob(1, fis);
+                            ps.executeUpdate();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                        break;
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
                 Account.setDataPlus(tusername, tfirstname, tsurname, 
                     temail, textphone.getText(), textacademic.getText(), textfaculty.getText());
+                
+                Account.setImage();
+                
+//                db.close();
+
                 JOptionPane.showMessageDialog(userframe, "Account successfully updated.");
+                User user = new User();
+                user.setSize(userframe.getSize());
+                user.setLocation(userframe.getLocation());
+                userframe.dispose();
             }
-        } else if (e.getSource().equals(changepicture)){
+        } 
+        else if (e.getSource().equals(changepicture)){
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
             fc.setFileFilter(filter);

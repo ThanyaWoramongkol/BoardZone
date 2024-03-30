@@ -1,4 +1,6 @@
 
+import java.awt.*;
+import javax.swing.*;
 import java.sql.ResultSet;
 
 public class Account {
@@ -10,6 +12,8 @@ public class Account {
     public static String year;
     public static String faculty;
     public static int id;
+    public static ImageIcon profile;
+    public static Image images;
     
     public static void setData(){
         try {
@@ -24,6 +28,12 @@ public class Account {
                 phone = rs.getString("phone");
                 year = rs.getString("year");
                 faculty = rs.getString("faculty");
+                
+                byte[] imgBytes = rs.getBytes(String.format("img"));
+                Image image = new ImageIcon(imgBytes).getImage();
+                ImageIcon icon = new ImageIcon(image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH));
+                profile = icon;
+                images = image;
             }
             
             db.close();
@@ -126,4 +136,24 @@ public class Account {
         }
     }
     
+    public static void setImage(){
+        try {
+            Database db = new Database();
+            String sql = String.format("SELECT * FROM boardzone.Account WHERE username = '%s';", Account.username);
+            ResultSet rs = db.getSelect(sql);
+            if (rs.next()){
+            byte[] imgBytes = rs.getBytes(String.format("img"));
+            Image image = new ImageIcon(imgBytes).getImage();
+            ImageIcon icon = new ImageIcon(image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH));
+
+//                Account picture = new Account();
+            profile = icon;
+            images = image;
+            }
+            db.close();
+            
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
 }
