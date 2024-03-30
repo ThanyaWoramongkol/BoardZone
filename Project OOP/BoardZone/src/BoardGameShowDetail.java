@@ -2,21 +2,26 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 
 public class BoardGameShowDetail implements MouseListener, ActionListener, WindowListener, Runnable{
     private JFrame frame;
-    private JPanel headerPanel, bodyPanel, mainImagePanel, showImagePanel, outputPanel, namePanel, dnbPanel, detailPanel, footerPanel, buttonPanel, bottomImagePanel, statusPanel;
+    private JPanel headerPanel, bodyPanel, mainImagePanel, showImagePanel, outputPanel, namePanel, dnbPanel, detailPanel, footerPanel, buttonPanel, bottomImagePanel, statusPanel, ratingPanel, status2Panel;
     private Home mainWindow;
     private JLabel xBtnLabel, nameLabel, ratingLabel;
     private JLabel imgLabel[] = new JLabel[4];;
     private JTextArea detailTA;
-    private JButton borrowBtn, timeBtn, isAvailableBtn;
+    private JButton borrowBtn, timeBtn, isAvailableBtn, saveBtn;
     private JScrollPane taScrollPane;
+    private JComboBox ratingComboBox;
     
     private int boardGameID;
-    private String name, detail, rating;
+    private String name, detail;
+    private double rating;
     private boolean isAvailable;
+    private boolean haveRated = false;
     
     public BoardGameShowDetail(Home mainWindow, int id){
         this.boardGameID = id;
@@ -46,11 +51,16 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         ratingLabel = new JLabel("Rating: ");
         taScrollPane = new JScrollPane(detailTA);
         taScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        ratingPanel = new JPanel();
+        status2Panel = new JPanel();
+        ratingComboBox = new JComboBox();
+        saveBtn = new JButton("Save");
         
         borrowBtn.addActionListener(this);
         borrowBtn.addMouseListener(this);
         showImagePanel.addMouseListener(this);
         frame.addWindowListener(this);
+        saveBtn.addActionListener(this);
         
         //Header
         Image image = new ImageIcon("./resource/icons/times.png").getImage();
@@ -114,12 +124,41 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         Image starImg = new ImageIcon("./resource/icons/star.png").getImage();
         ImageIcon starIcon = new ImageIcon(starImg.getScaledInstance(12, 12,  java.awt.Image.SCALE_SMOOTH));
         ratingLabel.setIcon(starIcon);
+        ratingLabel.setFont(ratingLabel.getFont().deriveFont(12f));
          
-        statusPanel.setLayout(new GridLayout(1, 3));
+        ratingComboBox.addItem("0");
+        ratingComboBox.addItem("1");
+        ratingComboBox.addItem("2");
+        ratingComboBox.addItem("3");
+        ratingComboBox.addItem("4");
+        ratingComboBox.addItem("5");
+        
+        saveBtn.setFont(saveBtn.getFont().deriveFont(12f));
+        saveBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        ratingComboBox.setBackground(new Color(61, 61, 61));
+        ratingComboBox.setForeground(Color.WHITE);
+        saveBtn.setBackground(new Color(61, 61, 61));
+        saveBtn.setForeground(new Color(180, 180, 180));
+        
+        ratingComboBox.setPreferredSize(new Dimension(35, 18));
+        saveBtn.setPreferredSize(new Dimension(70, 18));
+        
+        
+        ratingPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        ratingPanel.add(ratingLabel);
+        ratingPanel.add(ratingComboBox);
+        ratingPanel.add(saveBtn);
+        ratingPanel.setBackground(new Color(61, 61, 61));
+        
+        status2Panel.setBackground(new Color(61, 61, 61));
+        status2Panel.setLayout(new GridLayout(1, 2));
+        status2Panel.add(new BlankPanel(new Color(61, 61, 61)));
+        status2Panel.add(isAvailableBtn);
+        
+        statusPanel.setLayout(new GridLayout(1, 2));
         statusPanel.setBackground(new Color(61, 61, 61));
-        statusPanel.add(ratingLabel);
-        statusPanel.add(new BlankPanel(new Color(61, 61, 61)));
-        statusPanel.add(isAvailableBtn);
+        statusPanel.add(ratingPanel);
+        statusPanel.add(status2Panel);
         namePanel.add(statusPanel, BorderLayout.SOUTH);
         
         taScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -218,6 +257,9 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(xBtnLabel)){
             frame.dispose();
+            Database db = new Database();
+            db.update(String.format("UPDATE boardzone.board_games SET rating = '%s' WHERE board_game_id = '%s'", this.rating , ""+this.boardGameID));
+            db.close();
         }
     }
 
@@ -300,6 +342,32 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             if (isAvailable){
                 new Borrow(this.boardGameID);
                 frame.dispose();
+                Database db2 = new Database();
+                db2.update(String.format("UPDATE boardzone.board_games SET rating = '%s' WHERE board_game_id = '%s'", this.rating , ""+this.boardGameID));
+                db2.close();
+            }
+        }
+        if (e.getSource().equals(saveBtn)){
+            try {
+                Database db = new Database();
+                if (haveRated){
+                    db.update(String.format("UPDATE boardzone.board_game_ratings SET rating = '%s' WHERE user_id = '%s'", (String)ratingComboBox.getSelectedItem(), ""+Account.id));
+                }
+                else{
+                    db.update(String.format("INSERT INTO boardzone.board_game_ratings (user_id, rating, board_game_id) VALUES ('%s', '%s', '%s')", ""+Account.id, (String)ratingComboBox.getSelectedItem(), this.boardGameID));
+                }
+                ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_game_ratings WHERE board_game_id = '%s'", ""+boardGameID));
+                int totalRating = 0;
+                int numRating = 0;
+                while ((rs!=null) && (rs.next())){
+                    totalRating += rs.getInt("rating");
+                    numRating++;
+                }
+                db.close();
+                this.rating = (double)totalRating/numRating;
+                ratingLabel.setText("Rating: "+String.format("%.02f", this.rating));
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
 //        
@@ -342,8 +410,8 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                         isAvailableBtn.setPreferredSize(new Dimension(85, 26));
                     }
 
-                    rating = rs.getString("rating");
-                    ratingLabel.setText(ratingLabel.getText()+rating);
+                    rating = rs.getDouble("rating");
+                    ratingLabel.setText(ratingLabel.getText()+String.format("%.02f", rating));
 
                     for (int i=0; i<4; i++){
                         byte[] imgBytes = rs.getBytes(String.format("img%s", ""+i));
@@ -363,6 +431,16 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
 
                     System.out.println("Loading complete!");
                 }
+                
+                ResultSet rrs = db.getSelect(String.format("SELECT * FROM boardzone.board_game_ratings WHERE board_game_id = '%s'", ""+boardGameID));
+                while ((rrs!=null) && (rrs.next())){
+                    if (Account.id == rrs.getInt("user_id")){
+                        haveRated = true;
+                        ratingComboBox.setSelectedItem(""+rrs.getInt("rating"));
+                        break;
+                    }
+                }
+            
             }
             catch(Exception ex){
                 System.out.println(ex);

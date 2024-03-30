@@ -8,10 +8,10 @@ public class BoardGamePanel extends JPanel implements MouseListener{
     private JPanel imgPanel, detailPanel, namePanel, ratingNStatusPanel, statusPanel, nPanel, wPanel, ePanel, sPanel, w2Panel;
     private JButton statusBtn;
     private int boardGameID;
-    public BoardGamePanel(int boardGameID, String name, String rating, boolean isAvailable, ImageIcon img){
+    public BoardGamePanel(int boardGameID, String name, double rating, boolean isAvailable, ImageIcon img){
         this.boardGameID = boardGameID;
         nameLabel = new JLabel(name);
-        ratingLabel = new JLabel("      Rating: " + rating);
+        ratingLabel = new JLabel(String.format("      Rating: %.02f", rating));
         imgPanel = new JPanel();
         detailPanel = new JPanel();
         namePanel = new JPanel();
