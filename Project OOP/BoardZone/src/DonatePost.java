@@ -6,6 +6,12 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
+import javax.swing.border.*;
+import javax.swing.filechooser.*;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.*;
 
 public class DonatePost extends javax.swing.JPanel implements Runnable, MouseListener, ActionListener{
     private JPanel jPanel1;
@@ -28,7 +34,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
     private double price;
     private DonateData data;
     
-    public DonatePost(){
+    public DonatePost(Fund mainWindow, int id){
         jPanel1 = new JPanel();
         post = new JButton();
         jTextField1 = new JTextField();
@@ -98,6 +104,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         exitbutton = new JButton("X");
 //        postbutton = new JButton("Post");
 //        cost = new JTextField();
+        exitbutton.setBorderPainted(false);
         
         exitbutton.addActionListener(this);
         
@@ -115,6 +122,8 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         underleft.setPreferredSize(new Dimension(360 ,70));
         leftSubleft.setPreferredSize(new Dimension(25 ,620));
         
+        head.setEditable(false);
+        discription.setEditable(false);
         head.setFont(fontHead);
         head.setForeground(Color.WHITE);
         head.setOpaque(false);
@@ -214,9 +223,6 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
     @Override
     public void mouseExited(MouseEvent e) {
         
-    }
-    public static void main(String[] args) {
-        new Donate();
     }
 
     @Override

@@ -17,6 +17,7 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
     private JPanel jPanel1;
     private JButton post;
     private JTextArea priceta;
+    private Fund mainWindow;
     
     private JLabel imgLabel[] = new JLabel[4];;
     private File imgFiles[];
@@ -36,7 +37,8 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
 //    private JButton postbutton;
 //    private JTextField cost;
     
-    public Donate(){
+    public Donate(Fund mainWindow){
+        this.mainWindow = mainWindow;
         imgLabel[0] = new JLabel();
         imgLabel[1] = new JLabel();
         imgLabel[2] = new JLabel();
@@ -121,11 +123,13 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
         showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         showImagePanel.setBackground(new Color(101,101,101));
         showImagePanel.setLayout(new BorderLayout());
+        bottomImagePanel.setLayout(new GridLayout(1, 3));
+        bottomImagePanel.setBackground(new Color(126,126,126));
         bottomImagePanel.add(imgLabel[1]);
         bottomImagePanel.add(imgLabel[2]);
         bottomImagePanel.add(imgLabel[3]);
         showImagePanel.add(imgLabel[0]);
-//        showImagePanel.add(bottomImagePanel, BorderLayout.SOUTH);
+        showImagePanel.add(bottomImagePanel, BorderLayout.SOUTH);
         
         exitbutton.addMouseListener(this);
         exitbutton.setOpaque(true);
@@ -167,9 +171,6 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
         imgLabel[0].setIcon(plusIcon);
         imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
         showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//        mainImagePanel.setLayout(new BorderLayout());
-//        mainImagePanel.add(new BlankPanel(20, 50, new Color(61, 61, 61)), BorderLayout.EAST);
-//        mainImagePanel.add(showImagePanel);
         
         top.setBackground(new Color(43, 43, 43));
         exitbutton.setBackground(new Color(43, 43, 43));
@@ -209,6 +210,10 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
             donateframe.dispose();
         }
         else if (e.getSource().equals(showImagePanel)){
+            imgLabel[0].setIcon(plusIcon);
+            imgLabel[1].setIcon(null);
+            imgLabel[2].setIcon(null);
+            imgLabel[3].setIcon(null);
             
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
@@ -267,9 +272,6 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
             showImagePanel.setBackground(new Color(101,101,101));
         }
     }
-    public static void main(String[] args) {
-        new Donate();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -277,7 +279,7 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
         if (e.getSource().equals(post)){
             if (!head.getText().equals("") && !discription.getText().equals("")){
                 Database db = new Database();
-                db.update(String.format("INSERT INTO boardzone.donate_data (name, detail, price,fullprice) VALUES ('%s', '%s', '%f', '%f')", head.getText(), discription.getText(), Double.parseDouble(priceta.getText()), Double.parseDouble(priceta.getText())));
+                db.update(String.format("INSERT INTO boardzone.donate_data (name, detail, price,fullprice) VALUES ('%s', '%s', '%f', '%f')", head.getText(), discription.getText(), Double.parseDouble(priceta.getText())-Double.parseDouble(priceta.getText()), Double.parseDouble(priceta.getText())));
                 db.close();
                 Connection cn = db.getConnection();
                 int i = 0;
@@ -285,7 +287,7 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
                     for (File imgFile : imgFiles){
 
                         try(FileInputStream fis = new FileInputStream(imgFile)){
-                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.donate_data SET img%s = ? WHERE (name = ?)", ""+i));
+                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.donate_data SET image%s = ? WHERE (name = ?)", ""+i));
                             ps.setBlob(1, fis);
                             ps.setString(2, head.getText());
                             ps.executeUpdate();
