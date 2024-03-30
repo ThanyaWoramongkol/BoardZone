@@ -24,7 +24,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
     private JLabel picprofile;
     private JLabel loading;
     private JButton funbutton;
-    private JInternalFrame oxgame;
+    private JScrollPane lobbyScrollPane;
     private ArrayList<BoardGamePanel> bgPanels;
 
     public Lobby(){
@@ -44,6 +44,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         username = new JMenu(Account.username);
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         funbutton = new JButton("Play MiniGame");
+        lobbyScrollPane = new JScrollPane(lobbypanel);
         loading = new JLabel("Loading...");
         
         
@@ -54,7 +55,8 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         username.addMouseListener(this);
         funbutton.addActionListener(this);
 
-        lobbypanel.setLayout(new FlowLayout());
+//        lobbypanel.setLayout(new FlowLayout());
+        
         lobbyframe.setJMenuBar(lobbybar);
         lobbybar.setLayout(new BorderLayout());
         menupanel.add(homemenu);
@@ -71,6 +73,20 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
+        
+        ((FlowLayout)lobbypanel.getLayout()).setHgap(24);
+        ((FlowLayout)lobbypanel.getLayout()).setVgap(24);
+        
+        loading.setForeground(Color.WHITE);
+        lobbypanel.add(loading);
+        
+        lobbyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        lobbyScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        lobbyScrollPane.getVerticalScrollBar().setUnitIncrement(15);
+        lobbyScrollPane.getVerticalScrollBar().setBackground(new Color(75,75,75));
+        lobbyScrollPane.getVerticalScrollBar().setUI(new ScrollBarUI());
+        lobbyScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
+        lobbyScrollPane.setBorder(BorderFactory.createEmptyBorder());
         
         lobbyframe.setLayout(new BorderLayout());
         lobbyframe.add(lobbypanel, BorderLayout.CENTER);
@@ -108,6 +124,10 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         lobbyframe.setVisible(true);
     }
     
+    public JFrame getFrame(){
+        return this.lobbyframe;
+    }
+    
     public void refresh(){
         bgPanels = new ArrayList<BoardGamePanel>();
         Database db = new Database();
@@ -119,8 +139,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
                 int boardGameID = rs.getInt("board_game_id");
                 String name = rs.getString("name");
                 boolean isAvailable = rs.getBoolean("is_available");
-                String rate = rs.getString("rating");
-                double rating = Double.parseDouble(rate);
+                String rating = rs.getString("rating");
                 byte[] imgBytes = rs.getBytes("img0");
                 ImageIcon img = new ImageIcon(imgBytes);
                 bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
@@ -173,6 +192,12 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
             user.setSize(lobbyframe.getSize());
             user.setLocation(lobbyframe.getLocation());
             lobbyframe.dispose();
+        }
+        for( BoardGamePanel bgPanel : bgPanels){
+            if (e.getSource().equals(bgPanel)){
+                System.out.println("boardGameID:"+bgPanel.getID());
+                new BoardGameShowDetail(this, bgPanel.getID());
+            }
         }
     }
     public void mousePressed(MouseEvent e) {
