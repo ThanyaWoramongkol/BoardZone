@@ -119,7 +119,8 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
                 int boardGameID = rs.getInt("board_game_id");
                 String name = rs.getString("name");
                 boolean isAvailable = rs.getBoolean("is_available");
-                String rating = rs.getString("rating");
+                String rate = rs.getString("rating");
+                double rating = Double.parseDouble(rate);
                 byte[] imgBytes = rs.getBytes("img0");
                 ImageIcon img = new ImageIcon(imgBytes);
                 bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
