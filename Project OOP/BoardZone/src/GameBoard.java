@@ -11,7 +11,7 @@ public class GameBoard {
     public static final int O_WIN = 1;
     public static final int X_WIN = 2;
     
-    public final char EMPTY = '\u0000';
+    public static final char EMPTY = '\u0000';
     
     public GameBoard() {
         board = new char[3][3];
