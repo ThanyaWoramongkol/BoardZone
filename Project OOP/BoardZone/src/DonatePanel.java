@@ -9,7 +9,8 @@ public class DonatePanel extends JPanel implements Runnable, MouseListener {
         private int id;
         private String name;
         private String detail;
-        private double price, fullprice;
+        private double price;
+        private final double FULLPRICE;
         private ImageIcon img1, img2, img3, img4;
         
         public DonatePanel(int id, String name, String detail, double price, double fullprice, ImageIcon img1){
@@ -17,7 +18,7 @@ public class DonatePanel extends JPanel implements Runnable, MouseListener {
             this.name = name;
             this.detail = detail;
             this.price = price;
-            this.fullprice = fullprice;
+            this.FULLPRICE = fullprice;
             this.img1 = img1;
 //            this.img2 = img2;
 //            this.img3 = img3;
@@ -88,7 +89,7 @@ public class DonatePanel extends JPanel implements Runnable, MouseListener {
             return this.price;
         }
         public double getFullPrice(){
-            return this.fullprice;
+            return this.FULLPRICE;
         }
         public ImageIcon getImg1(){
             return this.img1;
