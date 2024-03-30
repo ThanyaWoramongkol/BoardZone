@@ -114,12 +114,15 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         homepanel.setBackground(new Color(75,75,75));
         
         createBtn.setForeground(new Color(255, 255, 255));
-        refreshBtn.setForeground(new Color(255, 255, 255));
+        refreshBtn.setForeground(new Color(233, 233, 233));
         homemenu.setForeground(new Color(255, 255, 255));
         lobbymenu.setForeground(new Color(170, 170, 170));
         fundmenu.setForeground(new Color(170, 170, 170));
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(170, 170, 170));
+        
+        createBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         homeframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         homeframe.setSize(1080,720);

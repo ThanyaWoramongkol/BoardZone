@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class BoardGamePanel extends JPanel implements MouseListener{
     private JLabel imgLabel, nameLabel, ratingLabel;
@@ -44,15 +45,24 @@ public class BoardGamePanel extends JPanel implements MouseListener{
         
         if (isAvailable){
             statusBtn.setText("Available");
-            statusBtn.setForeground(Color.CYAN);
+            statusBtn.setForeground(new Color( 173, 207, 240));
+            statusBtn.setBorder(new LineBorder(new Color( 173, 207, 240)));
+            statusBtn.setPreferredSize(new Dimension(85, 26));
         }
         else{
             statusBtn.setText("In use");
-            statusBtn.setForeground(Color.RED);
+            statusBtn.setForeground(new Color( 237, 135, 136));
+            statusBtn.setBorder(new LineBorder(new Color( 237, 135, 136)));
+            statusBtn.setPreferredSize(new Dimension(85, 26));
         }
         statusBtn.setFocusPainted(false);
         statusBtn.setRolloverEnabled(false);
         statusPanel.add(statusBtn);
+        
+        ratingLabel.setHorizontalTextPosition(JLabel.LEFT);
+        Image starImg = new ImageIcon("./resource/icons/star.png").getImage();
+        ImageIcon starIcon = new ImageIcon(starImg.getScaledInstance(12, 12,  java.awt.Image.SCALE_SMOOTH));
+        ratingLabel.setIcon(starIcon);
         
         detailPanel.setLayout(new GridLayout(2, 1));
         ratingNStatusPanel.setLayout(new GridLayout(1, 2));

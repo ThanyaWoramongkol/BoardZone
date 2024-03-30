@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.sql.*;
+import javax.swing.border.LineBorder;
 
 public class BoardGameShowDetail implements MouseListener, ActionListener, WindowListener, Runnable{
     private JFrame frame;
@@ -45,7 +46,9 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         ratingLabel = new JLabel("Rating: ");
         taScrollPane = new JScrollPane(detailTA);
         taScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        
         borrowBtn.addActionListener(this);
+        borrowBtn.addMouseListener(this);
         showImagePanel.addMouseListener(this);
         frame.addWindowListener(this);
         
@@ -68,8 +71,12 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         
         //mainImagePanel
         imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
+        imgLabel[0].setBorder(new LineBorder(new Color(126,126,126), 3));
+        imgLabel[1].setBorder(new LineBorder(new Color(126,126,126), 3));
+        imgLabel[2].setBorder(new LineBorder(new Color(126,126,126), 3));
+        imgLabel[3].setBorder(new LineBorder(new Color(126,126,126), 3));
         
-        
+          
         showImagePanel.setBackground(new Color(126,126,126));
         showImagePanel.setLayout(new BorderLayout());
         bottomImagePanel.setLayout(new GridLayout(1, 3));
@@ -102,6 +109,11 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         isAvailableBtn.setRolloverEnabled(false);
         isAvailableBtn.setFocusPainted(false);
         ratingLabel.setForeground(new Color(180, 180, 180));
+        
+        ratingLabel.setHorizontalTextPosition(JLabel.LEFT);
+        Image starImg = new ImageIcon("./resource/icons/star.png").getImage();
+        ImageIcon starIcon = new ImageIcon(starImg.getScaledInstance(12, 12,  java.awt.Image.SCALE_SMOOTH));
+        ratingLabel.setIcon(starIcon);
          
         statusPanel.setLayout(new GridLayout(1, 3));
         statusPanel.setBackground(new Color(61, 61, 61));
@@ -128,14 +140,18 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         detailPanel.setBackground(new Color(61, 61, 61));
 
         borrowBtn.setBackground(new Color(61, 61, 61));
-        borrowBtn.setForeground(new Color(255, 255, 255));
         borrowBtn.setFont(borrowBtn.getFont().deriveFont(16f));
+        borrowBtn.setForeground(new Color( 173, 207, 240));
+        borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240)));
+        borrowBtn.setPreferredSize(new Dimension(91, 31));
+        borrowBtn.setFocusPainted(false);
         borrowBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         timeBtn.setBackground(new Color(61, 61, 61));
         timeBtn.setForeground(new Color(255, 255, 255));
         timeBtn.setFont(timeBtn.getFont().deriveFont(16f));
         timeBtn.setRolloverEnabled(false);
+        timeBtn.setFocusPainted(false);
         
         buttonPanel.add(borrowBtn);
         buttonPanel.add(timeBtn);
@@ -216,12 +232,18 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         if (e.getSource().equals(xBtnLabel)){
             xBtnLabel.setBackground(Color.red);
         }
+        else if (e.getSource().equals(borrowBtn)){
+            borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 3));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if (e.getSource().equals(xBtnLabel)){
             xBtnLabel.setBackground(new Color(61,61,61));
+        }
+        else if (e.getSource().equals(borrowBtn)){
+            borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
         }
     }
 
@@ -247,11 +269,15 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                     isAvailable = rs.getBoolean("is_available");
                     if (isAvailable){
                         isAvailableBtn.setText("Available");
-                        isAvailableBtn.setForeground(Color.CYAN);
+                        isAvailableBtn.setForeground(new Color( 173, 207, 240));
+                        isAvailableBtn.setBorder(new LineBorder(new Color( 173, 207, 240)));
+                        isAvailableBtn.setPreferredSize(new Dimension(85, 26));
                     }
                     else {
                         isAvailableBtn.setText("In use");
-                        isAvailableBtn.setForeground(Color.RED);
+                        isAvailableBtn.setForeground(new Color( 237, 135, 136));
+                        isAvailableBtn.setBorder(new LineBorder(new Color( 237, 135, 136)));
+                        isAvailableBtn.setPreferredSize(new Dimension(85, 26));
                     }
 
                     rating = rs.getString("rating");

@@ -6,6 +6,7 @@ import javax.swing.filechooser.*;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.border.LineBorder;
 public class CreatePost implements MouseListener, ActionListener, Runnable{
     private JFrame frame;
     private JPanel headerPanel, bodyPanel, mainImagePanel, showImagePanel, inputPanel, namePanel, dnbPanel, detailPanel, footerPanel, postPanel, bottomImagePanel;
@@ -45,6 +46,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         taScrollPane = new JScrollPane(detailTA);
         
         postBtn.addActionListener(this);
+        postBtn.addMouseListener(this);
         showImagePanel.addMouseListener(this);
         
         //Header
@@ -69,6 +71,11 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         plusIcon = new ImageIcon(plusImage.getScaledInstance(48, 48,  java.awt.Image.SCALE_SMOOTH));
         imgLabel[0].setIcon(plusIcon);
         imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
+        imgLabel[0].setHorizontalAlignment(JLabel.CENTER);
+        imgLabel[0].setBorder(new LineBorder(new Color(126,126,126), 3));
+        imgLabel[1].setBorder(new LineBorder(new Color(126,126,126), 3));
+        imgLabel[2].setBorder(new LineBorder(new Color(126,126,126), 3));
+        imgLabel[3].setBorder(new LineBorder(new Color(126,126,126), 3));
         showImagePanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         
@@ -120,9 +127,12 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         detailPanel.setBackground(new Color(61, 61, 61));
 
         postBtn.setBackground(new Color(61, 61, 61));
-        postBtn.setForeground(new Color(255, 255, 255));
         postBtn.setFont(postBtn.getFont().deriveFont(16f));
         postBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        postBtn.setForeground(new Color( 173, 207, 240));
+        postBtn.setBorder(new LineBorder(new Color( 173, 207, 240)));
+        postBtn.setPreferredSize(new Dimension(91, 31));
+        postBtn.setFocusPainted(false);
         
         postPanel.setLayout(new BorderLayout());
         postPanel.add(new BlankPanel(new Color(61, 61, 61)), BorderLayout.CENTER);
@@ -197,7 +207,12 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
             imgLabel[2].setIcon(null);
             imgLabel[3].setIcon(null);
             
-            
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
             fc.setFileFilter(filter);
@@ -240,6 +255,9 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         else if (e.getSource().equals(showImagePanel)){
             showImagePanel.setBackground(new Color(150,150,150));
         }
+        else if (e.getSource().equals(postBtn)){
+            postBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 3));
+        }
     }
 
     @Override
@@ -249,6 +267,9 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
         }
         else if (e.getSource().equals(showImagePanel)){
             showImagePanel.setBackground(new Color(126,126,126));
+        }
+        else if (e.getSource().equals(postBtn)){
+            postBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
         }
     }
 
