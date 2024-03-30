@@ -1,8 +1,10 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import javax.swing.*;
 import java.sql.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class User implements MouseListener, ActionListener{
     private JFrame userframe;
@@ -50,6 +52,7 @@ public class User implements MouseListener, ActionListener{
     private JPanel stupidback6;
     private JPanel finalbutton1;
     private JPanel finalbutton2;
+    private JPanel blankp1, blankp2, blankp3;
     private JLabel name;
     private JLabel surname; 
     private JLabel usernameprofile; 
@@ -67,6 +70,7 @@ public class User implements MouseListener, ActionListener{
     private JButton logout;
     private JButton save;
     
+    private File imgFile[];
 
     public User(){
         userframe = new JFrame("BoardZone");
@@ -91,6 +95,7 @@ public class User implements MouseListener, ActionListener{
         pictureframe = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
         changepicturepanel = new JPanel();
         changepicture = new JButton("Change Picture Here");
+        blankp1 = new JPanel(); blankp2 = new JPanel(); blankp3 = new JPanel();
         stupidpanel1 = new JPanel();
         stupidpanel2 = new JPanel();
         stupidpanel3 = new JPanel();
@@ -177,6 +182,10 @@ public class User implements MouseListener, ActionListener{
         fundmenu.setForeground(new Color(170, 170, 170));
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(255, 255, 255)); 
+
+        blankp1.setBackground(new Color(75, 75, 75));
+        blankp2.setBackground(new Color(75, 75, 75));
+        blankp3.setBackground(new Color(75, 75, 75));
         
         userframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userframe.setSize(1080,720);
@@ -187,12 +196,16 @@ public class User implements MouseListener, ActionListener{
         userprofile.setLayout(new GridLayout(1,2));
         userprofile.add(userprofileleft);
         userprofile.add(userprofileright);
-        userprofileleft.setBackground(new Color(75,75,75));
+        userprofileleft.setBackground(new Color(126,126,126));
         userprofileright.setBackground(new Color(75,75,75));
         
         userprofileleft.setLayout(new BorderLayout());
         userprofileleft.add(pictureframe,BorderLayout.CENTER);
         backgroudpicture.setPreferredSize(new Dimension(userprofileleft.getWidth()-30, userprofileleft.getHeight()-30));
+        
+        userprofileleft.add(blankp1, BorderLayout.NORTH);
+        userprofileleft.add(blankp2, BorderLayout.EAST);
+        userprofileleft.add(blankp3, BorderLayout.WEST);
         
         userprofileleft.add(changepicturepanel,BorderLayout.SOUTH);
         changepicturepanel.setSize(userprofileleft.getWidth()-50, userprofileleft.getHeight()-50);
@@ -315,6 +328,8 @@ public class User implements MouseListener, ActionListener{
         stupidback6.setBackground(new Color(75,75,75));
         finalbutton1.setBackground(new Color(75,75,75));
         finalbutton2.setBackground(new Color(75,75,75));
+        
+        System.out.println(pictureframe.getWidth() + "|" + pictureframe.getHeight());
     }
     
     
@@ -326,9 +341,34 @@ public class User implements MouseListener, ActionListener{
             login.setLocation(userframe.getLocation());
             userframe.dispose();
         } else if (e.getSource().equals(save)){
-            Account.setDataPlus(textusername.getText(), textname.getText(), textsurname.getText(), 
-                    textemail.getText(), textphone.getText(), textacademic.getText(), textfaculty.getText());
-            JOptionPane.showMessageDialog(userframe, "Account successfully updated.");
+            String tusername = textusername.getText(); String tfirstname = textname.getText(); 
+            String tsurname = textsurname.getText(); String temail = textemail.getText();
+//            String terror = "Please input ";
+//            int error = false;
+            if (tusername.equals("") || tfirstname.equals("") || tsurname.equals("") || temail.equals("")){
+                JOptionPane.showMessageDialog(userframe, "Please input firstname, lastname, username and email");
+            }
+            else {
+                Account.setDataPlus(tusername, tfirstname, tsurname, 
+                    temail, textphone.getText(), textacademic.getText(), textfaculty.getText());
+                JOptionPane.showMessageDialog(userframe, "Account successfully updated.");
+            }
+        } else if (e.getSource().equals(changepicture)){
+            JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
+            fc.setFileFilter(filter);
+            fc.setMultiSelectionEnabled(true);
+            fc.showOpenDialog(userframe);
+            File files[] = fc.getSelectedFiles();
+            
+            imgFile = files.clone();
+            for (File imgFile : files){
+                Image image = new ImageIcon(imgFile.getAbsolutePath()).getImage();
+                ImageIcon icon = null;
+                icon = new ImageIcon(image.getScaledInstance(412, 473, java.awt.Image.SCALE_SMOOTH));
+                pictureframe.setIcon(icon);
+                break;
+            }
         }
     }
     
@@ -378,8 +418,8 @@ public class User implements MouseListener, ActionListener{
         userframe.setLocation(location);
     }
     
-//    public static void main(String[] args) {
-//        new User();
-//    }
+    public static void main(String[] args) {
+        new User();
+    }
 
 }
