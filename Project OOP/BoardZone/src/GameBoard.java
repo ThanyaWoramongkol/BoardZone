@@ -11,7 +11,7 @@ public class GameBoard {
     public static final int O_WIN = 1;
     public static final int X_WIN = 2;
     
-    public static final char EMPTY = '\u0000';
+    public final char EMPTY = '\u0000';
     
     public GameBoard() {
         board = new char[3][3];
@@ -146,63 +146,6 @@ public class GameBoard {
         }
     }
     
-    public void showBoard() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] != EMPTY){
-                    System.out.print(board[i][j]);
-                } else {
-                    System.out.print(" ");
-                }
-                if (j < 2) {
-                    System.out.print("|");
-                }
-            }
-            System.out.println("");
-            if (i < 2) {
-                System.out.println("-----");                
-            }
-        }
-    }
-    
-    public void showBoard(int[][] board) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] != EMPTY){
-                    System.out.print(board[i][j]);
-                } else {
-                    System.out.print("0");
-                }
-                if (j < 2) {
-                    System.out.print("|");
-                }
-            }
-            System.out.println("");
-            if (i < 2) {
-                System.out.println("-----");                
-            }
-        }
-    }
-    
-    public void showBoard(char[][] board) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] != EMPTY){
-                    System.out.print(board[i][j]);
-                } else {
-                    System.out.print(" ");
-                }
-                if (j < 2) {
-                    System.out.print("|");
-                }
-            }
-            System.out.println("");
-            if (i < 2) {
-                System.out.println("-----");                
-            }
-        }
-    }
-    
     public void newGame(boolean withAI) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -245,8 +188,6 @@ public class GameBoard {
                 }
             }
         }
-        showBoard(testTable);
-//        System.out.println(bestRow +", " +bestCol + " " + minVal);
         placeMark(bestRow, bestCol);
     }
     
