@@ -79,7 +79,7 @@ public class Pay implements ActionListener {
         if(e.getSource().equals(pay)){
             if (!priceTF.getText().equals("") ){
                 Database db = new Database();
-                db.update(String.format("UPDATE boardzone.donate_data  SET price = '%f' WHERE id = '%d  ",price+Double.parseDouble(priceTF.getText()), this.id));
+                db.update(String.format("UPDATE boardzone.donate_data  SET price = '%f' WHERE id = '%d' ",price+Double.parseDouble(priceTF.getText()), this.id));
                 db.close();
                 jf.dispose();
                 JOptionPane.showMessageDialog(null, "We got your money :P");
