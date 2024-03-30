@@ -15,36 +15,42 @@ import java.io.*;
 
 public class DonatePost extends javax.swing.JPanel implements Runnable, MouseListener, ActionListener{
     private JPanel jPanel1;
-    private JButton post;
-    private JTextField jTextField1;
+    private JButton donate;
+    private JTextField priceJT;
     
     private JFrame donateframe;
     private JPanel gridpanel, leftPanel, rightPanel, rightPanell;
     private JPanel donatebar, subPanel, leftSubright, rightSubright, headright, leftSubleft, underleft, top;
     private JTextArea head, discription;
     private JLabel jl1, jl2, jl3, sp1;
-    private ImageIcon pic1;
     private Font fontHead;
-    private JButton picturebutton, exitbutton ;
+    private JButton exitbutton ;
+    private JLabel imgLabel[] = new JLabel[4];;
     
 //    private JButton postbutton;
 //    private JTextField cost;
     
     private String name, detail;
-    private double price;
+    private double price, fullprice;
     private DonateData data;
+    private ImageIcon img1;
+    private int id;
     
-    public DonatePost(Fund mainWindow, int id){
+    public DonatePost(Fund mainWindow, String name, String detail, double price, double fullprice, ImageIcon img1, int id){
+        this.id = id;
         jPanel1 = new JPanel();
-        post = new JButton();
-        jTextField1 = new JTextField();
+        donate = new JButton("Donate");
+        priceJT = new JTextField(price+"/"+fullprice);
+        imgLabel[0] = new JLabel();
+        imgLabel[1] = new JLabel();
+        imgLabel[2] = new JLabel();
+        imgLabel[3] = new JLabel();
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
 
         jPanel1.setBackground(new java.awt.Color(43, 43, 43));
-
-        post.setText("Donate");
-        post.setBackground(Color.WHITE);
+        
+        donate.setBackground(Color.WHITE);
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -52,20 +58,20 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
             jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(post)
+                .addComponent(donate)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
+                .addComponent(priceJT, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(priceJT, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                .addComponent(post)
+                .addComponent(donate)
                 .addContainerGap())
         );
 
@@ -78,8 +84,8 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
             layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         
-        post.addActionListener(this);
-        jTextField1.addActionListener(this);
+        donate.addActionListener(this);
+        priceJT.addActionListener(this);
         
         donateframe = new JFrame();
         leftPanel = new JPanel();
@@ -93,14 +99,14 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         underleft = new JPanel();
         top = new JPanel();
         gridpanel = new JPanel();
-        head = new JTextArea("");
-        discription = new JTextArea("Detail");
-        pic1 = new ImageIcon("poring.png");
-        jl1 = new JLabel(pic1, JLabel.CENTER);
+        head = new JTextArea(name);
+        discription = new JTextArea(detail);
+         Image image = img1.getImage();
+        ImageIcon icon = new ImageIcon(image.getScaledInstance(75, 75,  java.awt.Image.SCALE_SMOOTH));
+        jl1 = new JLabel(icon, JLabel.CENTER);
         jl2 = new JLabel();
         sp1 = new JLabel("     Name : ");
         fontHead = new Font("Inter", Font.BOLD, 20);
-        picturebutton = new JButton(pic1);
         exitbutton = new JButton("X");
 //        postbutton = new JButton("Post");
 //        cost = new JTextField();
@@ -124,6 +130,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         
         head.setEditable(false);
         discription.setEditable(false);
+        priceJT.setEditable(false);
         head.setFont(fontHead);
         head.setForeground(Color.WHITE);
         head.setOpaque(false);
@@ -138,7 +145,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         headright.add(sp1, BorderLayout.WEST); headright.add(head, BorderLayout.CENTER); headright.add(exitbutton, BorderLayout.EAST);
         
         subPanel.add(jl2);
-        leftPanel.add(picturebutton, BorderLayout.CENTER);
+        leftPanel.add(jl1, BorderLayout.CENTER);
         leftPanel.add(underleft, BorderLayout.SOUTH);
         leftPanel.add(leftSubleft, BorderLayout.WEST);
         
@@ -162,7 +169,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         underleft.setBackground(new Color(43, 43, 43));
         leftSubleft.setBackground(new Color(43, 43, 43));
         discription.setBackground(new Color(101,101,101));
-        picturebutton.setBackground(new Color(101,101,101));
+        jl1.setBackground(new Color(101,101,101));
 //        postbutton.setBackground(Color.cyan);
         
         gridpanel.add(leftPanel);
@@ -175,24 +182,6 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         donateframe.setSize(900, 500);
         donateframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         donateframe.setVisible(true);
-    }
-    public String getName(){
-        return name;
-    }
-    public String getDetail(){
-        return detail;
-    }
-    public double getPrice(){
-        return price;
-    }
-    public void setName(String name){
-        this.name = name;
-    }
-    public void setDetail(String detail){
-        this.detail = detail;
-    }
-    public void setPrice(double price){
-        this.price = price;
     }
 
     @Override
@@ -217,12 +206,16 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        
+        if (e.getSource().equals(exitbutton)){
+            exitbutton.setBackground(Color.red);
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        
+        if (e.getSource().equals(exitbutton)){
+            exitbutton.setBackground(new Color(61,61,61));
+        }
     }
 
     @Override
@@ -230,18 +223,8 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         if(e.getSource().equals(exitbutton)){
             donateframe.dispose();
         }
-        else if(e.getSource().equals(picturebutton)){
-            try {
-                // retrieve image
-                BufferedImage bi = null;
-                File outputfile = new File("saved.png");
-                ImageIO.write(bi, "png", outputfile);
-            } catch (IOException f) {
-                
-            }
-        }
-        else if(e.getSource().equals(post)){
-            new Pay();
+        else if(e.getSource().equals(donate)){
+            new Pay(name, price, fullprice, this.id);
         }
     }
 

@@ -9,25 +9,38 @@
  */
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.*;
 import javax.imageio.ImageIO;
+import java.sql.*;
 
 public class Pay implements ActionListener {
     private JFrame jf;
     private JPanel jp ;
     private ImageIcon qr;
-    private JLabel jl1, txt;
-    private JTextField price;
+    private JLabel jl1, txt, priceJL;
+    private JTextField priceTF;
     private JButton pay;
     private JLabel empty_line1, empty_line2, empty_line3;
     
-    public Pay(){
+    private String name;
+    private double price, fullprice;
+    private int id;
+    
+    public Pay(String name, double price, double fullprice, int id){
+        this.id = id;
         jf = new JFrame();
         jp = new JPanel();
         qr = new ImageIcon("Easter egg.png");
         jl1 = new JLabel(qr, JLabel.CENTER);
-        txt = new JLabel("Amount of money");
-        price = new JTextField();
+        txt = new JLabel(name);
+        priceJL = new JLabel(price+"/"+fullprice);
+        priceTF = new JTextField();
         pay = new JButton("Pay");
         empty_line1 = new JLabel();
         empty_line2 = new JLabel();
@@ -36,7 +49,7 @@ public class Pay implements ActionListener {
         empty_line1.setPreferredSize(new Dimension(3000,20));
         empty_line2.setPreferredSize(new Dimension(3000,0));
         empty_line3.setPreferredSize(new Dimension(3000,0));
-        price.setPreferredSize(new Dimension(100,20));
+        priceTF.setPreferredSize(new Dimension(100,20));
         
         jp.setLayout(new FlowLayout());
         
@@ -45,7 +58,8 @@ public class Pay implements ActionListener {
         jp.add(empty_line2);
         jp.add(txt);
         jp.add(empty_line3);
-        jp.add(price);
+        jp.add(priceJL);
+        jp.add(priceTF);
         jp.add(pay);
         
         jf.add(jp);
@@ -59,14 +73,17 @@ public class Pay implements ActionListener {
         jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jf.setVisible(true);
     }
-    public static void main(String[] args) {
-        new Pay();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(pay)){
-            jf.dispose();
+            if (!priceTF.getText().equals("") ){
+                Database db = new Database();
+                db.update(String.format("UPDATE boardzone.donate_data  SET price = '%f' WHERE id = '%d  ",price+Double.parseDouble(priceTF.getText()), this.id));
+                db.close();
+                jf.dispose();
+                JOptionPane.showMessageDialog(null, "We got your money :P");
         }
     }
+}
 }
