@@ -99,6 +99,13 @@ public class BorrowItem implements Item{
         Database db = new Database();
         try{
             System.out.println("Connecting to database...");
+//
+            db.update(String.format("UPDATE boardzone.board_games\n" +
+"SET is_available = 1\n" +
+"WHERE board_game_id = '%s';", ""+id));
+            System.out.println("Success Update to database...");
+
+
             db.update(String.format("DELETE FROM boardzone.Borrow_item WHERE idboradgame = '%s' LIMIT 5", ""+id));
             System.out.println("Delete data complete!");
         }
@@ -147,16 +154,16 @@ public class BorrowItem implements Item{
         if (nowhour <= endhour){
             this.hourleft = duration.toHours(); // Extract the number of hours
             this.minuteleft = duration.toMinutes() % 60; // Extract the number of minutes
-//            System.out.println("First");
+            System.out.println("First");
             if(nowhour < starthour){
                 checkdelete = true;
-//                System.out.println("mark1");
+                System.out.println("mark1");
             } else if (nowhour == starthour && nowmin < startmin) {
                 checkdelete = true;
-//                System.out.println("mark2");
+                System.out.println("mark2");
             } else if (nowhour == endhour && nowmin > endmin) {
                 checkdelete = true;
-//                System.out.println("mark3");
+                System.out.println("mark3");
             }
         } else {
             this.hourleft = 24 + duration.toHours() ;
@@ -167,32 +174,20 @@ public class BorrowItem implements Item{
             System.out.println("Secone");
             if (starthour > nowhour && nowhour > endhour){
                 checkdelete = true;
-//                System.out.println("1mark");
+                System.out.println("1mark");
             } else if (nowhour == starthour && nowmin < startmin) {
                 checkdelete = true;
-//                System.out.println("2mark");
+                System.out.println("2mark");
             } else if (nowhour == endhour && nowmin > endmin) {
                 checkdelete = true;
-//                System.out.println("3mark");
+                System.out.println("3mark");
             }
         }
         this.TimeLeft = String.format("%02d:%02d", this.hourleft, this.minuteleft);
         System.out.println("Time Left: " + this.TimeLeft);
         
-        if (TimeLeft.equals("00:00") || hourleft < 0 || minuteleft < 0){
-            Database db2 = new Database();
-            try{
-            System.out.println("Connecting to database...");
-
-            db2.update(String.format("UPDATE boardzone.board_games\n" +
-"SET is_available = 1\n" +
-"WHERE board_game_id = '%s';", ""+this.gameid));
-                System.out.println("Success Update to database...");
-            }
-            catch(Exception ex){
-                System.out.println(ex);
-            }
-            db.close();
+        if (TimeLeft.equals("00:00") || hourleft < 0 || minuteleft < 0 || checkdelete){
+            TimeLeft = "00:00";
             this.deleteBorrowData(this.gameid);
         }
         

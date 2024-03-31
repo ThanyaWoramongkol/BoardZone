@@ -23,6 +23,8 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
     private boolean isAvailable;
     private boolean haveRated = false;
     
+    private BorrowItem item;
+    
     public BoardGameShowDetail(Home mainWindow, int id){
         this.boardGameID = id;
         this.mainWindow = mainWindow; 
@@ -238,7 +240,37 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
 
         Thread t = new Thread(this);
         t.start();
-    }   
+    }
+    
+    public void rechecktime(){
+        System.out.println("Connecting to database...");
+        Database db = new Database();
+        ResultSet rsborrow = db.getSelect(String.format("SELECT * FROM boardzone.Borrow_item WHERE idboradgame = '%s'", ""+boardGameID));
+        try{
+            while ((rsborrow!=null) && (rsborrow.next())){
+                if (this.boardGameID == rsborrow.getInt("idboradgame")){
+                    System.out.println("Create BorrowItem item");
+                    String gamename = rsborrow.getString("item_name");
+                    int maxp = rsborrow.getInt("Maxplayer");
+                    String startTime = rsborrow.getString("Borrow_at");
+                    int hourTime = rsborrow.getInt("EndHour");
+                    int minuteTime = rsborrow.getInt("EndMin");
+                    boolean ispublic = rsborrow.getBoolean("ispublic");
+                    String loca = rsborrow.getString("location");
+
+                    item = new BorrowItem(boardGameID, gamename, maxp,
+            startTime, hourTime, minuteTime, ispublic, loca);
+                    
+                    System.out.println("Create Success!!!");
+                    timeBtn.setText(item.showTimeLeft(boardGameID));
+                    break;
+                }
+            }
+        } catch(Exception ex){
+            System.out.println(ex);
+        }
+        db.close();
+    }
 
     @Override
     public void run() {
@@ -249,6 +281,19 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             }
             else {
                 frame.setAlwaysOnTop(false);
+            }
+            
+//            isAvailable = rs.getBoolean("is_available");
+            if (isAvailable){
+                timeBtn.setText("00:00");
+            } else {
+                try{
+                    this.rechecktime();
+                    Thread.sleep(10000);
+                }
+                catch (InterruptedException ex) {
+                    System.out.println(ex);
+                }
             }
         }
     }
@@ -391,6 +436,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                     isAvailable = rs.getBoolean("is_available");
                     if (isAvailable){
 //                        ADD by Title change the BorrowBtn
+                        timeBtn.setText("00:00");
                         borrowBtn.setText("Borrow");
                         borrowBtn.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
                         borrowBtn.setForeground(new Color( 173, 207, 240));
@@ -408,6 +454,8 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                         isAvailableBtn.setForeground(new Color( 237, 135, 136));
                         isAvailableBtn.setBorder(new LineBorder(new Color( 237, 135, 136)));
                         isAvailableBtn.setPreferredSize(new Dimension(85, 26));
+                        this.rechecktime();
+                        
                     }
 
                     rating = rs.getDouble("rating");
@@ -440,6 +488,9 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                         break;
                     }
                 }
+                
+                
+
             
             }
             catch(Exception ex){
