@@ -17,7 +17,8 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private JButton bprivate, bpublic, bcancel, bconfirm, bexit;
     private JLabel ltime, lmaxp, lloca, lsp1, lsp2, lsp3, lsp4;
     private JTextField thour, tmin, tmaxp, tloca;
-    private CheckINTTwoDigit<String> checkhour, checkmin, checkmaxp;
+    private CheckINTTwoDigit<String> checkmin, checkmaxp;
+    private CheckINTOneDigit<String> checkhour;
     
     public boolean ispublic;
     private int boardGameID;
@@ -25,6 +26,7 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private String startTime;
     private int hourTime;
     private int minuteTime;
+    private BorrowItem item;
     
     public Borrow(int id){
         this.boardGameID = id;
@@ -77,7 +79,8 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         tmaxp = new JTextField(2);
         tloca = new JTextField();
         
-        checkhour = new CheckINTTwoDigit<>(thour.getText());
+        checkhour = new CheckINTOneDigit<>(thour.getText());
+//        checkhour = new CheckINTTwoDigit<>(thour.getText());
         checkmin = new CheckINTTwoDigit<>(tmin.getText());
         checkmaxp = new CheckINTTwoDigit<>(tmaxp.getText());
 
@@ -318,7 +321,7 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                     System.out.println("Connecting to database...");
 
                     db.update(String.format("UPDATE boardzone.board_games\n" +
-"SET is_available = !is_available\n" +
+"SET is_available = 0\n" +
 "WHERE board_game_id = '%s';", ""+boardGameID));
                     System.out.println("Success Update to database...");
                 }
@@ -339,15 +342,16 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                 }
                 db.close();
                 
-//                try {
-//                    LocalTime time = LocalTime.now();
-//                    DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-//                    String formattime = time.format(format);
-//                    this.startTime = formattime;
-//                }
-//                catch (Exception ex) {
-//                    System.out.println(ex);
-//                }
+                try {
+                    LocalTime time = LocalTime.now();
+                    DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
+                    String formattime = time.format(format);
+                    this.startTime = formattime;
+                    System.out.println("Start Time: " + startTime);
+                }
+                catch (Exception ex) {
+                    System.out.println(ex);
+                }
                 if(thour.getText().equals("Hour")){
                     this.hourTime = 0;
                 } else {
@@ -360,10 +364,10 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                 }
                 
 
-                BorrowItem item = new BorrowItem(boardGameID, gamename, Integer.parseInt(tmaxp.getText()),
-                        hourTime, minuteTime, ispublic, tloca.getText());
+                item = new BorrowItem(boardGameID, gamename, Integer.parseInt(tmaxp.getText()),
+                        startTime, hourTime, minuteTime, ispublic, tloca.getText());
                 item.senttoDataBase();
-                System.out.println(item.showTimeLeft(boardGameID));
+                System.out.println("Time Left: " + item.showTimeLeft(boardGameID));
                 
 //                THIS IS IMPORTENT
                 JOptionPane.showMessageDialog(null, "Successfully Borrowed A Game");
@@ -398,7 +402,7 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
 //            thour.setText("Hour");
 //            thour.setForeground(Color.LIGHT_GRAY);
 //        } else
-        if(checkhour.getCheckText() < 0){
+        if(checkhour.getCheckText() < 0 || checkhour.getCheckText() >= 8){
             thour.setText("Hour");
             thour.setForeground(Color.LIGHT_GRAY);
         } else {
