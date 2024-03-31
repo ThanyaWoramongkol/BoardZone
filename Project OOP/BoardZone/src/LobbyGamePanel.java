@@ -11,7 +11,7 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
     private int boardGameID;
     private Color bgColor;
     
-    public LobbyGamePanel(/*int boardGameID, String name, ImageIcon img*/){
+    public LobbyGamePanel(int boardGameID, String name, ImageIcon img){
         this.boardGameID = boardGameID;
         nameLabel = new JLabel("");
         positionLabel = new JLabel("");
@@ -35,16 +35,16 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
         
         this.addMouseListener(this);
         //get Image
-//        Image image = img.getImage();
-//        ImageIcon icon = new ImageIcon(image.getScaledInstance(224, 126, java.awt.Image.SCALE_SMOOTH));
-//        imgLabel = new JLabel(icon);
+       Image image = img.getImage();
+       ImageIcon icon = new ImageIcon(image.getScaledInstance(224, 126, java.awt.Image.SCALE_SMOOTH));
+       imgLabel = new JLabel(icon);
         //set ImgPanel
         imgPanel.setLayout(new BorderLayout());
         imgPanel.add(blankN, BorderLayout.NORTH);
         imgPanel.add(blankE, BorderLayout.EAST);
         imgPanel.add(blankW, BorderLayout.WEST);
         imgPanel.add(blankS, BorderLayout.SOUTH);
-//        imgPanel.add(imgLabel);
+       imgPanel.add(imgLabel);
         //set namePanel
         namePanel.setLayout(new BorderLayout());
         nameLabel.setFont(nameLabel.getFont().deriveFont(16f));
