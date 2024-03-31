@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.time.*;
+import java.time.format.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -19,6 +21,10 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     
     public boolean ispublic;
     private int boardGameID;
+    private String gamename;
+    private String startTime;
+    private int hourTime;
+    private int minuteTime;
     
     public Borrow(int id){
         this.boardGameID = id;
@@ -271,7 +277,7 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         fr.setVisible(true);
     }
     public static void main(String[] args) {
-        new Borrow(23); //only for TESTING
+        new Borrow(22); //only for TESTING
     }
 
     @Override
@@ -302,14 +308,15 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
             else if (tmaxp.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Please input max player", "WARNING", JOptionPane.ERROR_MESSAGE);
             }
-            else if (tloca.getText().equals("") && ispublic){
-                JOptionPane.showMessageDialog(null, "Please input where you play", "WARNING", JOptionPane.ERROR_MESSAGE);
+            else if (tloca.getText().equals("")){
+                JOptionPane.showMessageDialog(null, "Please input Location you play", "WARNING", JOptionPane.ERROR_MESSAGE);
             }
             else {
 //                START DATA BASE
                 Database db = new Database();
                 try{
                     System.out.println("Connecting to database...");
+
                     db.update(String.format("UPDATE boardzone.board_games\n" +
 "SET is_available = !is_available\n" +
 "WHERE board_game_id = '%s';", ""+boardGameID));
@@ -318,7 +325,46 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                 catch(Exception ex){
                     System.out.println(ex);
                 }
+                
+                try{
+                    System.out.println("Connecting to database...");
+                    ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
+                    while((rs!=null) && (rs.next())){
+                        gamename = rs.getString("name");
+                    }
+                    System.out.println("Loading complete!");
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
                 db.close();
+                
+//                try {
+//                    LocalTime time = LocalTime.now();
+//                    DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
+//                    String formattime = time.format(format);
+//                    this.startTime = formattime;
+//                }
+//                catch (Exception ex) {
+//                    System.out.println(ex);
+//                }
+                if(thour.getText().equals("Hour")){
+                    this.hourTime = 0;
+                } else {
+                    this.hourTime = Integer.parseInt(thour.getText());
+                }
+                if(tmin.getText().equals("Minute")){
+                    this.minuteTime = 0;
+                } else {
+                    this.minuteTime = Integer.parseInt(tmin.getText());
+                }
+                
+
+                BorrowItem item = new BorrowItem(boardGameID, gamename, Integer.parseInt(tmaxp.getText()),
+                        hourTime, minuteTime, ispublic, tloca.getText());
+                item.senttoDataBase();
+                System.out.println(item.showTimeLeft(boardGameID));
+                
 //                THIS IS IMPORTENT
                 JOptionPane.showMessageDialog(null, "Successfully Borrowed A Game");
 //                new Lobby();
