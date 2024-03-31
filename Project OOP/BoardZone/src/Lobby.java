@@ -1,13 +1,17 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
+import java.util.*;
 import javax.swing.*;
+import javax.swing.border.*;
 
-public class Lobby implements MouseListener{
+public class Lobby implements MouseListener, ActionListener, WindowListener{
     private JFrame lobbyframe;
     private JPanel lobbypanel;
     private JPanel left;
     private JPanel right;
+    private JPanel bottompanel;
     private JMenuBar lobbybar;
     private JMenuBar menupanel;
     private JMenuBar space;
@@ -18,12 +22,17 @@ public class Lobby implements MouseListener{
     private JMenu aboutmenu;
     private JMenu username;
     private JLabel picprofile;
+    private JLabel loading;
+    private JButton funbutton, refresh;
+    private JScrollPane lobbyScrollPane;
+    private ArrayList<BoardGamePanel> bgPanels;
 
     public Lobby(){
         lobbyframe = new JFrame("BoardZone");
         lobbypanel = new JPanel();
         left = new JPanel();
         right = new JPanel();
+        bottompanel = new JPanel();
         lobbybar = new JMenuBar();
         menupanel = new JMenuBar();
         space = new JMenuBar();
@@ -34,13 +43,23 @@ public class Lobby implements MouseListener{
         aboutmenu = new JMenu("About us");
         username = new JMenu(Account.username);
         picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        funbutton = new JButton("Play MiniGame");
+        refresh = new JButton("Refresh");
+        lobbyScrollPane = new JScrollPane(lobbypanel);
+        loading = new JLabel("Loading...");
         
         homemenu.addMouseListener(this);
         lobbymenu.addMouseListener(this);
         fundmenu.addMouseListener(this);
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
+        
+        lobbyframe.addWindowListener(this);
+        
+        funbutton.addActionListener(this);
+        refresh.addActionListener(this);
 
+//        lobbypanel.setLayout(new FlowLayout());
         
         lobbyframe.setJMenuBar(lobbybar);
         lobbybar.setLayout(new BorderLayout());
@@ -54,14 +73,31 @@ public class Lobby implements MouseListener{
         lobbybar.add(menupanel, BorderLayout.WEST);
         lobbybar.add(space, BorderLayout.CENTER);
         lobbybar.add(profilemenu, BorderLayout.EAST);
+        bottompanel.add(funbutton);
+        bottompanel.add(refresh);
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
         
+        ((FlowLayout)lobbypanel.getLayout()).setHgap(24);
+        ((FlowLayout)lobbypanel.getLayout()).setVgap(24);
+        
+        loading.setForeground(Color.WHITE);
+        lobbypanel.add(loading);
+        
+        lobbyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        lobbyScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        lobbyScrollPane.getVerticalScrollBar().setUnitIncrement(15);
+        lobbyScrollPane.getVerticalScrollBar().setBackground(new Color(75,75,75));
+        lobbyScrollPane.getVerticalScrollBar().setUI(new ScrollBarUI());
+        lobbyScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
+        lobbyScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        
         lobbyframe.setLayout(new BorderLayout());
-        lobbyframe.add(lobbypanel, BorderLayout.CENTER);
+        lobbyframe.add(lobbyScrollPane, BorderLayout.CENTER);
         lobbyframe.add(left, BorderLayout.WEST);
-        lobbyframe.add(right, BorderLayout.EAST);   
+        lobbyframe.add(right, BorderLayout.EAST);
+        lobbyframe.add(bottompanel, BorderLayout.SOUTH);
                 
         lobbybar.setBackground(new Color(43, 43, 43));
         menupanel.setBackground(new Color(43, 43, 43));
@@ -70,6 +106,7 @@ public class Lobby implements MouseListener{
         lobbyframe.setBackground(new Color(101,101,101));
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
+        bottompanel.setBackground(new Color(101,101,101));
         lobbypanel.setBackground(new Color(75,75,75));
         
         homemenu.setForeground(new Color(170, 170, 170));
@@ -78,10 +115,61 @@ public class Lobby implements MouseListener{
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(170, 170, 170));
         
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+        funbutton.setForeground(new Color(red, green, blue));
+        funbutton.setBorder(new LineBorder(new Color(red, green, blue)));
+        funbutton.setBackground(null);
+        funbutton.setFont(new Font("Arial", Font.BOLD, 20));
+        
         lobbyframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lobbyframe.setSize(1080,720);
         lobbyframe.setVisible(true);
     }
+    
+    public JFrame getFrame(){
+        return this.lobbyframe;
+    }
+    
+    public void refresh(){
+        bgPanels = new ArrayList<BoardGamePanel>();
+        Database db = new Database();
+        try{
+            System.out.println("Connecting to database...");
+            ResultSet rs = db.getSelect("SELECT * FROM board_games");
+            while((rs!=null) && (rs.next())){
+                System.out.println("Loading Data....");
+                int boardGameID = rs.getInt("board_game_id");
+                String name = rs.getString("name");
+                boolean isAvailable = rs.getBoolean("is_available");
+                String rate = rs.getString("rating");
+                double rating = Double.parseDouble(rate);
+                byte[] imgBytes = rs.getBytes("img0");
+                ImageIcon img = new ImageIcon(imgBytes);
+                System.out.println(boardGameID + "|" + name + "|" + isAvailable + "|" + rating);
+                bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
+            }
+            System.out.println("Loading complete!");
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        db.close();
+        for( BoardGamePanel bgPanel : bgPanels){
+            lobbypanel.add(bgPanel);
+            bgPanel.addMouseListener(this);
+        }
+        loading.setVisible(false);
+        lobbypanel.setPreferredSize(new Dimension(880, 310*((int)(bgPanels.size()/3)+1)));
+    }
+    
+    public static void main(String[] args) {
+        new Lobby();
+    }
+    
+
     
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(homemenu)){
@@ -111,6 +199,12 @@ public class Lobby implements MouseListener{
             user.setLocation(lobbyframe.getLocation());
             lobbyframe.dispose();
         }
+        for( BoardGamePanel bgPanel : bgPanels){
+            if (e.getSource().equals(bgPanel)){
+                System.out.println("boardGameID:"+bgPanel.getID());
+                new LobbyShowDetail(this, bgPanel.getID());
+            }
+        }
     }
     public void mousePressed(MouseEvent e) {
     }
@@ -128,4 +222,36 @@ public class Lobby implements MouseListener{
     public void setLocation(Point location) {
         lobbyframe.setLocation(location);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(funbutton)){
+            new GameClient();
+        } else if (e.getSource().equals(refresh)){
+            this.refresh();
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        this.refresh();
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {}
+
+    @Override
+    public void windowClosed(WindowEvent e) {}
+
+    @Override
+    public void windowIconified(WindowEvent e) {}
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {}
+
+    @Override
+    public void windowActivated(WindowEvent e) {}
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
 }
