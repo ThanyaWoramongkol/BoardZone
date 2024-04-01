@@ -8,8 +8,8 @@ public class GameBoard {
     private boolean withAI = false;
     
     public static final int DRAW = 0;
-    public static final int O_WIN = 1;
-    public static final int X_WIN = 2;
+    public static final int O_WIN = 10;
+    public static final int X_WIN = -10;
     
     public static final char EMPTY = '\u0000';
     
@@ -72,15 +72,9 @@ public class GameBoard {
                 board[row][col] = playingMark;
                 placed++;
                 int winState = checkWin(board, row, col);
-                if (winState != 0 || placed == 9) {
+                if (winState != DRAW || placed == 9) {
                     running = false;
-                    if (winState == 1) {
-                        gameState = O_WIN;
-                    } else if (winState == -1) {
-                        gameState = X_WIN;
-                    } else {
-                        gameState = DRAW;
-                    }
+                    gameState = winState;
                 } else {
                     if (playingMark == 'O') {
                         playingMark = 'X';
@@ -88,7 +82,7 @@ public class GameBoard {
                         playingMark = 'O';
                     }
                 }
-                if (placed < 9 && withAI && playingMark == 'X') {
+                if (running && placed < 9 && withAI && playingMark == 'X') {
                     moveAI();
                 }
             }
@@ -137,12 +131,12 @@ public class GameBoard {
         
         if (rowWin || colWin || diagLRWin || diagRLWin) {
             if (mark == 'O') {
-                return 1;
+                return O_WIN;
             } else {
-                return -1;
+                return X_WIN;
             }
         } else {
-            return 0;
+            return DRAW;
         }
     }
     
@@ -160,12 +154,6 @@ public class GameBoard {
     }
     
     public void moveAI() {
-        int[][] testTable = new int[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                testTable[i][j] = 10;
-            }
-        }
         char[][] tempBoard = new char[3][3];
         for (int i = 0; i < 3; i++) {
             System.arraycopy(board[i], 0, tempBoard[i], 0, 3);
@@ -179,7 +167,6 @@ public class GameBoard {
                     tempBoard[i][j] = 'X';
                     val = miniMax(tempBoard, i, j, placed + 1, true);
                     tempBoard[i][j] = EMPTY;
-                    testTable[i][j] = val;
                     if (val < minVal) {
                         minVal = val;
                         bestRow = i;
@@ -188,6 +175,7 @@ public class GameBoard {
                 }
             }
         }
+        System.out.println("");
         placeMark(bestRow, bestCol);
     }
     
@@ -195,11 +183,12 @@ public class GameBoard {
         int winState = checkWin(board, row, col);
         
         if (depth == 9 || (depth < 9 && winState != 0)) {
-           return winState * depth;
+           return winState;
         }
         
+        // Player Turn
         if (maxTurn) {
-            int maxVal = -2;
+            int maxVal = Integer.MIN_VALUE;
             int val;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
@@ -215,7 +204,7 @@ public class GameBoard {
             }
             return maxVal;
         } else {
-            int minVal = 2;
+            int minVal = Integer.MAX_VALUE;
             int val;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
