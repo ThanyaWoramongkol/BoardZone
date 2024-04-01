@@ -212,7 +212,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
+            
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
             fc.setFileFilter(filter);
@@ -237,6 +237,11 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
                     imgLabel[i].setIcon(icon);
                     i++;
                 }
+            }
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }

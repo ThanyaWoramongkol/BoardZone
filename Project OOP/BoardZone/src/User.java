@@ -389,6 +389,11 @@ public class User implements MouseListener, ActionListener{
             }
         } 
         else if (e.getSource().equals(changepicture)){
+             try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
             fc.setFileFilter(filter);
@@ -403,6 +408,11 @@ public class User implements MouseListener, ActionListener{
                 icon = new ImageIcon(image.getScaledInstance(412, 473, java.awt.Image.SCALE_SMOOTH));
                 pictureframe.setIcon(icon);
                 break;
+            }
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }

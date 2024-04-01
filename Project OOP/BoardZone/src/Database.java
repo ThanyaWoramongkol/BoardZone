@@ -13,7 +13,7 @@ public class Database {
             ResultSet rec = statement.executeQuery(sql);
             return rec;
         }
-        catch (Exception ex){
+        catch (SQLException ex){
             ex.printStackTrace();
             return null;
         }

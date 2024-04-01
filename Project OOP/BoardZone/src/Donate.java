@@ -215,6 +215,12 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
             imgLabel[2].setIcon(null);
             imgLabel[3].setIcon(null);
             
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            
             JFileChooser fc = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("image files", "jpg", "jpeg", "png");
             fc.setFileFilter(filter);
@@ -239,6 +245,11 @@ public class Donate extends javax.swing.JPanel implements Runnable, MouseListene
                     imgLabel[i].setIcon(icon);
                     i++;
                 }
+            }
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }
