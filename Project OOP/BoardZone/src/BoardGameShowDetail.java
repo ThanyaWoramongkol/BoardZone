@@ -351,7 +351,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             Database db = new Database();
             try{
                 System.out.println("Connecting to database...");
-                ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
+                ResultSet rs = db.getSelect(String.format("SELECT is_available FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
                 while((rs!=null) && (rs.next())){
                     isAvailable = rs.getBoolean("is_available");
                     if (isAvailable){
@@ -385,11 +385,14 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             db.close();
             
             if (isAvailable){
-                new Borrow(this.boardGameID);
-                frame.dispose();
+//                rating UPDATE
                 Database db2 = new Database();
                 db2.update(String.format("UPDATE boardzone.board_games SET rating = '%s' WHERE board_game_id = '%s'", this.rating , ""+this.boardGameID));
                 db2.close();
+                
+//                Borrow and dispose
+                new Borrow(this.boardGameID);
+                frame.dispose();
             }
         }
         if (e.getSource().equals(saveBtn)){

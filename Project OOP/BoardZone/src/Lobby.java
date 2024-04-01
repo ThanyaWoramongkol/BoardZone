@@ -25,7 +25,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
     private JLabel loading;
     private JButton funbutton, refresh;
     private JScrollPane lobbyScrollPane;
-    private ArrayList<BoardGamePanel> bgPanels;
+    private ArrayList<LobbyGamePanel> bgPanels;
 
     public Lobby(){
         lobbyframe = new JFrame("BoardZone");
@@ -42,7 +42,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
         username = new JMenu(Account.username);
-        picprofile = new JLabel("", new ImageIcon("poring.png"), JLabel.CENTER);
+        picprofile = new JLabel("", Account.profile, JLabel.CENTER);
         funbutton = new JButton("Play MiniGame");
         refresh = new JButton("Refresh");
         lobbyScrollPane = new JScrollPane(lobbypanel);
@@ -93,6 +93,11 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         lobbyScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
         lobbyScrollPane.setBorder(BorderFactory.createEmptyBorder());
         
+        refresh.setFont(new Font("Arial", Font.BOLD, 20));
+        refresh.setForeground(new Color(233, 233, 233));
+        refresh.setBackground(new Color(88,88, 88));
+        refresh.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
+        
         lobbyframe.setLayout(new BorderLayout());
         lobbyframe.add(lobbyScrollPane, BorderLayout.CENTER);
         lobbyframe.add(left, BorderLayout.WEST);
@@ -120,7 +125,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
         funbutton.setForeground(new Color(red, green, blue));
-        funbutton.setBorder(new LineBorder(new Color(red, green, blue)));
+        funbutton.setBorder(new LineBorder(new Color(red, green, blue), 3));
         funbutton.setBackground(null);
         funbutton.setFont(new Font("Arial", Font.BOLD, 20));
         
@@ -134,22 +139,27 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
     }
     
     public void refresh(){
-        bgPanels = new ArrayList<BoardGamePanel>();
+        bgPanels = new ArrayList<LobbyGamePanel>();
         Database db = new Database();
         try{
             System.out.println("Connecting to database...");
-            ResultSet rs = db.getSelect("SELECT * FROM board_games");
+            ResultSet rs = db.getSelect("SELECT * FROM boardzone.Borrow_item INNER JOIN boardzone.board_games\n" +
+"ON boardzone.Borrow_item.idboradgame = boardzone.board_games.board_game_id");
             while((rs!=null) && (rs.next())){
                 System.out.println("Loading Data....");
-                int boardGameID = rs.getInt("board_game_id");
-                String name = rs.getString("name");
-                boolean isAvailable = rs.getBoolean("is_available");
-                String rate = rs.getString("rating");
-                double rating = Double.parseDouble(rate);
+                int boardGameID = rs.getInt("idboradgame");
+                String name = rs.getString("item_name");
+                String location = rs.getString("location");
+                int maxplayer = rs.getInt("Maxplayer");
+                boolean ispublic = rs.getBoolean("ispublic");
+                int playerc = rs.getInt("player");
+                System.out.println("Loading img");
+                
                 byte[] imgBytes = rs.getBytes("img0");
                 ImageIcon img = new ImageIcon(imgBytes);
-                System.out.println(boardGameID + "|" + name + "|" + isAvailable + "|" + rating);
-                bgPanels.add(new BoardGamePanel(boardGameID, name, rating, isAvailable, img));
+                
+                System.out.println(boardGameID + "|" + name + "|" + location  + "|" + maxplayer  + "|" + ispublic + "|" + playerc);
+                bgPanels.add(new LobbyGamePanel(boardGameID, name, location, maxplayer, ispublic, img, playerc));
             }
             System.out.println("Loading complete!");
         }
@@ -157,7 +167,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
             ex.printStackTrace();
         }
         db.close();
-        for( BoardGamePanel bgPanel : bgPanels){
+        for( LobbyGamePanel bgPanel : bgPanels){
             lobbypanel.add(bgPanel);
             bgPanel.addMouseListener(this);
         }
@@ -198,13 +208,11 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
             user.setSize(lobbyframe.getSize());
             user.setLocation(lobbyframe.getLocation());
             lobbyframe.dispose();
+        } else if (e.getSource().equals(bgPanels)){
+            lobbypanel.removeAll();
+            this.refresh();
         }
-        for( BoardGamePanel bgPanel : bgPanels){
-            if (e.getSource().equals(bgPanel)){
-                System.out.println("boardGameID:"+bgPanel.getID());
-                new LobbyShowDetail(this, bgPanel.getID());
-            }
-        }
+
     }
     public void mousePressed(MouseEvent e) {
     }
@@ -228,6 +236,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         if (e.getSource().equals(funbutton)){
             new GameClient();
         } else if (e.getSource().equals(refresh)){
+            lobbypanel.removeAll();
             this.refresh();
         }
     }

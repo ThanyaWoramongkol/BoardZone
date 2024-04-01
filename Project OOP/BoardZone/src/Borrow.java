@@ -331,7 +331,7 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                 
                 try{
                     System.out.println("Connecting to database...");
-                    ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
+                    ResultSet rs = db.getSelect(String.format("SELECT name FROM boardzone.board_games WHERE board_game_id = '%s'", ""+boardGameID));
                     while((rs!=null) && (rs.next())){
                         gamename = rs.getString("name");
                     }

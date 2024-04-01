@@ -120,7 +120,7 @@ public class BorrowItem implements Item{
         Database db = new Database();
         try{
             System.out.println("Connecting to database...");
-            ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.Borrow_item WHERE idboradgame = '%s'", ""+id));
+            ResultSet rs = db.getSelect(String.format("SELECT Borrow_at FROM boardzone.Borrow_item WHERE idboradgame = '%s'", ""+id));
             while((rs!=null) && (rs.next())){
                 this.timestart = rs.getString("Borrow_at");
                 System.out.println("Loading isAvailable complete!");
@@ -186,7 +186,7 @@ public class BorrowItem implements Item{
         this.TimeLeft = String.format("%02d:%02d", this.hourleft, this.minuteleft);
         System.out.println("Time Left: " + this.TimeLeft);
         
-        if (TimeLeft.equals("00:00") || hourleft < 0 || minuteleft < 0 || checkdelete){
+        if (TimeLeft.equals("00:00") || hourleft >= 8 || minuteleft < 0 || checkdelete){
             TimeLeft = "00:00";
             this.deleteBorrowData(this.gameid);
         }

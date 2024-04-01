@@ -2,20 +2,29 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class LobbyGamePanel extends JPanel implements MouseListener{
     private JLabel imgLabel, nameLabel, playerLabel, positionLabel;
     private JPanel imgPanel, detailPanel, namePanel, playerPanel, nameNplayerPanel, posNjoinPanel, positionPanel, joinPanel;
-    private JPanel blankN, blankW, blankE, blankS, blankName;
+    private JPanel blankN, blankW, blankE, blankS, blankName, blankPlayer;
     private JButton joinBtn;
     private int boardGameID;
     private Color bgColor;
     
-    public LobbyGamePanel(int boardGameID, String name, ImageIcon img){
+    private int playercount;
+    private int maxplayer;
+    private boolean ispublic;
+    
+    public LobbyGamePanel(int boardGameID, String name, String location, int maxp, boolean ispublic, ImageIcon img, int playercount){
+        this.ispublic = ispublic;
+        this.maxplayer = maxp;
+        this.playercount = playercount;
+        
         this.boardGameID = boardGameID;
-        nameLabel = new JLabel("");
-        positionLabel = new JLabel("");
-        playerLabel = new JLabel("");
+        nameLabel = new JLabel(name);
+        positionLabel = new JLabel(location);
+        playerLabel = new JLabel("Max: " + this.playercount + " / " + maxplayer);
         imgPanel = new JPanel();
         namePanel = new JPanel();
         playerPanel = new JPanel();
@@ -32,8 +41,9 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
         blankE = new BlankPanel(16, 16, bgColor);
         blankS = new BlankPanel(16, 16, bgColor);
         blankName = new BlankPanel(16, 16, bgColor);
-        
-        this.addMouseListener(this);
+        blankPlayer = new BlankPanel(16, 16, bgColor);
+                
+        joinBtn.addMouseListener(this);
         //get Image
        Image image = img.getImage();
        ImageIcon icon = new ImageIcon(image.getScaledInstance(224, 126, java.awt.Image.SCALE_SMOOTH));
@@ -49,9 +59,11 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
         namePanel.setLayout(new BorderLayout());
         nameLabel.setFont(nameLabel.getFont().deriveFont(16f));
         namePanel.add(blankName, BorderLayout.WEST);
-        namePanel.add(nameLabel);
+        namePanel.add(nameLabel, BorderLayout.CENTER);
         //set playerPanel
-        playerPanel.add(playerLabel);
+        playerPanel.setLayout(new BorderLayout());
+        playerPanel.add(playerLabel, BorderLayout.CENTER);
+        playerPanel.add(blankPlayer, BorderLayout.EAST);
         //set positionlabel
         positionPanel.add(positionLabel);
         //set joinBtn
@@ -60,10 +72,10 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
         
         // main Container setup
         detailPanel.setLayout(new GridLayout(2, 1));
-        nameNplayerPanel.setLayout(new GridLayout(1, 2));
+        nameNplayerPanel.setLayout(new BorderLayout());
         posNjoinPanel.setLayout(new GridLayout(1, 2));
 
-        nameNplayerPanel.add(namePanel); nameNplayerPanel.add(playerPanel);
+        nameNplayerPanel.add(namePanel, BorderLayout.CENTER); nameNplayerPanel.add(playerPanel, BorderLayout.EAST);
         posNjoinPanel.add(positionPanel); posNjoinPanel.add(joinBtn);
         nameNplayerPanel.setPreferredSize(new Dimension(224, 40));
         posNjoinPanel.setPreferredSize(new Dimension(224, 40));
@@ -90,15 +102,37 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
         this.setLayout(new BorderLayout());
         this.add(imgPanel);
         this.add(detailPanel, BorderLayout.SOUTH);
+        
+        playerLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        joinBtn.setFont(new Font("Arial", Font.BOLD, 20));
+         if (!ispublic) {
+            joinBtn.setText("Private");
+            joinBtn.setRolloverEnabled(false);
+            playerLabel.setText("Max: " + this.maxplayer);
+            joinBtn.setBackground(this.bgColor);
+            joinBtn.setForeground(Color.RED);
+            joinBtn.setBorder(new LineBorder(Color.RED, 3));
+        } else if (this.playercount >= maxplayer){
+            joinBtn.setText("Max");
+            joinBtn.setRolloverEnabled(false);
+            joinBtn.setBackground(this.bgColor);
+            joinBtn.setForeground(Color.RED);
+            joinBtn.setBorder(new LineBorder(Color.RED, 3));
+        } else {
+            joinBtn.setBackground(new Color( 173, 207, 240));
+            joinBtn.setForeground(Color.WHITE);
+            
+        }
     }
     
     public int getID(){
         return this.boardGameID;
     }
     
+//    TESTING GROUND
     public static void main(String[] args) {
         JFrame frame = new JFrame();
-        LobbyGamePanel panel = new LobbyGamePanel();
+        LobbyGamePanel panel = new LobbyGamePanel(22, "NAME1NAME2NAME3", "location", 5, false, new ImageIcon("poring.png"), 2);
         frame.add(panel);
         frame.pack();
         frame.setVisible(true);
@@ -108,7 +142,24 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if (ispublic){
+            
+            if (playercount < maxplayer){
+                Database db = new Database();
+                db.update(String.format("UPDATE boardzone.Borrow_item\n" +
+"SET player = player+1\n" +
+"WHERE idboradgame = '%s' LIMIT 5;", ""+boardGameID));
+                ++playercount;
+            }
+            if (playercount >= maxplayer){
+                joinBtn.setText("Max");
+                joinBtn.setRolloverEnabled(false);
+                joinBtn.setBackground(this.bgColor);
+                joinBtn.setForeground(Color.RED);
+                joinBtn.setBorder(new LineBorder(Color.RED, 3));
+            }
+            playerLabel.setText("Max: " + playercount + " / " + maxplayer);
+        }
     }
 
     @Override
@@ -123,11 +174,17 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        joinBtn.setFont(new Font("Arial", Font.BOLD, 24));
+        if (playercount >= maxplayer){
+            playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        joinBtn.setFont(new Font("Arial", Font.BOLD, 20));
+        if (playercount >= maxplayer){
+            playerLabel.setFont(new Font("Arial", Font.BOLD, 13));
+        }
     }
 }
