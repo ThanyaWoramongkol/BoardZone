@@ -276,7 +276,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(postBtn)){
-            if (!nameTF.getText().equals("") && !detailTA.getText().equals("")){
+            if (!nameTF.getText().equals("") && !detailTA.getText().equals("") && imgFiles != null && imgFiles.length > 0){
                 Database db = new Database();
                 db.update(String.format("INSERT INTO boardzone.board_games (name, detail, created_by) VALUES ('%s', '%s', '%s')", nameTF.getText(), detailTA.getText(), Account.username));
                 db.close();
@@ -307,7 +307,7 @@ public class CreatePost implements MouseListener, ActionListener, Runnable{
             }
             else {
                 frame.dispose();
-                JOptionPane.showMessageDialog(null, "pls input name and detail");
+                JOptionPane.showMessageDialog(null, "Please input name ,detail and image.");
             }
             
         }

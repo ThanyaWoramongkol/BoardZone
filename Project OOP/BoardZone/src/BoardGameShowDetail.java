@@ -391,7 +391,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                 db2.close();
                 
 //                Borrow and dispose
-                new Borrow(this.boardGameID);
+                new Borrow(this.boardGameID, this.mainWindow);
                 frame.dispose();
             }
         }

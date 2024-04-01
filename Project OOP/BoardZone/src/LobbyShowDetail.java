@@ -340,7 +340,7 @@ public class LobbyShowDetail implements MouseListener, ActionListener, WindowLis
             db.close();
             
             if (isAvailable){
-                new Borrow(this.boardGameID);
+//                new Borrow(this.boardGameID);
                 frame.dispose();
                 Database db2 = new Database();
                 db2.update(String.format("UPDATE boardzone.board_games SET rating = '%s' WHERE board_game_id = '%s'", this.rating , ""+this.boardGameID));

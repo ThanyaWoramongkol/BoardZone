@@ -20,6 +20,8 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private CheckINTTwoDigit<String> checkmin, checkmaxp;
     private CheckINTOneDigit<String> checkhour;
     
+    private Home mainWindow;
+    
     public boolean ispublic;
     private int boardGameID;
     private String gamename;
@@ -28,9 +30,9 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private int minuteTime;
     private BorrowItem item;
     
-    public Borrow(int id){
+    public Borrow(int id, Home mainWindow){
         this.boardGameID = id;
-        
+        this.mainWindow = mainWindow;
         fr = new JFrame();
         top = new JPanel();
         topleft = new JPanel();
@@ -272,15 +274,18 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         tmaxp.addFocusListener(this);
         
         
-        
+        fr.setAlwaysOnTop(true);
         fr.setSize(900, 500);
-        fr.setLocationRelativeTo(null);
+        fr.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-fr.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-fr.getHeight())/2));
         fr.setUndecorated(true);
         fr.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         fr.setVisible(true);
+        
+        Thread t = new Thread(this);
+        t.start();
     }
     public static void main(String[] args) {
-        new Borrow(22); //only for TESTING
+//        new Borrow(22); //only for TESTING
     }
 
     @Override
@@ -428,5 +433,16 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     }
 
     @Override
-    public void run() {}
+    public void run() {
+        while(true){
+           if(mainWindow.getFrame().isFocused()){
+                fr.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-fr.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-fr.getHeight())/2));
+                fr.setAlwaysOnTop(true);
+            }
+            else {
+                fr.setAlwaysOnTop(false);
+            } 
+        }
+        
+    }
 }
