@@ -127,45 +127,34 @@ public class GameClient implements ActionListener, MouseListener, Runnable {
     @Override
     public void run() {
         while (true) {
-            if (!game.getWithAI()){
-                if (game.isRunning()) {
+            if (game.isRunning()) {
+                if (!game.getWithAI()){
                     char playingMark = game.getPlayingMark();
                     if (playingMark == 'O') {
                         playerText.setText("O's Turn");
                     } else {
                         playerText.setText("X's Turn");
                     }
-                    updateAll();
                 } else {
-                    int winState = game.getGameState();
-                    if (winState == GameBoard.DRAW) {
-                        playerText.setText("Draw!");
-                    } else if (winState == GameBoard.O_WIN) {
-                        playerText.setText("O Win!");
-                    } else {
-                        playerText.setText("X Win!");
-                    }
-                }
-            } else {
-                if (game.isRunning()) {
                     char playingMark = game.getPlayingMark();
                     if (playingMark == 'O') {
                         playerText.setText("Your turn...");
                     }
-                    updateAll();
+                }
+                updateAll();
+            } else {
+                int winState = game.getGameState();
+                if (winState == GameBoard.DRAW) {
+                    playerText.setText("Draw!");
+                } else if (winState == GameBoard.O_WIN) {
+                    playerText.setText("O Win!");
                 } else {
-                    int winState = game.getGameState();
-                    if (winState == GameBoard.DRAW) {
-                        playerText.setText("Draw!");
-                    } else if (winState == GameBoard.O_WIN) {
-                        playerText.setText("You Win!");
-                    } else {
-                        playerText.setText("AI Win!");
-                    }
+                    playerText.setText("X Win!");
                 }
             }
         }
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
