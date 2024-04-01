@@ -175,7 +175,6 @@ public class GameBoard {
                 }
             }
         }
-        System.out.println("");
         placeMark(bestRow, bestCol);
     }
     
