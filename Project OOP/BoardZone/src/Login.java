@@ -297,7 +297,7 @@ public class Login implements ActionListener, MouseListener{
             String ufirstname = firstname.getText();
             String ulastname = lastname.getText();
             String uemail = email.getText();
-            
+            // show text when data don't have data on textField
             if (ufirstname.equals("") || ulastname.equals("")){
                 terror.setText("Please input firstname and lastname");
             } else if (uemail.equals("")){
@@ -311,26 +311,23 @@ public class Login implements ActionListener, MouseListener{
                     String sql = String.format("INSERT INTO boardzone.Account (username, password, email, firstname, lastname) VALUES ('%s','%s','%s','%s','%s');", 
                             uusername, upassword, uemail, ufirstname, ulastname);
                     db.update(sql);
-                    
-                    try (FileInputStream fis = new FileInputStream("poring.png")){
+                    // upload prodile picture to database
+                    try (FileInputStream fis = new FileInputStream("poring.png")){ // set Default picture poring
                         PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.Account SET img = ? WHERE username = '%s'", uusername));
                         ps.setBlob(1, fis);
                         ps.executeUpdate();
                     }catch (IOException ex){
                         ex.printStackTrace();
                     }
-                    
                     db.close();
-                    
-                    
-                } catch (Exception ex){
+                } catch (SQLException ex){
                     ex.printStackTrace();
                 }
+                JOptionPane.showMessageDialog(create, "Created Account Success");
+                
                 //remove text on this page
                 firstname.setText(""); lastname.setText(""); email.setText("");
-                iusername.setText(""); pPassword.setText("");terror.setText("");                
-                
-                JOptionPane.showMessageDialog(create, "Created Account Success");
+                iusername.setText(""); pPassword.setText("");terror.setText("");
                 
                 create.setVisible(false);
                 create.dispose();
