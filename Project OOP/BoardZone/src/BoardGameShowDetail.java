@@ -6,13 +6,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 
-//public class BoardGameShowDetail<mainwin> implements MouseListener, ActionListener, WindowListener, Runnable{
 public class BoardGameShowDetail implements MouseListener, ActionListener, WindowListener, Runnable{
     private JFrame frame;
     private JPanel headerPanel, bodyPanel, mainImagePanel, showImagePanel, outputPanel, namePanel, dnbPanel, detailPanel, footerPanel, buttonPanel, bottomImagePanel, statusPanel, ratingPanel, status2Panel;
-//    private mainwin mainWindow;
     private SeeDetail mainWindow;
-//    private Lobby mainWindow2;
     private JLabel xBtnLabel, nameLabel, ratingLabel;
     private JLabel imgLabel[] = new JLabel[4];;
     private JTextArea detailTA;
@@ -27,12 +24,10 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
     private boolean haveRated = false;
     
     private BorrowItem item;
-    
-    
-    public BoardGameShowDetail(SeeDetail mainWindow, int id){
-//    public BoardGameShowDetail(mainwin mainWindow, int id){
-        this.boardGameID = id;
-        this.mainWindow = mainWindow; 
+
+
+    public BoardGameShowDetail(){
+         
         frame = new JFrame();
         headerPanel = new JPanel();
         bodyPanel = new JPanel();
@@ -237,14 +232,17 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
         frame.setUndecorated(true);
         frame.setResizable(false);
         frame.setSize(854, 480);
-        frame.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-frame.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-frame.getHeight())/2));
-        
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-        
 
         Thread t = new Thread(this);
         t.start();
+    }
+    
+    public void setBoardGameShowDetail(SeeDetail mainWindow, int id){
+        this.boardGameID = id;
+        this.mainWindow = mainWindow;
+        frame.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-frame.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-frame.getHeight())/2));
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
     }
     
     public void rechecktime(){

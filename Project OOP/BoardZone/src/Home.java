@@ -197,7 +197,9 @@ public class Home implements MouseListener, ActionListener, WindowListener, SeeD
         for( BoardGamePanel bgPanel : bgPanels){
             if (e.getSource().equals(bgPanel)){
                 System.out.println("boardGameID:"+bgPanel.getID());
-                new BoardGameShowDetail(this, bgPanel.getID());
+//                new BoardGameShowDetail(this, bgPanel.getID());
+                BoardGameShowDetail gamedetail = new BoardGameShowDetail();
+                gamedetail.setBoardGameShowDetail(this, bgPanel.getID());
             }
         }
     }

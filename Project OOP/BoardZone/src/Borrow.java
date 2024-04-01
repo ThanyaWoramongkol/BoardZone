@@ -20,8 +20,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private CheckINTTwoDigit<String> checkmin, checkmaxp;
     private CheckINTOneDigit<String> checkhour;
     
-    private Home mainWindow;
-    
     public boolean ispublic;
     private int boardGameID;
     private String gamename;
@@ -30,9 +28,9 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private int minuteTime;
     private BorrowItem item;
     
-    public Borrow(int id, Home mainWindow){
+    public Borrow(int id){
         this.boardGameID = id;
-        this.mainWindow = mainWindow;
+        
         fr = new JFrame();
         top = new JPanel();
         topleft = new JPanel();
@@ -72,9 +70,9 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         ltime = new JLabel("Time");
         lmaxp = new JLabel("Max Player");
         lloca = new JLabel("Location");
-        lsp1 = new JLabel(": ");
-        lsp2 = new JLabel(": ");
-        lsp3 = new JLabel(": ");
+        lsp1 = new JLabel(":");
+        lsp2 = new JLabel(":");
+        lsp3 = new JLabel(":");
         lsp4 = new JLabel(" : ");
         thour = new JTextField("Hour");
         tmin = new JTextField("Minute");
@@ -193,7 +191,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         
 //      bottom layout
         bottom.add(bcancel); bottom.add(bconfirm);
-        bottom.add(new BlankPanel(900, 60, new Color(61,61,61)));
         bottom.setLayout(new FlowLayout());
         
 
@@ -206,41 +203,37 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         fr.add(bottom, BorderLayout.SOUTH);
         
 //        set color
-        fr.setBackground(new Color(61,61,61));
-        top.setBackground(new Color(61,61,61));
-        topleft.setBackground(new Color(61,61,61));
-        topright.setBackground(new Color(61,61,61));
-        topempty.setBackground(new Color(61,61,61));
-        topbelow.setBackground(new Color(61,61,61));
-        middle.setBackground(new Color(61,61,61));
-        mleft.setBackground(new Color(61,61,61));
-        mleft1.setBackground(new Color(61,61,61));
-        mleft2.setBackground(new Color(61,61,61));
-        mleft3.setBackground(new Color(61,61,61));
-        mright.setBackground(new Color(61,61,61));
-        mrightl.setBackground(new Color(61,61,61));
-        mrightr.setBackground(new Color(61,61,61));
-        mrighttopr.setBackground(new Color(61,61,61));
-        phour.setBackground(new Color(61,61,61));
-        pmin.setBackground(new Color(61,61,61));
-        pmaxp.setBackground(new Color(61,61,61));
-        ploca.setBackground(new Color(61,61,61));
-        bottom.setBackground(new Color(61,61,61));
-        westempty.setBackground(new Color(61,61,61));
-        eastempty.setBackground(new Color(61,61,61));
-        mep1.setBackground(new Color(61,61,61));
-        mep2.setBackground(new Color(61,61,61));
-        mep3.setBackground(new Color(61,61,61));
-        mep4.setBackground(new Color(61,61,61));
-        mep5.setBackground(new Color(61,61,61));
-        mep6.setBackground(new Color(61,61,61));
-        mep7.setBackground(new Color(61,61,61));
-        mep8.setBackground(new Color(61,61,61));
-        bexit.setBackground(new Color(61,61,61));
-        thour.setBackground(new Color(230,230,230));
-        tmaxp.setBackground(new Color(230,230,230));
-        tmin.setBackground(new Color(230,230,230));
-        tloca.setBackground(new Color(230,230,230));
+        fr.setBackground(new Color(43, 43, 43));
+        top.setBackground(new Color(43, 43, 43));
+        topleft.setBackground(new Color(43, 43, 43));
+        topright.setBackground(new Color(43, 43, 43));
+        topempty.setBackground(new Color(43, 43, 43));
+        topbelow.setBackground(new Color(43, 43, 43));
+        middle.setBackground(new Color(43, 43, 43));
+        mleft.setBackground(new Color(43, 43, 43));
+        mleft1.setBackground(new Color(43, 43, 43));
+        mleft2.setBackground(new Color(43, 43, 43));
+        mleft3.setBackground(new Color(43, 43, 43));
+        mright.setBackground(new Color(43, 43, 43));
+        mrightl.setBackground(new Color(43, 43, 43));
+        mrightr.setBackground(new Color(43, 43, 43));
+        mrighttopr.setBackground(new Color(43, 43, 43));
+        phour.setBackground(new Color(43, 43, 43));
+        pmin.setBackground(new Color(43, 43, 43));
+        pmaxp.setBackground(new Color(43, 43, 43));
+        ploca.setBackground(new Color(43, 43, 43));
+        bottom.setBackground(new Color(43, 43, 43));
+        westempty.setBackground(new Color(43, 43, 43));
+        eastempty.setBackground(new Color(43, 43, 43));
+        mep1.setBackground(new Color(43, 43, 43));
+        mep2.setBackground(new Color(43, 43, 43));
+        mep3.setBackground(new Color(43, 43, 43));
+        mep4.setBackground(new Color(43, 43, 43));
+        mep5.setBackground(new Color(43, 43, 43));
+        mep6.setBackground(new Color(43, 43, 43));
+        mep7.setBackground(new Color(43, 43, 43));
+        mep8.setBackground(new Color(43, 43, 43));
+        bexit.setBackground(new Color(43, 43, 43));
         
         bexit.setForeground(Color.white);
         ltime.setForeground(Color.white);
@@ -251,11 +244,11 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         lsp3.setForeground(Color.white);
         lsp4.setForeground(Color.white);
         bexit.setForeground(Color.white);
-        bcancel.setForeground(new Color( 237, 135, 136));
-        bcancel.setBorder(new LineBorder(new Color( 237, 135, 136), 3));
+        bcancel.setForeground(Color.red);
+        bcancel.setBorder(new LineBorder(Color.red, 3));
         bcancel.setBackground(null);
-        bconfirm.setForeground(new Color( 80, 147, 80));
-        bconfirm.setBorder(new LineBorder(new Color( 80, 147, 80), 3));
+        bconfirm.setForeground(Color.green);
+        bconfirm.setBorder(new LineBorder(Color.green, 3));
         bconfirm.setBackground(null);
         bexit.setBorderPainted(false);
         bpublic.setForeground(new Color( 173, 207, 240));
@@ -267,21 +260,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         thour.setForeground(Color.LIGHT_GRAY);
         tmin.setForeground(Color.LIGHT_GRAY);
         
-        //remove border
-        thour.setBorder(BorderFactory.createEmptyBorder());
-        tmaxp.setBorder(BorderFactory.createEmptyBorder());
-        tmin.setBorder(BorderFactory.createEmptyBorder());
-        tloca.setBorder(BorderFactory.createEmptyBorder());
-        
-        //add Hand cursor
-        bconfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        bcancel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        bpublic.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        bprivate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        //set Focus painted
-        bpublic.setFocusPainted(false);
-        bprivate.setFocusPainted(false);
         
         //add listener
         bprivate.addActionListener(this);
@@ -294,18 +272,15 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         tmaxp.addFocusListener(this);
         
         
-        fr.setAlwaysOnTop(true);
+        
         fr.setSize(900, 500);
-        fr.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-fr.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-fr.getHeight())/2));
+        fr.setLocationRelativeTo(null);
         fr.setUndecorated(true);
         fr.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         fr.setVisible(true);
-        
-        Thread t = new Thread(this);
-        t.start();
     }
     public static void main(String[] args) {
-//        new Borrow(22); //only for TESTING
+        new Borrow(22); //only for TESTING
     }
 
     @Override
@@ -453,16 +428,5 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     }
 
     @Override
-    public void run() {
-        while(true){
-           if(mainWindow.getFrame().isFocused()){
-                fr.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-fr.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-fr.getHeight())/2));
-                fr.setAlwaysOnTop(true);
-            }
-            else {
-                fr.setAlwaysOnTop(false);
-            } 
-        }
-        
-    }
+    public void run() {}
 }
