@@ -109,9 +109,9 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
         footerPanel.setBackground(new Color(101,101,101));
+        homepanel.setBackground(new Color(75,75,75));
         createBtn.setBackground(new Color(88,88,88));
         refreshBtn.setBackground(new Color(88,88, 88));
-        homepanel.setBackground(new Color(75,75,75));
         
         createBtn.setForeground(new Color(255, 255, 255));
         refreshBtn.setForeground(new Color(233, 233, 233));

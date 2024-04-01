@@ -123,6 +123,7 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
             joinBtn.setForeground(Color.WHITE);
             
         }
+         joinBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
     
     public int getID(){

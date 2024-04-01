@@ -30,6 +30,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
 //    private JButton postbutton;
 //    private JTextField cost;
     
+    private Fund mainWindow;
     private String name, detail;
     private double price, fullprice;
     private DonateData data;
@@ -38,6 +39,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
     
     public DonatePost(Fund mainWindow, String name, String detail, double price, double fullprice, ImageIcon img1, int id){
         this.id = id;
+        this.mainWindow = mainWindow;
         jPanel1 = new JPanel();
         donate = new JButton("Donate");
         priceJT = new JTextField(price+"/"+fullprice);
@@ -102,7 +104,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         head = new JTextArea(name);
         discription = new JTextArea(detail);
          Image image = img1.getImage();
-        ImageIcon icon = new ImageIcon(image.getScaledInstance(75, 75,  java.awt.Image.SCALE_SMOOTH));
+        ImageIcon icon = new ImageIcon(image.getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH));
         jl1 = new JLabel(icon, JLabel.CENTER);
         jl2 = new JLabel();
         sp1 = new JLabel("     Name : ");
@@ -180,13 +182,26 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
         
         donateframe.setUndecorated(true);
         donateframe.setSize(900, 500);
+        donateframe.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-donateframe.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-donateframe.getHeight())/2));
         donateframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         donateframe.setVisible(true);
+        
+        Thread t = new Thread(this);
+        t.start();
     }
 
     @Override
     public void run() {
-        donateframe.setLocation(90, 150);
+//        donateframe.setLocation(90, 150);
+        while (true) {
+            if(mainWindow.getFrame().isFocused()){
+                donateframe.setLocation((int)mainWindow.getFrame().getX()+((mainWindow.getFrame().getWidth()-donateframe.getWidth())/2), (int)mainWindow.getFrame().getY()+((mainWindow.getFrame().getHeight()-donateframe.getHeight())/2));
+                donateframe.setAlwaysOnTop(true);
+            }
+            else {
+                donateframe.setAlwaysOnTop(false);
+            }
+        }
     }
 
     @Override

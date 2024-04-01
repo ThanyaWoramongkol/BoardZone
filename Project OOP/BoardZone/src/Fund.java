@@ -67,6 +67,7 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         donateButton.addActionListener( this);
         refreshBtn.addActionListener(this);
         
+        
         ((FlowLayout)fundpanel.getLayout()).setHgap(24);
         ((FlowLayout)fundpanel.getLayout()).setVgap(24);
         
@@ -116,9 +117,18 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         right.setBackground(new Color(101, 101, 101));
         fundpanel.setBackground(new Color(75, 75, 75));
         jp.setBackground(new Color(101, 101, 101));
-        donateButton.setBackground(Color.WHITE);
-        refreshBtn.setBackground(Color.WHITE);
-
+        
+        donateButton.setBackground(new Color(88,88,88));
+        refreshBtn.setBackground(new Color(88,88, 88));
+        
+        donateButton.setForeground(new Color(255, 255, 255));
+        refreshBtn.setForeground(new Color(233, 233, 233));
+        
+        donateButton.setFocusPainted(false);
+        refreshBtn.setFocusPainted(false);
+        donateButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
         homemenu.setForeground(new Color(170, 170, 170));
         lobbymenu.setForeground(new Color(170, 170, 170));
         fundmenu.setForeground(new Color(255, 255, 255));
@@ -129,7 +139,9 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         fundframe.setSize(1080, 720);
         fundframe.setVisible(true);
     }
-    
+    public JFrame getFrame(){
+        return this.fundframe;
+    }
     public void refresh(){
         bgPanels = new ArrayList<DonatePanel>();
         Database db = new Database();
