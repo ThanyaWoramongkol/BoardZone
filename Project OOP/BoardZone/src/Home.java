@@ -133,9 +133,8 @@ public class Home implements MouseListener, ActionListener, WindowListener, SeeD
         return this.homeframe;
     }
     @Override
-    public void refresh(){
+    public void refresh(Database db){
         bgPanels = new ArrayList<BoardGamePanel>();
-        Database db = new Database();
         try{
             System.out.println("Connecting to database...");
             ResultSet rs = db.getSelect("SELECT * FROM board_games");
@@ -227,13 +226,13 @@ public class Home implements MouseListener, ActionListener, WindowListener, SeeD
         }
         else if (e.getSource().equals(refreshBtn)){
             homepanel.removeAll();
-            this.refresh();
+            this.refresh(new Database());
         }
     }
 
     @Override
     public void windowOpened(WindowEvent e) {
-        this.refresh();
+        this.refresh(new Database());
     }
 
     @Override
