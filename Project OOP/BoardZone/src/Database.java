@@ -1,6 +1,4 @@
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 public class Database {
     private Connection connect = null;
     private Statement statement = null;
@@ -10,8 +8,7 @@ public class Database {
 
     public ResultSet getSelect(String sql){
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connect = DriverManager.getConnection(host,user,password);
+            connect = this.getConnection();
             statement = connect.createStatement();
             ResultSet rec = statement.executeQuery(sql);
             return rec;
@@ -24,13 +21,9 @@ public class Database {
     
     public void update(String sql){
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connect = DriverManager.getConnection(host,user,password);
+            connect = this.getConnection();
             statement = connect.createStatement();
             statement.executeUpdate(sql);
-        }
-        catch (ClassNotFoundException ex){
-            ex.printStackTrace();
         }
         catch (SQLException ex){
             ex.printStackTrace();
