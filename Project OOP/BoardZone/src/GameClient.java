@@ -75,7 +75,7 @@ public class GameClient implements ActionListener, MouseListener, Runnable {
         Thread t = new Thread(this);
         t.start();
         
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
@@ -138,9 +138,9 @@ public class GameClient implements ActionListener, MouseListener, Runnable {
                     updateAll();
                 } else {
                     int winState = game.getGameState();
-                    if (winState == 0) {
+                    if (winState == GameBoard.DRAW) {
                         playerText.setText("Draw!");
-                    } else if (winState == 1) {
+                    } else if (winState == GameBoard.O_WIN) {
                         playerText.setText("O Win!");
                     } else {
                         playerText.setText("X Win!");
@@ -155,9 +155,9 @@ public class GameClient implements ActionListener, MouseListener, Runnable {
                     updateAll();
                 } else {
                     int winState = game.getGameState();
-                    if (winState == 0) {
+                    if (winState == GameBoard.DRAW) {
                         playerText.setText("Draw!");
-                    } else if (winState == 1) {
+                    } else if (winState == GameBoard.O_WIN) {
                         playerText.setText("You Win!");
                     } else {
                         playerText.setText("AI Win!");
