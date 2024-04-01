@@ -33,13 +33,16 @@ public class Pay implements ActionListener {
     private int id;
     
     public Pay(String name, double price, double fullprice, int id){
+        System.out.println(price);
         this.id = id;
+        this.price = price;
+        this.fullprice = fullprice;
         jf = new JFrame();
         jp = new JPanel();
         qr = new ImageIcon("Easter egg.png");
         jl1 = new JLabel(qr, JLabel.CENTER);
         txt = new JLabel(name);
-        priceJL = new JLabel(price+"/"+fullprice);
+        priceJL = new JLabel(this.price+"/"+this.fullprice);
         priceTF = new JTextField();
         pay = new JButton("Pay");
         empty_line1 = new JLabel();
@@ -78,11 +81,13 @@ public class Pay implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(pay)){
             if (!priceTF.getText().equals("") ){
+                System.out.println(this.price);
                 Database db = new Database();
-                db.update(String.format("UPDATE boardzone.donate_data  SET price = '%f' WHERE id = '%d' ",price+Double.parseDouble(priceTF.getText()), this.id));
+                db.update(String.format("UPDATE boardzone.donate_data  SET price = '%f' WHERE id = '%d' ",this.price+Double.parseDouble(priceTF.getText()), this.id));
                 db.close();
                 jf.dispose();
                 JOptionPane.showMessageDialog(null, "We got your money :P");
+                System.out.println(this.price);
         }
     }
 }

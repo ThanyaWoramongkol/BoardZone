@@ -39,6 +39,10 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
     
     public DonatePost(Fund mainWindow, String name, String detail, double price, double fullprice, ImageIcon img1, int id){
         this.id = id;
+        this.price = price;
+        this.fullprice = fullprice;
+        this.name = name;
+        this.detail =detail;
         this.mainWindow = mainWindow;
         jPanel1 = new JPanel();
         donate = new JButton("Donate");
@@ -239,7 +243,7 @@ public class DonatePost extends javax.swing.JPanel implements Runnable, MouseLis
             donateframe.dispose();
         }
         else if(e.getSource().equals(donate)){
-            new Pay(name, price, fullprice, this.id);
+            new Pay(this.name, this.price, this.fullprice, this.id);
         }
     }
 
