@@ -6,7 +6,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class Lobby implements MouseListener, ActionListener, WindowListener{
+public class Lobby implements MouseListener, ActionListener, WindowListener, SeeDetail{
     private JFrame lobbyframe;
     private JPanel lobbypanel;
     private JPanel left;
@@ -93,12 +93,10 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         lobbyScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
         lobbyScrollPane.setBorder(BorderFactory.createEmptyBorder());
         
-        refresh.setFont(new Font("Arial", Font.BOLD, 13));
-        refresh.setPreferredSize(new Dimension(100, 26));
+        refresh.setFont(new Font("Arial", Font.BOLD, 20));
         refresh.setForeground(new Color(233, 233, 233));
         refresh.setBackground(new Color(88,88, 88));
         refresh.setBorder(new LineBorder(new Color( 173, 207, 240), 1));
-        refresh.setFocusPainted(false);
         
         lobbyframe.setLayout(new BorderLayout());
         lobbyframe.add(lobbyScrollPane, BorderLayout.CENTER);
@@ -122,31 +120,26 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         aboutmenu.setForeground(new Color(170, 170, 170));
         username.setForeground(new Color(170, 170, 170));
         
-        refresh.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        funbutton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        
-        
         Random random = new Random();
         int red = random.nextInt(256);
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
         funbutton.setForeground(new Color(red, green, blue));
-        funbutton.setBorder(new LineBorder(new Color(red, green, blue), 2));
-        funbutton.setPreferredSize(new Dimension(160, 26));
-        funbutton.setBackground(new Color(88,88, 88));
-        funbutton.setFont(new Font("Arial", Font.BOLD, 13));
-        funbutton.setFocusPainted(false);
+        funbutton.setBorder(new LineBorder(new Color(red, green, blue), 3));
+        funbutton.setBackground(null);
+        funbutton.setFont(new Font("Arial", Font.BOLD, 20));
         
         lobbyframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         lobbyframe.setSize(1080,720);
         lobbyframe.setVisible(true);
     }
     
+    @Override
     public JFrame getFrame(){
         return this.lobbyframe;
     }
     
+    @Override
     public void refresh(){
         bgPanels = new ArrayList<LobbyGamePanel>();
         Database db = new Database();
@@ -220,6 +213,12 @@ public class Lobby implements MouseListener, ActionListener, WindowListener{
         } else if (e.getSource().equals(bgPanels)){
             lobbypanel.removeAll();
             this.refresh();
+        }
+        for( LobbyGamePanel bgPanel : bgPanels){
+            if (e.getSource().equals(bgPanel)){
+                System.out.println("boardGameID:"+bgPanel.getID());
+                new BoardGameShowDetail(this, bgPanel.getID());
+            }
         }
 
     }

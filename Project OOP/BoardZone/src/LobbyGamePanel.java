@@ -42,7 +42,8 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
         blankS = new BlankPanel(16, 16, bgColor);
         blankName = new BlankPanel(16, 16, bgColor);
         blankPlayer = new BlankPanel(16, 16, bgColor);
-                
+        
+        this.addMouseListener(this);
         joinBtn.addMouseListener(this);
         //get Image
        Image image = img.getImage();
@@ -123,7 +124,6 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
             joinBtn.setForeground(Color.WHITE);
             
         }
-         joinBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
     
     public int getID(){
@@ -143,24 +143,26 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (ispublic){
-            
-            if (playercount < maxplayer){
-                Database db = new Database();
-                db.update(String.format("UPDATE boardzone.Borrow_item\n" +
-"SET player = player+1\n" +
-"WHERE idboradgame = '%s' LIMIT 5;", ""+boardGameID));
-                ++playercount;
+        if (e.getSource().equals(joinBtn)){
+            if (ispublic){
+                if (playercount < maxplayer){
+                    Database db = new Database();
+                    db.update(String.format("UPDATE boardzone.Borrow_item\n" +
+    "SET player = player+1\n" +
+    "WHERE idboradgame = '%s' LIMIT 5;", ""+boardGameID));
+                    ++playercount;
+                }
+                if (playercount >= maxplayer){
+                    joinBtn.setText("Max");
+                    joinBtn.setRolloverEnabled(false);
+                    joinBtn.setBackground(this.bgColor);
+                    joinBtn.setForeground(Color.RED);
+                    joinBtn.setBorder(new LineBorder(Color.RED, 3));
+                }
+                playerLabel.setText("Max: " + playercount + " / " + maxplayer);
             }
-            if (playercount >= maxplayer){
-                joinBtn.setText("Max");
-                joinBtn.setRolloverEnabled(false);
-                joinBtn.setBackground(this.bgColor);
-                joinBtn.setForeground(Color.RED);
-                joinBtn.setBorder(new LineBorder(Color.RED, 3));
-            }
-            playerLabel.setText("Max: " + playercount + " / " + maxplayer);
         }
+        
     }
 
     @Override
@@ -175,17 +177,50 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        joinBtn.setFont(new Font("Arial", Font.BOLD, 24));
-        if (playercount >= maxplayer){
-            playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        if (e.getSource().equals(joinBtn)){
+            joinBtn.setFont(new Font("Arial", Font.BOLD, 24));
+            if (playercount >= maxplayer){
+                playerLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            }
+        } else {
+            detailPanel.setBackground(new Color(64, 63, 62));
+            namePanel.setBackground(new Color(64, 63, 62));
+            playerPanel.setBackground(new Color(64, 63, 62));
+            nameNplayerPanel.setBackground(new Color(64, 63, 62));
+            posNjoinPanel.setBackground(new Color(64, 63, 62));
+            positionPanel.setBackground(new Color(64, 63, 62));
+            joinPanel.setBackground(new Color(64, 63, 62));
+            blankN.setBackground(new Color(64, 63, 62));
+            blankW.setBackground(new Color(64, 63, 62));
+            blankE.setBackground(new Color(64, 63, 62));
+            blankS.setBackground(new Color(64, 63, 62));
+            blankName.setBackground(new Color(64, 63, 62));
+            blankPlayer.setBackground(new Color(64, 63, 62));
         }
+        
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        joinBtn.setFont(new Font("Arial", Font.BOLD, 20));
-        if (playercount >= maxplayer){
-            playerLabel.setFont(new Font("Arial", Font.BOLD, 13));
-        }
+        if (e.getSource().equals(joinBtn)){
+            joinBtn.setFont(new Font("Arial", Font.BOLD, 20));
+            if (playercount >= maxplayer){
+                playerLabel.setFont(new Font("Arial", Font.BOLD, 13));
+            }
+        } else {
+            detailPanel.setBackground(this.bgColor);
+            namePanel.setBackground(this.bgColor);
+            playerPanel.setBackground(this.bgColor);
+            nameNplayerPanel.setBackground(this.bgColor);
+            posNjoinPanel.setBackground(this.bgColor);
+            positionPanel.setBackground(this.bgColor);
+            joinPanel.setBackground(this.bgColor);
+            blankN.setBackground(this.bgColor);
+            blankW.setBackground(this.bgColor);
+            blankE.setBackground(this.bgColor);
+            blankS.setBackground(this.bgColor);
+            blankName.setBackground(this.bgColor);
+            blankPlayer.setBackground(this.bgColor);
+        } 
     }
 }

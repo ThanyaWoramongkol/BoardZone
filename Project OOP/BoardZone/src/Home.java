@@ -4,7 +4,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.sql.*;
 import java.util.*;
-public class Home implements MouseListener, ActionListener, WindowListener{
+public class Home implements MouseListener, ActionListener, WindowListener, SeeDetail{
     private JFrame homeframe;
     private JPanel homepanel;
     private JPanel left;
@@ -109,9 +109,9 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         left.setBackground(new Color(101,101,101));
         right.setBackground(new Color(101,101,101));
         footerPanel.setBackground(new Color(101,101,101));
-        homepanel.setBackground(new Color(75,75,75));
         createBtn.setBackground(new Color(88,88,88));
         refreshBtn.setBackground(new Color(88,88, 88));
+        homepanel.setBackground(new Color(75,75,75));
         
         createBtn.setForeground(new Color(255, 255, 255));
         refreshBtn.setForeground(new Color(233, 233, 233));
@@ -128,9 +128,11 @@ public class Home implements MouseListener, ActionListener, WindowListener{
         homeframe.setSize(1080,720);
         homeframe.setVisible(true);
     }
+    @Override
     public JFrame getFrame(){
         return this.homeframe;
     }
+    @Override
     public void refresh(){
         bgPanels = new ArrayList<BoardGamePanel>();
         Database db = new Database();

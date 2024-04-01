@@ -6,10 +6,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.border.LineBorder;
 
+//public class BoardGameShowDetail<mainwin> implements MouseListener, ActionListener, WindowListener, Runnable{
 public class BoardGameShowDetail implements MouseListener, ActionListener, WindowListener, Runnable{
     private JFrame frame;
     private JPanel headerPanel, bodyPanel, mainImagePanel, showImagePanel, outputPanel, namePanel, dnbPanel, detailPanel, footerPanel, buttonPanel, bottomImagePanel, statusPanel, ratingPanel, status2Panel;
-    private Home mainWindow;
+//    private mainwin mainWindow;
+    private SeeDetail mainWindow;
+//    private Lobby mainWindow2;
     private JLabel xBtnLabel, nameLabel, ratingLabel;
     private JLabel imgLabel[] = new JLabel[4];;
     private JTextArea detailTA;
@@ -25,7 +28,9 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
     
     private BorrowItem item;
     
-    public BoardGameShowDetail(Home mainWindow, int id){
+    
+    public BoardGameShowDetail(SeeDetail mainWindow, int id){
+//    public BoardGameShowDetail(mainwin mainWindow, int id){
         this.boardGameID = id;
         this.mainWindow = mainWindow; 
         frame = new JFrame();
@@ -289,7 +294,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             } else {
                 try{
                     this.rechecktime();
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 }
                 catch (InterruptedException ex) {
                     System.out.println(ex);
@@ -299,7 +304,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public synchronized void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(xBtnLabel)){
             frame.dispose();
             Database db = new Database();
@@ -391,7 +396,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                 db2.close();
                 
 //                Borrow and dispose
-                new Borrow(this.boardGameID, this.mainWindow);
+                new Borrow(this.boardGameID);
                 frame.dispose();
             }
         }
