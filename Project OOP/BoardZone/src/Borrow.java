@@ -17,8 +17,10 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private JButton bprivate, bpublic, bcancel, bconfirm, bexit;
     private JLabel ltime, lmaxp, lloca, lsp1, lsp2, lsp3, lsp4;
     private JTextField thour, tmin, tmaxp, tloca;
-    private CheckINTTwoDigit<String> checkmin, checkmaxp;
-    private CheckINTOneDigit<String> checkhour;
+    
+    private CheckINT checkINT1, checkINT2;
+    
+    private int checkmin, checkmaxp, checkhour;
     
     public boolean ispublic;
     private int boardGameID;
@@ -79,12 +81,8 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         tmaxp = new JTextField(2);
         tloca = new JTextField();
         
-        checkhour = new CheckINTOneDigit<>(thour.getText());
-//        checkhour = new CheckINTTwoDigit<>(thour.getText());
-        checkmin = new CheckINTTwoDigit<>(tmin.getText());
-        checkmaxp = new CheckINTTwoDigit<>(tmaxp.getText());
-
-        
+        checkINT1 = new CheckINTOneDigit();
+        checkINT2 = new CheckINTTwoDigit();
         
         top.setLayout(new BorderLayout());
         topleft.setLayout(new BorderLayout());
@@ -282,6 +280,11 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     public static void main(String[] args) {
         new Borrow(22); //only for TESTING
     }
+    
+    public static int checkIntSize(CheckINT checkINT, String textcheck) {
+        checkINT.setContent(textcheck);
+        return checkINT.getCheckText();
+    }
 
     @Override
     public synchronized void actionPerformed(ActionEvent e) {
@@ -395,33 +398,33 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
 
     @Override
     public synchronized void focusLost(FocusEvent e) {
-        checkhour.setContent(thour.getText());
-        checkmin.setContent(tmin.getText());
-        checkmaxp.setContent(tmaxp.getText());
-//        if (thour.getText().equals("")){
-//            thour.setText("Hour");
-//            thour.setForeground(Color.LIGHT_GRAY);
-//        } else
-        if(checkhour.getCheckText() < 0 || checkhour.getCheckText() >= 8){
+//        checkhour.setContent(thour.getText());
+//        checkmin.setContent(tmin.getText());
+//        checkmaxp.setContent(tmaxp.getText());
+        checkhour = checkIntSize(checkINT1, thour.getText());
+        checkmin = checkIntSize(checkINT2, tmin.getText());
+        checkmaxp = checkIntSize(checkINT2, tmaxp.getText());
+
+        if(checkhour < 0 || checkhour >= 8){
             thour.setText("Hour");
             thour.setForeground(Color.LIGHT_GRAY);
         } else {
-            thour.setText("" + checkhour.getCheckText());
+            thour.setText("" + checkhour);
             thour.setForeground(Color.BLACK);
         }
 
-        if(checkmin.getCheckText() < 0 || checkmin.getCheckText() >= 60){
+        if(checkmin < 0 || checkmin >= 60){
             tmin.setText("Minute");
             tmin.setForeground(Color.LIGHT_GRAY);
         } else {
-            tmin.setText("" + checkmin.getCheckText());
+            tmin.setText("" + checkmin);
             tmin.setForeground(Color.BLACK);
         }
         
-        if(checkmaxp.getCheckText() < 0){
+        if(checkmaxp < 0){
             tmaxp.setText("");
         } else {
-            tmaxp.setText("" + checkmaxp.getCheckText());
+            tmaxp.setText("" + checkmaxp);
             tmaxp.setForeground(Color.BLACK);
         }
 
