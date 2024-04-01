@@ -8,8 +8,8 @@ public class GameBoard {
     private boolean withAI = false;
     
     public static final int DRAW = 0;
-    public static final int O_WIN = 10;
-    public static final int X_WIN = -10;
+    public static final int O_WIN = 1;
+    public static final int X_WIN = -1;
     
     public static final char EMPTY = '\u0000';
     
