@@ -129,17 +129,6 @@ public class LobbyGamePanel extends JPanel implements MouseListener{
     public int getID(){
         return this.boardGameID;
     }
-    
-//    TESTING GROUND
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        LobbyGamePanel panel = new LobbyGamePanel(22, "NAME1NAME2NAME3", "location", 5, false, new ImageIcon("poring.png"), 2);
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
