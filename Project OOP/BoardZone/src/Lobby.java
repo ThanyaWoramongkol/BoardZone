@@ -174,12 +174,6 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
         lobbypanel.setPreferredSize(new Dimension(880, 310*((int)(bgPanels.size()/3)+1)));
     }
     
-    public static void main(String[] args) {
-        new Lobby();
-    }
-    
-
-    
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(homemenu)){
             Home home = new Home();
