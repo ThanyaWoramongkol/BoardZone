@@ -245,7 +245,6 @@ public class User implements MouseListener, ActionListener{
         userprofileright.add(rightpanel7);
         userprofileright.add(rightpanel12);
         
-        
         rightpanel1.setLayout(new GridLayout());
         rightpanel1.add(rightpanel8);
         rightpanel8.setLayout(new GridLayout(2,1));
@@ -352,8 +351,6 @@ public class User implements MouseListener, ActionListener{
         else if (e.getSource().equals(save)){
             String tusername = textusername.getText(); String tfirstname = textname.getText(); 
             String tsurname = textsurname.getText(); String temail = textemail.getText();
-//            String terror = "Please input ";
-//            int error = false;
             if (tusername.equals("") || tfirstname.equals("") || tsurname.equals("") || temail.equals("")){
                 JOptionPane.showMessageDialog(userframe, "Please input firstname, lastname, username and email");
             }
@@ -378,9 +375,6 @@ public class User implements MouseListener, ActionListener{
                     temail, textphone.getText(), textacademic.getText(), textfaculty.getText());
                 
                 Account.setImage();
-                
-//                db.close();
-
                 JOptionPane.showMessageDialog(userframe, "Account successfully updated.");
                 User user = new User();
                 user.setSize(userframe.getSize());
