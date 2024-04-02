@@ -473,8 +473,4 @@ public class About implements MouseListener{
     public void setLocation(Point location) {
         aboutframe.setLocation(location);
     }
-    
-    public static void main(String[] args) {
-        new About();
-    }
 }
