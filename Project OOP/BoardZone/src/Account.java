@@ -141,7 +141,6 @@ public class Account {
             Image image = new ImageIcon(imgBytes).getImage();
             ImageIcon icon = new ImageIcon(image.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH));
 
-//                Account picture = new Account();
             profile = icon;
             images = image;
             }
