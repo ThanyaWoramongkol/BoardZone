@@ -156,20 +156,8 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
                 Double price = rs.getDouble("price");
                 Double fullprice = rs.getDouble("fullprice");
                 byte[] imgBytes1 = rs.getBytes("img0");
-//                if (rs.getBytes("img1")!=null){
-//                    byte[] imgBytes2 = rs.getBytes("img1");
-//                }
-//                else{
-//                    byte[] imgBytes2 = new ImageIcon("poring.png");
-//                }
-//                byte[] imgBytes3 = rs.getBytes("img2");
-//                byte[] imgBytes4 = rs.getBytes("img3");
                 ImageIcon img1 = new ImageIcon(imgBytes1);
-//                ImageIcon img2 = new ImageIcon(imgBytes2);
-//                ImageIcon img3 = new ImageIcon(imgBytes3);
-//                ImageIcon img4 = new ImageIcon(imgBytes4);
-                bgPanels.add(new DonatePanel(id, name, detail, price, fullprice, img1)); //bgPanels.add(new DonatePanel(id, name, detail, price, fullprice, img1, img2, img3, img4));
-                
+                bgPanels.add(new DonatePanel(id, name, detail, price, fullprice, img1));
             }
             System.out.println("Loading complete!");
         }
