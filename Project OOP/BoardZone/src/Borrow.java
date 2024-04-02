@@ -19,7 +19,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
     private JTextField thour, tmin, tmaxp, tloca;
     
     private CheckINT checkINT1, checkINT2;
-    
     private int checkmin, checkmaxp, checkhour;
     
     public boolean ispublic;
@@ -115,7 +114,7 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         
         thour.setColumns(2);
         tmin.setColumns(2);
-//        tmaxp.setColumns(2);
+        tmaxp.setColumns(2);
         
         westempty.setPreferredSize(new Dimension(80 ,100));
         eastempty.setPreferredSize(new Dimension(80 ,100));
@@ -158,9 +157,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         mleft.setLayout(new GridLayout(3, 1));
         
 //      middle right
-//        phour.add(thour, BorderLayout.CENTER);
-//        phour.add(tmaxp, BorderLayout.NORTH);
-//        phour.add(tloca, BorderLayout.SOUTH);
         phour.add(thour, BorderLayout.CENTER);
         phour.add(mep1, BorderLayout.NORTH);
         phour.add(mep2, BorderLayout.SOUTH);
@@ -191,8 +187,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         bottom.add(bcancel); bottom.add(bconfirm);
         bottom.setLayout(new FlowLayout());
         
-
-//        topbelow.setPreferredSize(new Dimension(360 ,50));
         
         fr.add(top, BorderLayout.NORTH);
         fr.add(westempty, BorderLayout.WEST);
@@ -277,9 +271,11 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
         fr.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         fr.setVisible(true);
     }
-    public static void main(String[] args) {
-        new Borrow(22); //only for TESTING
-    }
+    
+//    TESTING
+//    public static void main(String[] args) {
+//        new Borrow(22); //only for TESTING
+//    }
     
     public static int checkIntSize(CheckINT checkINT, String textcheck) {
         checkINT.setContent(textcheck);
@@ -374,7 +370,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
                 
 //                THIS IS IMPORTENT
                 JOptionPane.showMessageDialog(null, "Successfully Borrowed A Game");
-//                new Lobby();
                 fr.dispose();
             }
         } else {
@@ -398,9 +393,6 @@ public class Borrow implements ActionListener, FocusListener, Runnable{
 
     @Override
     public synchronized void focusLost(FocusEvent e) {
-//        checkhour.setContent(thour.getText());
-//        checkmin.setContent(tmin.getText());
-//        checkmaxp.setContent(tmaxp.getText());
         checkhour = checkIntSize(checkINT1, thour.getText());
         checkmin = checkIntSize(checkINT2, tmin.getText());
         checkmaxp = checkIntSize(checkINT2, tmaxp.getText());

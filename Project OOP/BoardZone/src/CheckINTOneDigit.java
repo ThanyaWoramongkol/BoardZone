@@ -1,6 +1,5 @@
 
 public class CheckINTOneDigit<T> extends CheckINT {
-//    private final static int limit = 1;
     public CheckINTOneDigit(){
         super(1);
     }
