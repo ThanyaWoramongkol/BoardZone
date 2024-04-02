@@ -106,9 +106,6 @@ public class GameClient implements ActionListener, MouseListener, Runnable {
         int posX = e.getX() * 3 / gamePanel.getWidth();
         int posY = e.getY() * 3 / gamePanel.getHeight();
         game.placeMark(posY, posX);
-//        if (game.getMarkPlaced() < 8) {
-//            game.moveAI();
-//        }
         this.updateAll();
     }
 
