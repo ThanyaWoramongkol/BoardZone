@@ -240,10 +240,6 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         }
     }
 
-    public static void main(String[] args) {
-        new Fund();
-    }
-
     @Override
     public void windowOpened(WindowEvent e) {
         this.refresh();
