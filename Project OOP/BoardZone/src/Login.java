@@ -236,12 +236,10 @@ public class Login implements ActionListener, MouseListener{
     
     @Override
     public void actionPerformed(ActionEvent ae) {
-        
         if (ae.getSource().equals(login)){
             if (username.getText().equals("") || String.valueOf(password.getPassword()).equals("")){
                 err.setText("Please input username or password.");
             } else if (login()) {
-                System.out.println(username.getText() + " | " + String.valueOf(password.getPassword()));
                 Account.setUsername(username.getText());
                 Account.setData();
                 
