@@ -402,10 +402,10 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
             try {
                 Database db = new Database();
                 if (haveRated){
-                    db.update(String.format("UPDATE boardzone.board_game_ratings SET rating = '%s' WHERE user_id = '%s'", (String)ratingComboBox.getSelectedItem(), ""+Account.id));
+                    db.update(String.format("UPDATE boardzone.board_game_ratings SET rating = '%s' WHERE user_id = '%s'", (String)ratingComboBox.getSelectedItem(), ""+Account.getID()));
                 }
                 else{
-                    db.update(String.format("INSERT INTO boardzone.board_game_ratings (user_id, rating, board_game_id) VALUES ('%s', '%s', '%s')", ""+Account.id, (String)ratingComboBox.getSelectedItem(), this.boardGameID));
+                    db.update(String.format("INSERT INTO boardzone.board_game_ratings (user_id, rating, board_game_id) VALUES ('%s', '%s', '%s')", ""+Account.getID(), (String)ratingComboBox.getSelectedItem(), this.boardGameID));
                 }
                 ResultSet rs = db.getSelect(String.format("SELECT * FROM boardzone.board_game_ratings WHERE board_game_id = '%s'", ""+boardGameID));
                 int totalRating = 0;
@@ -488,7 +488,7 @@ public class BoardGameShowDetail implements MouseListener, ActionListener, Windo
                 
                 ResultSet rrs = db.getSelect(String.format("SELECT * FROM boardzone.board_game_ratings WHERE board_game_id = '%s'", ""+boardGameID));
                 while ((rrs!=null) && (rrs.next())){
-                    if (Account.id == rrs.getInt("user_id")){
+                    if (Account.getID() == rrs.getInt("user_id")){
                         haveRated = true;
                         ratingComboBox.setSelectedItem(""+rrs.getInt("rating"));
                         break;
