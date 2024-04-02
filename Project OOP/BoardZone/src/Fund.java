@@ -44,8 +44,8 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.getUsername());
-        picprofile = new JLabel("", Account.getProfile(), JLabel.CENTER);
+        username = new JMenu(Account.username);
+        picprofile = new JLabel("", Account.profile, JLabel.CENTER);
         donateButton = new JButton("Create post");
         refreshBtn = new JButton("Refresh");
         loading = new JLabel("Loading...");
@@ -63,21 +63,21 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         aboutmenu.addMouseListener(this);
         username.addMouseListener(this);
         fundframe.addWindowListener(this);
-        
-        donateButton.addActionListener( this);
+
+        donateButton.addActionListener(this);
         refreshBtn.addActionListener(this);
-        
-        
-        ((FlowLayout)fundpanel.getLayout()).setHgap(24);
-        ((FlowLayout)fundpanel.getLayout()).setVgap(24);
-        
+
+
+        ((FlowLayout) fundpanel.getLayout()).setHgap(24);
+        ((FlowLayout) fundpanel.getLayout()).setVgap(24);
+
         loading.setForeground(Color.WHITE);
         fundpanel.add(loading);
-        
+
         homeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         homeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         homeScrollPane.getVerticalScrollBar().setUnitIncrement(15);
-        homeScrollPane.getVerticalScrollBar().setBackground(new Color(75,75,75));
+        homeScrollPane.getVerticalScrollBar().setBackground(new Color(75, 75, 75));
         homeScrollPane.getVerticalScrollBar().setUI(new ScrollBarUI());
         homeScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(8, 1));
         homeScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -101,7 +101,7 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
 
         left.setPreferredSize(new Dimension(100, 720));
         right.setPreferredSize(new Dimension(100, 720));
-        
+
         fundframe.setLayout(new BorderLayout());
         fundframe.add(homeScrollPane, BorderLayout.CENTER);
         fundframe.add(left, BorderLayout.WEST);
@@ -117,18 +117,18 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         right.setBackground(new Color(101, 101, 101));
         fundpanel.setBackground(new Color(75, 75, 75));
         jp.setBackground(new Color(101, 101, 101));
-        
-        donateButton.setBackground(new Color(88,88,88));
-        refreshBtn.setBackground(new Color(88,88, 88));
-        
+
+        donateButton.setBackground(new Color(88, 88, 88));
+        refreshBtn.setBackground(new Color(88, 88, 88));
+
         donateButton.setForeground(new Color(255, 255, 255));
         refreshBtn.setForeground(new Color(233, 233, 233));
-        
+
         donateButton.setFocusPainted(false);
         refreshBtn.setFocusPainted(false);
         donateButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
+
         homemenu.setForeground(new Color(170, 170, 170));
         lobbymenu.setForeground(new Color(170, 170, 170));
         fundmenu.setForeground(new Color(255, 255, 255));
@@ -139,17 +139,19 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         fundframe.setSize(1080, 720);
         fundframe.setVisible(true);
     }
-    public JFrame getFrame(){
+
+    public JFrame getFrame() {
         return this.fundframe;
     }
-    public void refresh(){
+
+    public void refresh() {
         bgPanels = new ArrayList<DonatePanel>();
         Database db = new Database();
-        try{
+        try {
             System.out.println("Connecting to database...");
             ResultSet rs = db.getSelect("SELECT * FROM donate_data");
-            while((rs!=null) && (rs.next())){
-                    System.out.println("Loading Data....");
+            while ((rs != null) && (rs.next())) {
+                System.out.println("Loading Data....");
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String detail = rs.getString("detail");
@@ -157,21 +159,21 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
                 Double fullprice = rs.getDouble("fullprice");
                 byte[] imgBytes1 = rs.getBytes("img0");
                 ImageIcon img1 = new ImageIcon(imgBytes1);
-                bgPanels.add(new DonatePanel(id, name, detail, price, fullprice, img1));
+                bgPanels.add(new DonatePanel(id, name, detail, price, fullprice, img1)); //bgPanels.add(new DonatePanel(id, name, detail, price, fullprice, img1, img2, img3, img4));
+
             }
             System.out.println("Loading complete!");
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         db.close();
-        for( DonatePanel bgPanel : bgPanels){
+        for (DonatePanel bgPanel : bgPanels) {
             fundpanel.add(bgPanel);
             bgPanel.addMouseListener(this);
         }
         loading.setVisible(false);
         System.out.println("loading visible false");
-        fundpanel.setPreferredSize(new Dimension(880, 310*((int)(bgPanels.size()/3)+1)));
+        fundpanel.setPreferredSize(new Dimension(880, 310 * ((int) (bgPanels.size() / 3) + 1)));
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -198,9 +200,9 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
             user.setLocation(fundframe.getLocation());
             fundframe.dispose();
         }
-        for( DonatePanel bgPanel : bgPanels){
-            if (e.getSource().equals(bgPanel)){
-                System.out.println("DonateID:"+bgPanel.getID());
+        for (DonatePanel bgPanel : bgPanels) {
+            if (e.getSource().equals(bgPanel)) {
+                System.out.println("DonateID:" + bgPanel.getID());
                 new DonatePost(this, bgPanel.getName(), bgPanel.getDetail(), bgPanel.getPrice(), bgPanel.getFullPrice(), bgPanel.getImg1(), bgPanel.getID());
             }
         }
@@ -232,8 +234,7 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
             Donate donate = new Donate(this);
             Thread thread = new Thread(donate);
             thread.start();
-        }
-        else if (e.getSource().equals(refreshBtn)){
+        } else if (e.getSource().equals(refreshBtn)) {
             fundpanel.removeAll();
             this.refresh();
         }
@@ -250,32 +251,32 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        
+
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        
+
     }
 
     @Override
     public void windowIconified(WindowEvent e) {
-        
+
     }
 
     @Override
     public void windowDeiconified(WindowEvent e) {
-        
+
     }
 
     @Override
     public void windowActivated(WindowEvent e) {
-        
+
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
-        
+
     }
 
 }
