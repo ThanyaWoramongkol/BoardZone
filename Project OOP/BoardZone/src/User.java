@@ -456,9 +456,4 @@ public class User implements MouseListener, ActionListener{
     public void setLocation(Point location) {
         userframe.setLocation(location);
     }
-    
-    public static void main(String[] args) {
-        new User();
-    }
-
 }
