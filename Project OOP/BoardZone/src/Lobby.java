@@ -41,8 +41,8 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.username);
-        picprofile = new JLabel("", Account.profile, JLabel.CENTER);
+        username = new JMenu(Account.getUsername());
+        picprofile = new JLabel("", Account.getProfile(), JLabel.CENTER);
         funbutton = new JButton("Play MiniGame");
         refresh = new JButton("Refresh");
         lobbyScrollPane = new JScrollPane(lobbypanel);
@@ -138,9 +138,8 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
     }
     
     @Override
-    public void refresh(){
+    public void refresh(Database db){
         bgPanels = new ArrayList<LobbyGamePanel>();
-        Database db = new Database();
         try{
             System.out.println("Connecting to database...");
             ResultSet rs = db.getSelect("SELECT * FROM boardzone.Borrow_item INNER JOIN boardzone.board_games\n" +
@@ -210,7 +209,7 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
             lobbyframe.dispose();
         } else if (e.getSource().equals(bgPanels)){
             lobbypanel.removeAll();
-            this.refresh();
+            this.refresh(new Database());
         }
         for( LobbyGamePanel bgPanel : bgPanels){
             if (e.getSource().equals(bgPanel)){
@@ -244,13 +243,13 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
             new GameClient();
         } else if (e.getSource().equals(refresh)){
             lobbypanel.removeAll();
-            this.refresh();
+            this.refresh(new Database());
         }
     }
 
     @Override
     public void windowOpened(WindowEvent e) {
-        this.refresh();
+        this.refresh(new Database());
     }
 
     @Override
@@ -270,4 +269,5 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
 
     @Override
     public void windowDeactivated(WindowEvent e) {}
+
 }
