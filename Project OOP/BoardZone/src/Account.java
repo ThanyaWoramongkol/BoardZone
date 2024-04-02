@@ -4,16 +4,16 @@ import javax.swing.*;
 import java.sql.ResultSet;
 
 public class Account {
-    public static String username;
-    public static String firstname;
-    public static String lastname;
-    public static String email;
-    public static String phone;
-    public static String year;
-    public static String faculty;
-    public static int id;
-    public static ImageIcon profile;
-    public static Image images;
+    private static String username;
+    private static String firstname;
+    private static String lastname;
+    private static String email;
+    private static String phone;
+    private static String year;
+    private static String faculty;
+    private static int id;
+    private static ImageIcon profile;
+    private static Image images;
     
     public static void setData(){
         try {
@@ -63,77 +63,72 @@ public class Account {
         }
     }
     
-    public static void setUsername(String firstname){
-        try {
-            Database db = new Database();
-            String sql = String.format("UPDATE boardzone.Account SET username = '%s' "
-                    + "WHERE id = %s;", firstname, id);
-
-            db.update(sql);
-            db.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+    public static String getUsername(){
+        return username;
     }
-
+    
+    public static void setUsername(String username){
+        Account.username = username;
+    }
+    
+    public static String getFirstname(){
+        return firstname;
+    }
+    
+    public static void setFirstname(String firstname){
+        Account.firstname = firstname;
+    }
+    
+    public static String getLastname(){
+        return lastname;
+    }
+    
     public static void setLastname(String lastname){
-        try {
-            Database db = new Database();
-            String sql = String.format("UPDATE boardzone.Account SET lastname = '%s' WHERE id = '%s';", lastname, id);
-
-            db.update(sql);
-            db.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        Account.lastname = lastname;
     }
+    
+    public static String getEmail(){
+        return email;
+    }
+    
     public static void setEmail(String email){
-        try {
-            Database db = new Database();
-            String sql = String.format("UPDATE boardzone.Account SET email = '%s' WHERE id = %s;", email, id);
-
-            db.update(sql);
-            db.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        Account.email = email;
+    }
+    
+    public static String getPhone(){
+        return phone;
     }
     
     public static void setPhone(String phone){
-        try {
-            Database db = new Database();
-            String sql = String.format("UPDATE boardzone.Account SET phone = '%s' WHERE id = %s;", phone, id);
-
-            db.update(sql);
-            db.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        Account.phone = phone;
     }
-
+    
+    public static String getYear(){
+        return year;
+    }
     
     public static void setYear(String year){
-        try {
-            Database db = new Database();
-            String sql = String.format("UPDATE boardzone.Account SET year = '%s' WHERE id = %s;", year, id);
-
-            db.update(sql);
-            db.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        Account.year = year;
     }
     
-    public static void setFaculty(String faculty){
-        try {
-            Database db = new Database();
-            String sql = String.format("UPDATE boardzone.Account SET faculty = '%s' WHERE id' = %s;", faculty, id);
-
-            db.update(sql);
-            db.close();
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+    public static String getFaculty(){
+        return faculty;
+    }
+    
+    public static int getID(){
+        return id;
+    }
+    
+    public static void setID(int id){
+        Account.id = id;
+    }
+    
+    public static ImageIcon getProfile(){
+        return profile;
+    }
+    
+    public static Image getImage(){
+        return images;
     }
     
     public static void setImage(){

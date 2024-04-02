@@ -44,8 +44,8 @@ public class Fund implements MouseListener, ActionListener, WindowListener {
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.username);
-        picprofile = new JLabel("", Account.profile, JLabel.CENTER);
+        username = new JMenu(Account.getUsername());
+        picprofile = new JLabel("", Account.getProfile(), JLabel.CENTER);
         donateButton = new JButton("Create post");
         refreshBtn = new JButton("Refresh");
         loading = new JLabel("Loading...");

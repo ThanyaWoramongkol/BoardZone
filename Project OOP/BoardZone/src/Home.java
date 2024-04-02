@@ -38,8 +38,8 @@ public class Home implements MouseListener, ActionListener, WindowListener, SeeD
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.username);
-        picprofile = new JLabel("", Account.profile, JLabel.CENTER);
+        username = new JMenu(Account.getUsername());
+        picprofile = new JLabel("", Account.getProfile(), JLabel.CENTER);
         createBtn = new JButton("Create Post");
         refreshBtn = new JButton("Refresh");
         footerPanel = new JPanel();

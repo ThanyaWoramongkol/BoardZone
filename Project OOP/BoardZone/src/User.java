@@ -89,16 +89,16 @@ public class User implements MouseListener, ActionListener{
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.username);
-        picprofile = new JLabel("", Account.profile, JLabel.CENTER);     
+        username = new JMenu(Account.getUsername());
+        picprofile = new JLabel("", Account.getProfile(), JLabel.CENTER);     
 
         userprofile = new JPanel();
         userprofileleft = new JPanel();
         userprofileright = new JPanel();
         backgroudpicture = new JPanel();
         
-        pictureframe = new JLabel(Account.profile);
-        ImageIcon icon = new ImageIcon(Account.images.getScaledInstance(412, 473, java.awt.Image.SCALE_SMOOTH));
+        pictureframe = new JLabel(Account.getProfile());
+        ImageIcon icon = new ImageIcon(Account.getImage().getScaledInstance(412, 473, java.awt.Image.SCALE_SMOOTH));
         pictureframe.setIcon(icon);
 
         changepicturepanel = new JPanel();
@@ -135,13 +135,13 @@ public class User implements MouseListener, ActionListener{
         email = new JLabel("Email :");
         academic = new JLabel("Academic Year :");
         faculty = new JLabel("Faculty :");
-        textname = new JTextField(Account.firstname,16);
-        textsurname = new JTextField(Account.lastname, 16);
-        textusername = new JTextField(Account.username, 48);
-        textphone = new JTextField(Account.phone, 48);
-        textemail = new JTextField(Account.email, 48);
-        textacademic = new JTextField(Account.year, 16);
-        textfaculty = new JTextField(Account.faculty, 16);
+        textname = new JTextField(Account.getFirstname(),16);
+        textsurname = new JTextField(Account.getLastname(), 16);
+        textusername = new JTextField(Account.getUsername(), 48);
+        textphone = new JTextField(Account.getPhone(), 48);
+        textemail = new JTextField(Account.getEmail(), 48);
+        textacademic = new JTextField(Account.getYear(), 16);
+        textfaculty = new JTextField(Account.getFaculty(), 16);
         logout = new JButton("Logout");
         save = new JButton("Save");
         
@@ -363,7 +363,7 @@ public class User implements MouseListener, ActionListener{
                 try{
                     for (File img : imgFile){
                         try (FileInputStream fis = new FileInputStream(img)){
-                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.Account SET img = ? WHERE (id = %s);", Account.id));
+                            PreparedStatement ps = cn.prepareStatement(String.format("UPDATE boardzone.Account SET img = ? WHERE (id = %s);", Account.getID()));
                             ps.setBlob(1, fis);
                             ps.executeUpdate();
                         } catch (IOException ex) {

@@ -41,8 +41,8 @@ public class Lobby implements MouseListener, ActionListener, WindowListener, See
         lobbymenu = new JMenu("Lobby");
         fundmenu = new JMenu("Funds");
         aboutmenu = new JMenu("About us");
-        username = new JMenu(Account.username);
-        picprofile = new JLabel("", Account.profile, JLabel.CENTER);
+        username = new JMenu(Account.getUsername());
+        picprofile = new JLabel("", Account.getProfile(), JLabel.CENTER);
         funbutton = new JButton("Play MiniGame");
         refresh = new JButton("Refresh");
         lobbyScrollPane = new JScrollPane(lobbypanel);

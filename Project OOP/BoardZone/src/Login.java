@@ -278,7 +278,7 @@ public class Login implements ActionListener, MouseListener{
                 err.setText("Please input username or password.");
             } else if (login()) {
                 System.out.println(username.getText() + " | " + String.valueOf(password.getPassword()));
-                Account.username = username.getText();
+                Account.setUsername(username.getText());
                 Account.setData();
                 
                 Home home = new Home();
